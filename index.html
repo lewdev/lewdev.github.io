@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <title>Kanrodai</title>
+    <link type="text/css" rel="stylesheet" href="style.css" media="all">
+  </head>
+  <body>
+    <div id="map"></div>
+    <div class="latlng">
+      <a href="#" onclick="goToKanrodai();">Go to Kanrodai</a><br/>
+      <a href="#" onclick="goToCurrentLoc();">Go to Current Location</a><br/>
+      <a href="#" onclick="viewPath();">View Path</a>
+    </div>
+
+    <div id="panel">asdf</div>
+
+    <script src="kanrodai.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6AfTuAsQ40bgMiHYTo1-dO3COLMVVeM0&callback=initMap">
+    </script>
+  </body>
+</html>
