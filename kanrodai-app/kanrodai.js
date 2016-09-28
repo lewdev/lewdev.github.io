@@ -1,14 +1,7 @@
-var kanrodaiLoc = {lat: 34.60119673714936, lng: 135.84321758174895};
 var map;
-var currentLoc;
+var kanrodaiLoc = {lat: 34.60119673714936, lng: 135.84321758174895};
+var currentLocMarker, kanrodaiPath;
 function initMap() {
-/*
-    map = new google.maps.Map(document.getElementById('map'), {
-      zoom: 3,
-      center: kanrodaiLoc,
-      mapTypeId: 'terrain'
-    });
-*/
      map = new google.maps.Map(document.getElementById("map"), {
        zoom: 15,  //Sets zoom level (0-21)
        center: kanrodaiLoc,
@@ -17,21 +10,21 @@ function initMap() {
        {
          style: google.maps.NavigationControlStyle.SMALL //sets map controls size eg. zoom
        },
-       mapTypeId: google.maps.MapTypeId.ROADMAP //sets type of map Options:ROADMAP, SATELLITE, HYBRID, TERRIAN
+       mapTypeId: google.maps.MapTypeId.SATELLITE //sets type of map Options:ROADMAP, SATELLITE, HYBRID, TERRIAN
     });
 
-    var kanrodai = new google.maps.Marker({
+    var kanrodaiMarker = new google.maps.Marker({
         position: kanrodaiLoc,
-        map: map,
-        title: 'The Kanrodai!'
+        icon: "images/kanrodai-30x30.png",
+        title: 'The Kanrodai!',
+        map: map
     });
-
-    var myLatLng = {lat: -25.363, lng: 131.044};
-    var marker1 = new google.maps.Marker({
-        position: myLatLng,
-        map: map,
-        draggable:true,
-        title: 'Hello World!'
+    var infowindow = new google.maps.InfoWindow({
+          content: '<h2>The Kanrodai</h2>Learn more about the Kanrodai ' 
+            + '<a href="http://en.tenrikyo-resource.com/wiki/Kanrodai" target="_blank">here</a>.'
+        });
+    kanrodaiMarker.addListener('click', function() {
+        infowindow.open(map, kanrodaiMarker);
     });
     getLocation();
 }
@@ -44,7 +37,7 @@ function getLocation() {
     }
 }
 function showPosition(position) {
-    currentLoc = {lat: position.coords.latitude, lng: position.coords.longitude};
+    var currentLoc = {lat: position.coords.latitude, lng: position.coords.longitude};
 
     //set map center and zoom.
     map.setCenter(currentLoc);
@@ -52,7 +45,7 @@ function showPosition(position) {
 
     var pathCoordinates = [currentLoc, kanrodaiLoc];
 
-    var kanrodaiPath = new google.maps.Polyline({
+    kanrodaiPath = new google.maps.Polyline({
       path: pathCoordinates,
       geodesic: true,
       strokeColor: '#FF0000',
@@ -61,44 +54,91 @@ function showPosition(position) {
     });
     kanrodaiPath.setMap(map);
 
-    var currentLocMarker = new google.maps.Marker({
+    //create your marker for your location!
+    currentLocMarker = new google.maps.Marker({
         position: currentLoc,
-        map: map,
-        title: 'You are here!'
+        title: 'You are here!',
+        icon: "images/happi-coat-30x30.png",
+        draggable: true,
+        map: map
+    });
+    var infowindow = new google.maps.InfoWindow({
+      content: "<h2>You're here!</h2>You may click-and-drag to move this icon to a more accurate location."
+    });
+    currentLocMarker.addListener('click', function() {
+      infowindow.open(map, currentLocMarker);
+    });
+    onLocationChanged(currentLoc);
+
+    google.maps.event.addListener(currentLocMarker, "dragend", function() {
+        console.log("dragend");
+        var newLoc = {
+            lat: this.getPosition().lat(),
+            lng: this.getPosition().lng()
+        };
+        onLocationChanged(newLoc);
     });
     currentLocMarker.setMap(map);
 }
 
+function onLocationChanged(newLoc) {
+    kanrodaiPath.setPath([newLoc, kanrodaiLoc]);
+    var distance = GreatCircle.getDistance(currentLocMarker.getPosition(),
+            new google.maps.LatLng(kanrodaiLoc.lat, kanrodaiLoc.lng)
+        ),
+        distanceDiv = document.getElementById("distance");
+    distanceDiv.style.textAlign = "center";
+    distanceDiv.style.display = "block";
+    distanceDiv.style.paddingTop = "5px";
+    distanceDiv.innerHTML = "<strong>Distance:</strong> " + formatDistance(distance);
+}
+
+function formatDistance(distance) {
+   //convert distance to feet
+   var units = " ft.",
+       distanceStr,
+       distanceM = distance;
+   distance = distance * 3.28084;
+   if (distance > 5280) {
+       distance = distance / 5280;
+       units = " mi."
+   }
+   distance = Math.round(distance);
+   distanceStr = distance.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+   return distanceStr + units;
+    
+}
+
 function goToKanrodai() {
     map.setCenter(kanrodaiLoc);
+    map.setZoom(19);
     return false;
 }
 
 function goToCurrentLoc() {
-    map.setCenter(currentLoc);
+    map.setCenter(currentLocMarker.getPosition());
+    map.setZoom(19);
     return false;
 }
 
 function viewPath() {
-    var coords = new google.maps.LatLng(currentLoc.lat, currentLoc.lng);
-    var directionsService = new google.maps.DirectionsService();
-    var directionsDisplay = new google.maps.DirectionsRenderer();
+    var distance,
+        midpoint;
+    if (currentLocMarker) {
+        //get midpoint
+        midpoint = GreatCircle.getMidPoint(
+            currentLocMarker.getPosition(),
+            new google.maps.LatLng(kanrodaiLoc.lat, kanrodaiLoc.lng)
+        );
+        map.setCenter(midpoint);
 
-    directionsDisplay.setMap(map);
-    directionsDisplay.setPanel(document.getElementById('panel'));
-    var request = {
-        origin: coords,
-        destination: 'Tenri City, Nara, Japan',
-        travelMode: google.maps.DirectionsTravelMode.DRIVING
-    };
+        //get distance
+        distance = GreatCircle.getDistance(currentLocMarker.getPosition(),
+            new google.maps.LatLng(kanrodaiLoc.lat, kanrodaiLoc.lng)
+        );
+        console.log(distance);
 
-    directionsService.route(request, function (response, status) {
-        if (status == google.maps.DirectionsStatus.OK) {
-           directionsDisplay.setDirections(response);
-        }
-else {
-alert("Failed");
-}
-    });
-    return false;
+        //get zoom level
+        map.setZoom(GreatCircle.getZoomLevelByRange(distance));
+    }
 }
