@@ -94,10 +94,10 @@ function onLocationChanged(newLoc) {
 }
 
 function formatDistance(distance) {
-   //convert distance to feet
    var units = " ft.",
        distanceStr,
        distanceM = distance;
+   //convert distance (meters) to feet
    distance = distance * 3.28084;
    if (distance > 5280) {
        distance = distance / 5280;
