@@ -50,13 +50,13 @@
     <div id="panel">
       <ul class="list-group">
         <li class="list-group-item">
-          <a href="#" onclick="goToKanrodai();">Go to Kanrodai</a>
+          <a href="#" onclick="kanrodaiApp.goToKanrodai(); return false;">Go to Kanrodai</a>
         </li>
         <li class="list-group-item">
-          <a href="#" onclick="goToCurrentLoc();">Go to Current Location</a>
+          <a href="#" onclick="kanrodaiApp.goToUserLoc(); return false;">Go to Current Location</a>
         </li>
         <li class="list-group-item">
-          <a href="#" onclick="viewPath();">View Path</a>
+          <a href="#" onclick="kanrodaiApp.viewPath(); return false;">View Path</a>
         </li>
       </ul>
       <span id="distance"></span>
@@ -83,7 +83,7 @@
             The <strong>Kanrodai App</strong> is a simple application to help a user determine the location at which 
             the <a href="http://en.tenrikyo-resource.com/wiki/Kanrodai" target="_blank">Kanrodai</a>, the sacred spot where
             <a href="http://en.tenrikyo-resource.com/wiki/Tenrikyo">Tenrikyo</a> followers were taught to be where human beings
-            were first created, is located.
+            were first created.
 
             <h3>What is the Kanrodai?</h3>
             Kanrodai is a wooden pillar that stands on the sacred spot that is called the <a href="http://en.tenrikyo-resource.com/wiki/Jiba" target="_blank">Jiba</a>
@@ -114,19 +114,10 @@
     fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));</script>
 
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6AfTuAsQ40bgMiHYTo1-dO3COLMVVeM0&callback=initMap"></script>
     <script src="js/jquery-3.1.1.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/GreatCircle.js"></script>
-    <script src="js/kanrodai.js"></script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB6AfTuAsQ40bgMiHYTo1-dO3COLMVVeM0&callback=initMap">
-    </script>
-    <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-2833478-13', 'auto');
-    ga('send', 'pageview');
-    </script>
+    <script src="js/KanrodaiApp.js"></script>
   </body>
 </html>
