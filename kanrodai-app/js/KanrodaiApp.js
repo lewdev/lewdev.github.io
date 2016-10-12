@@ -9,7 +9,10 @@ DEFAULT_USER_LOC = {
     lng: -157.68656843825454
 };
 
-function initMap() {
+/**
+ * This is called back by the Google Maps script when it is finished initializing.
+ */
+window.initMap = function() {
   map = new google.maps.Map(document.getElementById("map"), {
     zoom : 15, // Sets zoom level (0-21)
     center : KANRODAI_LOC,
@@ -21,36 +24,42 @@ function initMap() {
   });
   kanrodaiApp = new KanrodaiApp();
   kanrodaiApp.initialize();
-}
+};
 
 function KanrodaiApp() {
+  var thisRef = this;
   /**
    * @private
    * @type {google.maps.Marker}
    */
-  this.kanrodaiMarker = null;
+  thisRef.kanrodaiMarker = null;
   /**
    * @private
    * @type {google.maps.InfoWindow}
    */
-  this.kanrodaiInfowindow = null;
+  thisRef.kanrodaiInfowindow = null;
   /**
    * @private
    * @type {google.maps.Marker}
    */
-  this.userLocMarker = null;
+  thisRef.userLocMarker = null;
   /**
    * @private
    * @type {google.maps.InfoWindow}
    */
-  this.userInfowindow = null;
+  thisRef.userInfowindow = null;
   /**
    * @private
    * @type {Array<number>}
    */
-  this.kanrodaiPath = null;
+  thisRef.kanrodaiPath = null;
 };
 
+/**
+ * 
+ * @public
+ * @this {KanrodaiApp}
+ */
 KanrodaiApp.prototype.initialize = function() {
   var thisRef = this;
 
