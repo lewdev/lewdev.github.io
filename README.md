@@ -1,6 +1,15 @@
-# Hi
+# Lewis Nakao
 
 This will be a portfolio of my code creations. Hopefully this will grow into a list of interesting things.
 
+Contact me: [lewdev@gmail.com](mailto:lewdev@gmail.com)
+
 * [Kanrodai App](https://lewdev.github.io/kanrodai-app/)
 * [Tick-Tack-Toe v1](https://lewdev.github.io/ticktacktoe/v1/)
+
+Other Links
+===========
+* [My resume (google docs)](https://docs.google.com/document/d/e/2PACX-1vQjXQRdUtzvOFekpmqbTlOsvNy-PIADmWVZmXm1OOD6AFK8Mkw37aqZ0ecUADp-1HZxjO4vNO_sVW3s/pub)
+* [Github Profile](https://github.com/lewdev)
+* [LinkedIn Profile](https://www.linkedin.com/in/lewisnakao)
+* [StackOverflow](http://stackoverflow.com/cv/lewis.nakao)
