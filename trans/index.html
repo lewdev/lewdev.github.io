@@ -48,7 +48,6 @@ li { margin-bottom: 10px; }
       , targetUrl = urlInput.value
     ;
     if (targetUrl == '') {
-      outputDiv.innerHTML = "ERROR: blank input";
       return;
     }
     addUrlToList(targetUrl, urlList.length);
@@ -91,7 +90,6 @@ li { margin-bottom: 10px; }
       , link = '<a href="' + transUrl + '" target="_blank">' + targetUrl + '</a>'
           //+ ' ' + langSource + '&rArr;' + langTarget //&hArr;
           + ' (<a href="#" onclick="deleteLink(' + index + ', this);">x</a>)'
-      , data = document.cookie
     ;
 
     if (urlListElem) {
@@ -101,6 +99,7 @@ li { margin-bottom: 10px; }
     else {
       alert("URL list element not found!");
     }
+    document.getElementById('url').focus();
   }
 
   function deleteLink(index, elem) {
@@ -114,8 +113,11 @@ li { margin-bottom: 10px; }
   }
 
   window.onload = function() {
-    var cookieString = document.cookie
-      , cookieVars = cookieString.split(',')
+    var cookieString = document.cookie;
+    if (cookieString.indexOf(";") > -1) {
+      cookieString = cookieString.split(';')[1];
+    }
+    var cookieVars = cookieString.split(',')
       , cookieVarsSize = cookieVars.length
       , j
       , cookieVarArr
@@ -123,11 +125,11 @@ li { margin-bottom: 10px; }
     ;
     for (j = 0; j < cookieVarsSize; j++) {
       cookieVarArr = cookieVars[j].split("=");
-      varsObject[cookieVarArr[0]] = cookieVarArr[1];
+      varsObject[cookieVarArr[0].trim()] = cookieVarArr[1];
     }
     if (cookieString && cookieString != '') {
       var data = varsObject["data"]
-        , urlArr = data.split("|")
+        , urlArr = data ? data.split("|") : []
         , urlArrSize = urlArr.length
         , i
       ;
@@ -151,7 +153,7 @@ li { margin-bottom: 10px; }
     urlList = [];
     var urlListElem = document.getElementById("urlList");
     urlListElem.innerHTML = "";
-    document.cookie = "data=;langSource=" + langSource + ";langTarget=" + langTarget + "; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "data=,langSource=" + langSource + ",langTarget=" + langTarget + "; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
   }
 
   window.addEventListener("unload", function() {
@@ -170,7 +172,7 @@ li { margin-bottom: 10px; }
       }
     }
     document.cookie = "data=" + dataStr + ",langSource=" + langSource + ",langTarget=" + langTarget + "; path=/";
-    console.log("document.cookie=" + document.cookie);
+    console.log("persisted document.cookie=" + document.cookie);
   }
   </script>
 </body>
