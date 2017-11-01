@@ -23,6 +23,7 @@ li { margin-bottom: .5em; }
       <td class="trans-url-input">
         <input id="url" type="text" style="width:100%"
           onclick="this.select();"
+          placeholder="Enter URL to translate here..."
           onkeypress="if(event.keyCode == 13){trans();this.value='';}" />
       </td>
 
@@ -41,10 +42,6 @@ li { margin-bottom: .5em; }
         </select>
       </td>
 
-      <td>
-        <input type="button" value="clear all" onclick="clearAllData();"/>
-      </td>
-
       <td class="trans-url-buttons">
         <input type="button" value="trans" onclick="trans();document.getElementById('url').value='';"/>
       </td>
@@ -53,6 +50,28 @@ li { margin-bottom: .5em; }
   </table>
 
   <ul id="urlList"></ul>
+
+  <div id="footer">
+    <a href="#" onclick="if(confirm('Are you sure you want to delete all items on this list?')){clearAllData();}"
+      title="Clear all items on this list.">clear all</a>
+
+    <a href="#" onclick="toggleAbout();" title="What's this?">about</a>
+  </div>
+
+  <div id="about" style="display:none;">
+    <h1>What's this?</h1>
+    <p>This is a simple one-page app that tracks a links to translated pages. If you have to do this often, it can be very useful. The links are saved on to your hard drive so you can come back to the page as you left it off.</p>
+    <p>This is one of a few quick and dirty apps that I like to build to solve a problem that I have. Hopefully, this will solve many others' problems.</p>
+    <ul>
+      <li>
+        Home page: <a href="https://lewdev.github.io/">https://lewdev.github.io/</a>
+      </li>
+      <li>
+        Source: <a href="https://github.com/lewdev/trans">https://github.com/lewdev/trans</a>
+      </li>
+    </ul>
+    <a href="#" onclick="toggleAbout();" title="What's this?">hide</a>
+  </div>
 
   <script>
   var urlList = []
@@ -202,6 +221,12 @@ li { margin-bottom: .5em; }
     catch (e) {
       console.log("Local Storage is not supported in this browser. " + e);
     }
+    return false;
+  }
+
+  function toggleAbout() {
+    var aboutDiv = document.getElementById('about');
+    aboutDiv.style.display = aboutDiv.style.display == 'none' ? 'block' : 'none';
     return false;
   }
   </script>
