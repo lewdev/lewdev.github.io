@@ -2,37 +2,54 @@
 <head>
 <title>trans</title>
 <style>
-body, li, div, span, input { font-size: 20px; font-family: arial; }
-li { margin-bottom: 10px; }
+body, li, div, span, input, select, option { font-size: 15px; font-family: arial; }
+li { margin-bottom: .5em; }
+.trans-table { width: 100%; border-collapse: collapse; }
+.trans-table > tbody > tr > td:first-child { width: 100%; }
+.trans-table > tbody > tr > td { padding: 0; margin: 0; width: 10px;}
+
+@media screen and (min-width: 480px) {
+  body, li, div, span, input, select, option { font-size: 30px; }
+}
+@media screen and (min-width: 1024px) {
+  body, li, div, span, input, select, option { font-size: 20px; }
+}
 </style>
 </head>
 <body>
-  <table width="100%">
+  <table class="trans-table">
+    <tbody>
     <tr>
-      <td>
+      <td class="trans-url-input">
         <input id="url" type="text" style="width:100%"
           onclick="this.select();"
           onkeypress="if(event.keyCode == 13){trans();this.value='';}" />
       </td>
 
-      <td width="130">
-        <input type="button" value="trans" onclick="trans();document.getElementById('url').value='';"/>
-        <input type="button" value="clear" onclick="clearAllData();"/>
-      </td>
-
-      <td width="80">
+      <td class="trans-lang-select">
         <select id="langSource" onchange="onLangChange();">
           <option value="ja">ja</option>
           <option value="en">en</option>
           <option value="lo">lo</option>
         </select>
+      </td>
+      <td>
         <select id="langTarget" onchange="onLangChange();">
           <option value="en">en</option>
           <option value="ja">ja</option>
           <option value="lo">lo</option>
         </select>
       </td>
+
+      <td>
+        <input type="button" value="clear all" onclick="clearAllData();"/>
+      </td>
+
+      <td class="trans-url-buttons">
+        <input type="button" value="trans" onclick="trans();document.getElementById('url').value='';"/>
+      </td>
     </tr>
+    </tbody>
   </table>
 
   <ul id="urlList"></ul>
@@ -58,7 +75,7 @@ li { margin-bottom: 10px; }
 
     urlList.push(targetUrl);
     //save urls
-    persistUrlsToCookie();
+    persistData();
   }
 
   function onLangChange() {
@@ -74,7 +91,7 @@ li { margin-bottom: 10px; }
     ;
     langSource = langSourceSelect ? langSourceSelect.value : "ja"
     langTarget = langTargetSelect ? langTargetSelect.value : "en";
-    persistUrlsToCookie();
+    persistData();
   }
 
   function addUrlToListInUi(targetUrl, index) {
@@ -103,21 +120,25 @@ li { margin-bottom: 10px; }
   }
 
   function deleteLink(index, elem) {
-    //console.log("deleteLink targetUrl=" + targetUrl + ", urlList.length=" + urlList.length);
     var parent = elem.parentNode;
     parent.parentNode.removeChild(parent);
     urlList.splice(index, 1);
-    console.log("deleteLink removed link! urlList.length=" + urlList.length);
-    persistUrlsToCookie();
+    //console.log("deleteLink removed link! urlList.length=" + urlList.length);
+    persistData();
     return false;
   }
 
   window.onload = function() {
-    var cookieString = document.cookie;
-    if (cookieString.indexOf(";") > -1) {
-      cookieString = cookieString.split(';')[1];
+    if (!supportsHtml5Storage()) {
+      alert("Local Storage is not supported.");
     }
-    var cookieVars = cookieString.split(',')
+    var myDataString = localStorage.getItem("data");
+    //var cookieString = document.cookie;
+    //if ';' is found, split by ';'
+    if (myDataString.indexOf(";") > -1) {
+      myDataString = myDataString.split(';')[1];
+    }
+    var cookieVars = myDataString.split(',')
       , cookieVarsSize = cookieVars.length
       , j
       , cookieVarArr
@@ -127,7 +148,7 @@ li { margin-bottom: 10px; }
       cookieVarArr = cookieVars[j].split("=");
       varsObject[cookieVarArr[0].trim()] = cookieVarArr[1];
     }
-    if (cookieString && cookieString != '') {
+    if (myDataString && myDataString != '') {
       var data = varsObject["data"]
         , urlArr = data ? data.split("|") : []
         , urlArrSize = urlArr.length
@@ -153,14 +174,14 @@ li { margin-bottom: 10px; }
     urlList = [];
     var urlListElem = document.getElementById("urlList");
     urlListElem.innerHTML = "";
-    document.cookie = "data=,langSource=" + langSource + ",langTarget=" + langTarget + "; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    localStorage.setItem("data", "data=,langSource=" + langSource + ",langTarget=" + langTarget);
   }
 
   window.addEventListener("unload", function() {
-    persistUrlsToCookie();
+    persistData();
   });
 
-  function persistUrlsToCookie() {
+  function persistData() {
     var urlListSize = urlList.length
       , dataStr = ''
       , i
@@ -171,8 +192,17 @@ li { margin-bottom: 10px; }
         dataStr += "|" + urlList[i];
       }
     }
-    document.cookie = "data=" + dataStr + ",langSource=" + langSource + ",langTarget=" + langTarget + "; path=/";
-    console.log("persisted document.cookie=" + document.cookie);
+    localStorage.setItem("data", "data=" + dataStr + ",langSource=" + langSource + ",langTarget=" + langTarget);
+  }
+
+  function supportsHtml5Storage() {
+    try {
+      return 'localStorage' in window && window['localStorage'] !== null;
+    }
+    catch (e) {
+      console.log("Local Storage is not supported in this browser. " + e);
+    }
+    return false;
   }
   </script>
 </body>
