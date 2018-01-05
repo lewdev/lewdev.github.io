@@ -2,17 +2,74 @@
 <head>
 <title>trans</title>
 <style>
-body, li, div, span, input, select, option { font-size: 15px; font-family: arial; }
+/* dark theme */
+body, td, th, input, select, option { background-color: black; }
+body, li, div, span, input, textarea, select, option, td, th, a { color: #DDD; }
+a { color: #caab38; }
+a:visited { color: #977605; }
+a:hover { text-decoration: none; }
+
+/* standard theme */
+body, li, div, span, input, textarea, select, option, td, th, a { font-size: 30px; font-family: arial; }
 li { margin-bottom: .5em; }
 .trans-table { width: 100%; border-collapse: collapse; }
 .trans-table > tbody > tr > td:first-child { width: 100%; }
 .trans-table > tbody > tr > td { padding: 0; margin: 0; width: 10px;}
-
+table#urlList {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1em;
+}
+#urlList > tr > td:last-child {
+  text-align: center;
+  width: 30px;
+}
+#urlList > tr > td:last-child > a {
+  padding: 5px 10px;
+}
+#urlList > tr > td {
+  border: 1px solid gray;
+  padding: 5px;
+}
+#footer {
+  padding: 1em;
+} 
+td:hover {
+  background-color: #333;
+}
+a.trans-link {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 1024px;
+}
+#trans-options-short { display: block; }
+#trans-options-wide { display: none; }
 @media screen and (min-width: 480px) {
-  body, li, div, span, input, select, option { font-size: 30px; }
+  body, li, div, span, input, select, option, td, th, a { font-size: 40px; }
+  a.trans-link { width: 430px; }
+}
+@media screen and (min-width: 640px) {
+  body, li, div, span, input, select, option, td, th, a { font-size: 40px; }
+  a.trans-link { width: 590px; }
+}
+@media screen and (min-width: 800px) {
+  body, li, div, span, input, select, option, td, th, a { font-size: 40px; }
+  a.trans-link { width: 750px; }
+  #trans-options-short { display: none; }
+  #trans-options-wide { display: block; }
 }
 @media screen and (min-width: 1024px) {
-  body, li, div, span, input, select, option { font-size: 20px; }
+  body, li, div, span, input, select, option, td, th, a { font-size: 30px; }
+  a.trans-link { width: 974px; }
+  #trans-options-short { display: none; }
+  #trans-options-wide { display: block; }
+}
+@media screen and (min-width: 1200px) {
+  body, li, div, span, input, select, option, td, th, a { font-size: 30px; }
+  a.trans-link { width: 1150px; }
+  #trans-options-short { display: none; }
+  #trans-options-wide { display: block; }
 }
 </style>
 </head>
@@ -28,34 +85,62 @@ li { margin-bottom: .5em; }
       </td>
 
       <td class="trans-lang-select">
-        <select id="langSource" onchange="onLangChange();">
-          <option value="ja">ja</option>
-          <option value="en">en</option>
-          <option value="lo">lo</option>
-        </select>
-      </td>
+        <table id="trans-options-wide">
+          <tr>
+            <td>
+              <select id="langSource" onchange="onLangChange1();">
+                <option value="ja">ja</option>
+                <option value="en">en</option>
+                <option value="lo">lo</option>
+              </select>
+            </td>
+            <td>
+              <select id="langTarget" onchange="onLangChange1();">
+                <option value="en">en</option>
+                <option value="ja">ja</option>
+                <option value="lo">lo</option>
+              </select>
+            </td>
+            <td>
+              <input type="button" value="trans" onclick="trans();document.getElementById('url').value='';"/>
+            </td>
+          </tr>
+        </table>
       <td>
-        <select id="langTarget" onchange="onLangChange();">
-          <option value="en">en</option>
-          <option value="ja">ja</option>
-          <option value="lo">lo</option>
-        </select>
-      </td>
-
-      <td class="trans-url-buttons">
-        <input type="button" value="trans" onclick="trans();document.getElementById('url').value='';"/>
-      </td>
     </tr>
     </tbody>
   </table>
 
-  <ul id="urlList"></ul>
+  <table id="trans-options-short">
+    <tr>
+      <td>
+        <select id="langSource2" onchange="onLangChange2();">
+          <option value="ja">Japanese</option>
+          <option value="en">English</option>
+          <option value="lo">Laotian</option>
+        </select>
+      </td>
+      <td>
+        <select id="langTarget2" onchange="onLangChange2();">
+          <option value="en">English</option>
+          <option value="ja">Japanese</option>
+          <option value="lo">Laotian</option>
+        </select>
+      </td>
+      <td>
+        <input type="button" value="trans" onclick="trans();document.getElementById('url').value='';"/>
+      </td>
+    </tr>
+  </table>
+
+  <table id="urlList"></table>
 
   <div id="footer">
     <a href="#" onclick="if(confirm('Are you sure you want to delete all items on this list?')){clearAllData();}"
       title="Clear all items on this list.">clear all</a>
 
-    <a href="#" onclick="toggleAbout();" title="What's this?">about</a>
+    <a href="#" style="margin-left:1em;"
+      onclick="toggleAbout();" title="What is this app?">about</a>
   </div>
 
   <div id="about" style="display:none;">
@@ -70,7 +155,7 @@ li { margin-bottom: .5em; }
         Source: <a href="https://github.com/lewdev/trans">https://github.com/lewdev/trans</a>
       </li>
     </ul>
-    <a href="#" onclick="toggleAbout();" title="What's this?">hide</a>
+    <a href="#" onclick="toggleAbout();">hide</a>
   </div>
 
   <script>
@@ -79,6 +164,7 @@ li { margin-bottom: .5em; }
     , langTarget = 'en'
     , GTRANS_URL = 'https://translate.google.com/translate?hl=en&sl={langSource}&tl={langTarget}&anno=2&sandbox=1&u='
   ;
+
   function trans() {
     var urlInput = document.getElementById("url")
       , targetUrl = urlInput.value
@@ -86,6 +172,16 @@ li { margin-bottom: .5em; }
     if (targetUrl == '') {
       return;
     }
+
+    if (targetUrl.startsWith('https://translate.googleusercontent.com/translate')) {
+
+      var pattern = /https\:\/\/translate\.googleusercontent\.com\/translate_c\?anno=2&depth=1&hl=[a-z]{2}&rurl=translate\.google\.com&sl=[a-z]{2}&sp=nmt4&tl=[a-z]{2}&u=/igm;
+      targetUrl = targetUrl.replace(pattern, "");
+      targetUrl = targetUrl.replace(/&usg=[A-Za-z0-9\-]+/ig, "");
+    }
+    targetUrl = targetUrl.replace(/%3F/ig, '?');
+    targetUrl = targetUrl.replace(/%3D/ig, '=');
+    targetUrl = targetUrl.replace(/%26/ig, '&');
     addUrlToList(targetUrl, urlList.length);
   }
 
@@ -96,50 +192,69 @@ li { margin-bottom: .5em; }
     //save urls
     persistData();
   }
-
-  function onLangChange() {
-    var urlListElem = document.getElementById("urlList");
-    urlListElem.innerHTML = "";
-
-    var size = urlList.length, i;
-    for (i = 0; i < size; i++) {
-      addUrlToListInUi(urlList[i], i);
-    }
+  function onLangChange(isOnLangChange1) {
+    rebuildList();
     var langSourceSelect = document.getElementById("langSource")
       , langTargetSelect = document.getElementById("langTarget")
+      , langSource2Select = document.getElementById("langSource2")
+      , langTarget2Select = document.getElementById("langTarget2")
     ;
-    langSource = langSourceSelect ? langSourceSelect.value : "ja"
-    langTarget = langTargetSelect ? langTargetSelect.value : "en";
+    if (isOnLangChange1) {
+      langSource = langSourceSelect ? langSourceSelect.value : "ja";
+      langTarget = langTargetSelect ? langTargetSelect.value : "en";
+      langSource2Select.value = langSource;
+      langTarget2Select.value = langTarget;
+    }
+    else {
+      langSource = langSourceSelect ? langSourceSelect.value : "ja";
+      langTarget = langTargetSelect ? langTargetSelect.value : "en";
+      langSourceSelect.value = langSource;
+      langTargetSelect.value = langTarget;
+    }
     persistData();
+  }
+  function onLangChange1() {
+    onLangChange(true);
+  }
+  function onLangChange2() {
+    onLangChange(false);
+  }
+
+  function rebuildList() {
+    var urlListElem = document.getElementById("urlList"),
+        i,
+        size = urlList.length;
+    if (urlListElem) {
+      urlListElem.innerHTML = "";
+      for (i = 0; i < size; i++) {
+        addUrlToListInUi(urlList[i], i);
+      }
+    }
   }
 
   function addUrlToListInUi(targetUrl, index) {
-    var langSourceSelect = document.getElementById("langSource")
-      , langTargetSelect = document.getElementById("langTarget")
-    ;
-    langSource = langSourceSelect ? langSourceSelect.value : "ja"
-    langTarget = langTargetSelect ? langTargetSelect.value : "en";
-
     var transUrl = GTRANS_URL.replace(/\{langSource\}/g, langSource).replace(/\{langTarget\}/g, langTarget) + targetUrl.trim()
-      , urlListElem = document.getElementById("urlList")
-      , li = document.createElement("li")
-      , link = '<a href="' + transUrl + '" target="_blank">' + targetUrl + '</a>'
-          //+ ' ' + langSource + '&rArr;' + langTarget //&hArr;
-          + ' (<a href="#" onclick="deleteLink(' + index + ', this);">x</a>)'
+      , link = '<a href="' + transUrl + '" target="_blank" class="trans-link" title="' + targetUrl + '">' + cleanUrl(targetUrl) + '</a>'
+      , deleteBtn = '<a href="#" onclick="deleteLink(' + index + ', this);">x</a>'
+      , table = document.getElementById("urlList")
+      , tr = document.createElement("tr")
+      , urlCell = document.createElement("td")
+      , urlDelCell = document.createElement("td")
     ;
 
-    if (urlListElem) {
-      li.innerHTML = link;
-      urlListElem.appendChild(li);
-    }
-    else {
-      alert("URL list element not found!");
+    // table
+    if (table) {
+      urlCell.innerHTML = link;
+      tr.appendChild(urlCell);
+      urlDelCell.innerHTML = deleteBtn;
+      tr.appendChild(urlDelCell);
+      table.insertBefore(tr, table.childNodes[0]);
     }
     document.getElementById('url').focus();
   }
 
   function deleteLink(index, elem) {
-    var parent = elem.parentNode;
+    var parent = elem.parentNode.parentNode;
     parent.parentNode.removeChild(parent);
     urlList.splice(index, 1);
     //console.log("deleteLink removed link! urlList.length=" + urlList.length);
@@ -166,6 +281,12 @@ li { margin-bottom: .5em; }
     for (j = 0; j < cookieVarsSize; j++) {
       cookieVarArr = cookieVars[j].split("=");
       varsObject[cookieVarArr[0].trim()] = cookieVarArr[1];
+      if (cookieVarArr.length > 2) {
+          var i;
+          for (i = 2; i < cookieVarArr.length; i++) {
+              varsObject[cookieVarArr[0].trim()] += "=" + cookieVarArr[i];
+          }
+      }
     }
     if (myDataString && myDataString != '') {
       var data = varsObject["data"]
@@ -186,14 +307,15 @@ li { margin-bottom: .5em; }
     ;
     langSourceSelect.value = langSource;
     langTargetSelect.value = langTarget;
+    onLangChange1();
     document.getElementById('url').focus();
   };
 
   function clearAllData() {
-    urlList = [];
     var urlListElem = document.getElementById("urlList");
     urlListElem.innerHTML = "";
     localStorage.setItem("data", "data=,langSource=" + langSource + ",langTarget=" + langTarget);
+    urlList = [];
   }
 
   window.addEventListener("unload", function() {
@@ -226,9 +348,28 @@ li { margin-bottom: .5em; }
 
   function toggleAbout() {
     var aboutDiv = document.getElementById('about');
-    aboutDiv.style.display = aboutDiv.style.display == 'none' ? 'block' : 'none';
+    if (aboutDiv) {
+        aboutDiv.style.display = aboutDiv.style.display == 'none' ? 'block' : 'none';
+    }
     return false;
   }
+
+  function cleanUrl(url) {
+    if (url && url.indexOf("://") > -1) {
+        var arr = url.split("://")
+          , newUrl = arr[1]
+          , i
+        ;
+        if (arr.length > 2) {
+            for (i = 2; i < arr.length; i++) {
+                newUrl += arr[i];
+            }
+        }
+        return newUrl;
+    }
+    return url;
+  }
+
   </script>
 </body>
 </html>
