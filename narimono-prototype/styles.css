@@ -1,0 +1,65 @@
+
+@media only screen and (max-width: 1000px) {
+  .intro-song-panel > table td {
+    font-size: 24px;
+    padding: 5px;
+    width: 40px;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .intro-song-panel > table td {
+    font-size: 14px;
+    padding: 3px;
+    width: 30px;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .intro-song-panel > table td {
+    font-size: 30px;
+    padding: 5px;
+    width: 60px;
+  }
+}
+.intro-song-panel > table {
+  margin: 2em auto;
+}
+.intro-song-panel > table td {
+  border: 1px dotted gray;
+  white-space: nowrap;
+}
+.two-btn {
+  width: 300px;
+  height: 100px;
+  margin: 5px;
+  font-size: 30px;
+}
+.koto-btn {
+  width: 200px;
+  font-size: 20px;
+  display: block;
+  margin-bottom: 5px;
+}
+.fue-btn {
+  margin: 5px;
+  width: 100px;
+  height: 200px;
+  font-size: 20px;
+}
+.fue-btn.short {
+  height: 90px;
+}
+.narimono-btn-table {
+  margin-left:auto;
+  margin-right:auto;
+}
+.narimono-btn {
+  width: 150px;
+}
+.narimono-list-item {
+  list-style-type: none;
+  padding-bottom: 5px;
+}
+.narimono-shortcut-ref {
+  padding-left: 5px;
+}
