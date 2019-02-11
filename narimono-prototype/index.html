@@ -28,6 +28,17 @@
 </head>
 <body onload="init()">
 
+<!-- fb share -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2&appId=1653802928255147&autoLogAppEvents=1';
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<!-- END fb share -->
+
 <div class="container mt-3">
   <!-- Nav tabs -->
   <ul id="narimono-tabs" class="nav nav-tabs">
@@ -67,10 +78,25 @@
       <p>This is a prototype app for playing the sounds from most of the "Musical Instruments"
       or "Narimono" used in the performance of the "Mikagura-uta." I plan to produce a 
       rhythm game.</p>
+      <div>
+        <div class="fb-share-button" data-href="https://lewdev.github.io/narimono-prototype/" data-layout="button_count" data-size="small" data-mobile-iframe="true"><a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Flewdev.github.io%2Fnarimono-prototype%2F&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>
+      </div>
+      <br/>
       <button class="btn btn-secondary" onclick="playSong('section1', 'Fue');">Section 1 (Fue)</button>
       <button class="btn btn-secondary" onclick="playSong('section1', 'Hyoshigi');">Section 1 (Hyoshigi)</button>
       <button class="btn btn-secondary" onclick="playSong('section1', 'Chanpon');">Section 1 (Chanpon)</button>
+
       <div id="displaySong" class="intro-song-panel"></div>
+
+      <p>
+        <h3>Author: Lewis Nakao</h3>
+        Co-founder of the <a href="http://tenrikyo-resource.com">Tenrikyo Resource</a>
+        <ul>
+          <li><a href="https://www.facebook.com/lewdev" target="_blank">Facebook Profile</a></li>
+          <li><a href="https://github.com/lewdev" target="_blank">Github Profile</a></li>
+          <li><a href="https://www.linkedin.com/in/lewisnakao/" target="_blank">LinkedIn Profile</a></li>
+        </ul>
+      </p>
     </div>
 
     <div id="Hyoshigi" class="container tab-pane fade"><br>
