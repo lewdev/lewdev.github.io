@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Get the Kanye best from Kanye.rest!</title>
+  <link href='https://fonts.googleapis.com/css?family=Pacifico|Open+Sans:400,300,700' rel='stylesheet' type='text/css'>
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css'>
+  <style>
+  body {
+    text-align: center;
+    font-size: 16px;
+    background-color: #DBE3E6;
+    font-family: 'Roboto', sans-serif;
+  }
+  h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 5em;
+    color: #252E40;
+    line-height: 1.3em;
+  }
+  button {
+    background-color: #F16669;
+    border: none;
+    padding: 15px 20px;
+    color: white;
+    font-size: 2em;
+    margin-top: 40px;
+    transition: 1s;
+    cursor: pointer;
+    border-radius: 10px;
+  }
+  button:hover {
+    background-color: #ae1013;
+  }
+  button#projectBtn {
+    background-color: #66acf1;
+    font-size: 1em;
+  }
+  button#projectBtn:hover {
+    background-color: #102dae;
+  }
+  </style>
+</head>
+
+<body>
+<h1>Kanye West Quotes</h1>
+
+<img src="https://kanye.rest/images/logo.png"/>
+
+<div>Get the Kanye Best from kanye.rest!</div>
+
+<button id="quoteBtn">🤣 Get a Quote! 🤑</button>
+
+<div>
+  <a href="https://kanye.rest/"><button id="projectBtn">API: kanye.rest</button></a>
+</div>
+
+<script src='//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js'></script>
+<script >
+$("#quoteBtn").click(function() {
+  fetch('https://api.kanye.rest')
+    .then(response => {
+      return response.json();
+    })
+    .then(json => {
+      swal({
+        title: "Kanye quote:",
+        text: json.quote,
+      });
+    })
+  ;
+});
+</script>
+</body></html>
