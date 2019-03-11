@@ -1,7 +1,5 @@
 # Lewis Nakao
 
-![Lewis' Project Euler Progress](https://projecteuler.net/profile/lewdev.png "Lewis' Project Euler Progress")
-
 This will be a portfolio of my code creations. Hopefully this will grow into a list of interesting things.
 
 Contact me: [lewdev@gmail.com](mailto:lewdev@gmail.com)
@@ -17,3 +15,5 @@ Other Links
 * [Github Profile](https://github.com/lewdev)
 * [LinkedIn Profile](https://www.linkedin.com/in/lewisnakao)
 * [StackOverflow](http://stackoverflow.com/cv/lewis.nakao)
+
+![Lewis' Project Euler Progress](https://projecteuler.net/profile/lewdev.png "Lewis' Project Euler Progress")
