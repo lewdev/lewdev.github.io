@@ -13,7 +13,7 @@ Contact me: [lewdev@gmail.com](mailto:lewdev@gmail.com)
 
 Other Links
 ===========
-* [My resume (google docs)](https://docs.google.com/document/d/e/2PACX-1vQjXQRdUtzvOFekpmqbTlOsvNy-PIADmWVZmXm1OOD6AFK8Mkw37aqZ0ecUADp-1HZxjO4vNO_sVW3s/pub)
+* [My resume (pdf)](https://drive.google.com/open?id=1neZuwiGy5SBrFOiJnbcvcx1Bb-LV8iPP)
 * [Github Profile](https://github.com/lewdev)
 * [LinkedIn Profile](https://www.linkedin.com/in/lewisnakao)
 * [StackOverflow](http://stackoverflow.com/cv/lewis.nakao)
