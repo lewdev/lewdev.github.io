@@ -8,6 +8,7 @@ Projects
 ========
 
 * [Ofudesaki Browser](https://lewdev.github.io/ofudesaki-browser/)
+* [Number Guessing Game](https://lewdev.github.io/apps/number-guess)
 * [Regex Find & Format Tool](https://lewdev.github.io/apps/regex-find-and-format)
 * [Narimono App (prototype)](https://lewdev.github.io/narimono-prototype/)
 * [Kanrodai App](https://lewdev.github.io/kanrodai-app/)
