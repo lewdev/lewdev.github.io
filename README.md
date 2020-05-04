@@ -6,14 +6,17 @@ Contact me: [lewdev@gmail.com](mailto:lewdev@gmail.com)
 
 Projects
 ========
-
 * [Ofudesaki Browser](https://lewdev.github.io/ofudesaki-browser/)
-* [Number Guessing Game](https://lewdev.github.io/apps/number-guess)
 * [Regex Find & Format Tool](https://lewdev.github.io/apps/regex-find-and-format)
 * [Narimono App (prototype)](https://lewdev.github.io/narimono-prototype/)
 * [Kanrodai App](https://lewdev.github.io/kanrodai-app/)
 * [Tick-Tack-Toe v1](https://lewdev.github.io/ticktacktoe/v1/)
 * [trans](https://lewdev.github.io/trans/) A Google Translate link generator with link history.
+
+Games
+=====
+* [Burger Builder](https://lewdev.github.io/apps/burger-builder)
+* [Number Guessing Game](https://lewdev.github.io/apps/number-guess)
 
 Other Links
 ===========
