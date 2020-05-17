@@ -1,6 +1,6 @@
 # Lewis Nakao
 
-I am a Software Engineer with over 8 years of experience in the full-software development lifecycle including user support and maintenance. With a Master’s degree in Computer Science, I have experience leading projects and providing technical guidance to clients, SMEs, and users. Over my career, I have provided mentorship and on-boarding support for developers at all levels of experience. Specializing in Java and JavaScript web-based software development, I would be interested in challenging lead or senior software engineering roles.
+I am a Software Engineer with over 8 years of experience in the full-software development lifecycle including user support and maintenance. With a Master’s degree in Computer Science, I have experience leading projects and providing technical guidance to clients, stakeholders, and users. Over my career, I have provided mentorship and on-boarding support for developers at all levels of experience. Specializing in Java and JavaScript web-based software development, I would be interested in challenging lead or senior software engineering roles.
 
 Contact me: [lewdev@gmail.com](mailto:lewdev@gmail.com)
 
