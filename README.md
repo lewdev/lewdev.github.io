@@ -8,15 +8,15 @@ Projects
 ========
 * [Ofudesaki Browser](https://lewdev.github.io/ofudesaki-browser/)
 * [Regex Find & Format Tool](https://lewdev.github.io/apps/regex-find-and-format)
-* [Narimono App (prototype)](https://lewdev.github.io/narimono-prototype/)
-* [Kanrodai App](https://lewdev.github.io/kanrodai-app/)
-* [Tick-Tack-Toe v1](https://lewdev.github.io/ticktacktoe/v1/)
-* [trans](https://lewdev.github.io/trans/) A Google Translate link generator with link history.
+* [Narimono App (prototype)](https://lewdev.github.io/narimono-prototype/) ([View Source](https://github.com/lewdev/narimono))
+* [Kanrodai App](https://lewdev.github.io/kanrodai-app/) ([View Source](https://github.com/lewdev/kanrodai-app))
+* [trans](https://lewdev.github.io/trans/) ([View Source](https://github.com/lewdev/trans)) A Google Translate link generator with link history.
 
 Games
 =====
-* [Burger Builder](https://lewdev.github.io/apps/burger-builder)
-* [Number Guessing Game](https://lewdev.github.io/apps/number-guess)
+* [Burger Builder](https://lewdev.github.io/apps/burger-builder) ([View Source](https://github.com/lewdev/burger-builder))
+* [Number Guessing Game](https://lewdev.github.io/apps/number-guess) ([View Source](https://github.com/lewdev/number-guess))
+* [Tick-Tack-Toe v1](https://lewdev.github.io/ticktacktoe/v1/) ([View Source](https://github.com/lewdev/ticktacktoe))
 
 Other Links
 ===========
