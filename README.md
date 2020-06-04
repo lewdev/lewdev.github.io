@@ -26,3 +26,13 @@ Other Links
 * [StackOverflow](http://stackoverflow.com/cv/lewis.nakao)
 
 ![Lewis' Project Euler Progress](https://projecteuler.net/profile/lewdev.png "Lewis' Project Euler Progress")
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-2833478-13"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-2833478-13');
+</script>
