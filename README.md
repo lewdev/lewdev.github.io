@@ -26,3 +26,5 @@ Other Links
 * [StackOverflow](http://stackoverflow.com/cv/lewis.nakao)
 
 ![Lewis' Project Euler Progress](https://projecteuler.net/profile/lewdev.png "Lewis' Project Euler Progress")
+
+{% include google_analytics.html %}
