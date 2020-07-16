@@ -6,6 +6,7 @@ Contact me: [lewdev@gmail.com](mailto:lewdev@gmail.com)
 
 Projects
 ========
+* [HW Gen](https://lewdev.github.io/apps/hw-gen) Randomly generates math homework.
 * [Ofudesaki Browser](https://lewdev.github.io/ofudesaki-browser/)
 * [Regex Find & Format Tool](https://lewdev.github.io/apps/regex-find-and-format)
 * [Narimono App (prototype)](https://lewdev.github.io/narimono-prototype/) ([View Source](https://github.com/lewdev/narimono))
