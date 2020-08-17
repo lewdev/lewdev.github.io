@@ -1,39 +1,848 @@
-var aa="function"==typeof Object.defineProperties?Object.defineProperty:function(a,b,c){a!=Array.prototype&&a!=Object.prototype&&(a[b]=c.value)};function ba(a){a=["object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global,a];for(var b=0;b<a.length;++b){var c=a[b];if(c&&c.Math==Math)return c}throw Error("Cannot find global object");}var ca=ba(this);
-function k(a,b){if(b){var c=ca;a=a.split(".");for(var d=0;d<a.length-1;d++){var f=a[d];f in c||(c[f]={});c=c[f]}a=a[a.length-1];d=c[a];b=b(d);b!=d&&null!=b&&aa(c,a,{configurable:!0,writable:!0,value:b})}}k("Object.is",function(a){return a?a:function(b,c){return b===c?0!==b||1/b===1/c:b!==b&&c!==c}});
-k("Array.prototype.includes",function(a){return a?a:function(b,c){var d=this;d instanceof String&&(d=String(d));var f=d.length;c=c||0;for(0>c&&(c=Math.max(c+f,0));c<f;c++){var h=d[c];if(h===b||Object.is(h,b))return!0}return!1}});
-k("String.prototype.includes",function(a){return a?a:function(b,c){if(null==this)throw new TypeError("The 'this' value for String.prototype.includes must not be null or undefined");if(b instanceof RegExp)throw new TypeError("First argument to String.prototype.includes must not be a regular expression");return-1!==this.indexOf(b,c||0)}});function da(a){var b=0;return function(){return b<a.length?{done:!1,value:a[b++]}:{done:!0}}}
-function ea(a){var b="undefined"!=typeof Symbol&&Symbol.iterator&&a[Symbol.iterator];return b?b.call(a):{next:da(a)}}
-k("Promise",function(a){function b(e){this.c=0;this.i=void 0;this.a=[];var g=this.f();try{e(g.resolve,g.reject)}catch(l){g.reject(l)}}function c(){this.a=null}function d(e){return e instanceof b?e:new b(function(g){g(e)})}if(a)return a;c.prototype.c=function(e){if(null==this.a){this.a=[];var g=this;this.f(function(){g.i()})}this.a.push(e)};var f=ca.setTimeout;c.prototype.f=function(e){f(e,0)};c.prototype.i=function(){for(;this.a&&this.a.length;){var e=this.a;this.a=[];for(var g=0;g<e.length;++g){var l=
-e[g];e[g]=null;try{l()}catch(m){this.h(m)}}}this.a=null};c.prototype.h=function(e){this.f(function(){throw e;})};b.prototype.f=function(){function e(m){return function(q){l||(l=!0,m.call(g,q))}}var g=this,l=!1;return{resolve:e(this.w),reject:e(this.h)}};b.prototype.w=function(e){if(e===this)this.h(new TypeError("A Promise cannot resolve to itself"));else if(e instanceof b)this.A(e);else{a:switch(typeof e){case "object":var g=null!=e;break a;case "function":g=!0;break a;default:g=!1}g?this.v(e):this.m(e)}};
-b.prototype.v=function(e){var g=void 0;try{g=e.then}catch(l){this.h(l);return}"function"==typeof g?this.B(g,e):this.m(e)};b.prototype.h=function(e){this.o(2,e)};b.prototype.m=function(e){this.o(1,e)};b.prototype.o=function(e,g){if(0!=this.c)throw Error("Cannot settle("+e+", "+g+"): Promise already settled in state"+this.c);this.c=e;this.i=g;this.u()};b.prototype.u=function(){if(null!=this.a){for(var e=0;e<this.a.length;++e)h.c(this.a[e]);this.a=null}};var h=new c;b.prototype.A=function(e){var g=this.f();
-e.l(g.resolve,g.reject)};b.prototype.B=function(e,g){var l=this.f();try{e.call(g,l.resolve,l.reject)}catch(m){l.reject(m)}};b.prototype.then=function(e,g){function l(t,w){return"function"==typeof t?function(V){try{m(t(V))}catch(W){q(W)}}:w}var m,q,u=new b(function(t,w){m=t;q=w});this.l(l(e,m),l(g,q));return u};b.prototype.catch=function(e){return this.then(void 0,e)};b.prototype.l=function(e,g){function l(){switch(m.c){case 1:e(m.i);break;case 2:g(m.i);break;default:throw Error("Unexpected state: "+
-m.c);}}var m=this;null==this.a?h.c(l):this.a.push(l)};b.resolve=d;b.reject=function(e){return new b(function(g,l){l(e)})};b.race=function(e){return new b(function(g,l){for(var m=ea(e),q=m.next();!q.done;q=m.next())d(q.value).l(g,l)})};b.all=function(e){var g=ea(e),l=g.next();return l.done?d([]):new b(function(m,q){function u(V){return function(W){t[V]=W;w--;0==w&&m(t)}}var t=[],w=0;do t.push(void 0),w++,d(l.value).l(u(t.length-1),q),l=g.next();while(!l.done)})};return b});
-var n=["verse","group","search","favorites"],fa=n.indexOf("verse"),ha=n.indexOf("group"),ia=n.indexOf("search"),ja=n.indexOf("favorites"),p=document.getElementById("verseDisplay"),r=document.getElementById("partSelect"),v=document.getElementById("verseSelect"),x=document.getElementById("verseGroupSelect"),y=document.getElementById("verseNavTop"),z=document.getElementById("verseNavBottom"),ka=y.cloneNode(!0),A=document.getElementById("bookmarkDisplay"),la=document.getElementById("favoritesDisplay"),
-ma=document.querySelector(".verse-options"),B=document.getElementById("searchTxt"),na=document.getElementById("searchBtn"),oa=document.getElementById("searchClearBtn"),C=document.getElementById("searchResults"),D=document.getElementById("groupView"),E=document.getElementById("hideButtonLabelCbx"),F={view:0,selectedPart:1,selectedVerse:1,selectedVerseGroup:"1:1-20",searchStr:"",hideButtonLabel:!1,verseOptions:{showRomanized:!0,showJapanese:!0,showEnglish:!0,showPortuguese:!0,showKanji:!0,showEnglish2:!1},
-groupOptions:{showRomanized:!0,showJapanese:!0,showEnglish:!0,showPortuguese:!0,showKanji:!1,showEnglish2:!1},searchOptions:{showRomanized:!0,showJapanese:!0,showEnglish:!0,showPortuguese:!0,showKanji:!0,showEnglish2:!1},favoritesOptions:{showRomanized:!0,showJapanese:!0,showEnglish:!0,showPortuguese:!0,showKanji:!0,showEnglish2:!1},isDataLoaded:!1},G={favorites:[],bookmark:0},H=null,I=null;
-function pa(){var a=document.querySelector(".modal-window");a&&(a.onclick=function(){window.location="#"});r.onchange=function(){J(parseInt(r.value,10));K(1);L()};v.onchange=function(){K(parseInt(v.value,10));L()};x.onchange=function(){M(x.value);N()};M(F.selectedVerseGroup);J(F.selectedPart);K(F.selectedVerse);O(F.view);B.onkeyup=function(b){13===b.keyCode&&qa()};B.value=F.searchStr;na.onclick=function(){qa()};oa.onclick=function(){B.value="";B.focus()};ra()}
-function ra(){var a=document.querySelector(".of-bottom-menu");F.hideButtonLabel&&sa(a,"of-hide-labels");E.checked=F.hideButtonLabel;E.onclick=function(){var b=F.hideButtonLabel;"undefined"===b&&(b=!1);F.hideButtonLabel=!b;E.checked=!b;b?ta(a,"of-hide-labels"):sa(a,"of-hide-labels");P()}}function qa(){F.searchStr=B.value.trim();ua()}function Q(){F.view===fa?L():F.view===ha?N():F.view===ia?ua():F.view===ja&&va()}function J(a){F.selectedPart=a;r.value=F.selectedPart;wa(a)}
-function K(a){F.selectedVerse=a;v.value=F.selectedVerse}function M(a){F.selectedVerseGroup=a;x.value=F.selectedVerseGroup}function xa(a){var b=H.verses.length;return 0>=a?H.verses[b-1]:a>b?H.verses[0]:H.verses[a-1]}function R(a,b){for(var c=H.verses.length,d=0;d<c;d++){var f=H.verses[d];if(f.part===a&&f.verse===b)return f}return null}
-function O(a){F.view=a;n.map(function(d){var f=document.getElementById(d+"View");f&&(f.style.display="none");f=document.querySelectorAll("."+d+"-view");for(var h=0;h<f.length;h++)f[h].style.display="none";(f=document.getElementById(d+"ViewMenuItem"))||console.log(d+"ViewMenuItem not found.");ta(f,"selected")});a=n[a];var b=document.getElementById(a+"View"),c=document.querySelectorAll("."+a+"-view");b.style.display="";b.classList.add("animated","fadeIn");b.addEventListener("animationend",function(){});
-for(b=0;b<c.length;b++)c[b].style.display="";sa(document.querySelector("#"+a+"ViewMenuItem"),"selected");P();Q()}function L(){var a=F.selectedPart,b=F.selectedVerse;(I=R(a,b))?(ya(),p.innerHTML=S(I,"verse",null),T(p,I)):p.innerHTML="Verse "+a+":"+b+" not found!"}
-function T(a,b){if(a&&b){var c=a.querySelector(".verse-btn"),d=a.querySelector(".read-btn"),f=a.querySelector(".favorite-btn"),h=a.querySelector(".bookmark-btn"),e=b.part,g=b.verse,l=e+":"+g;c&&(c.onclick=function(){J(e);K(g);O(fa)});if(d){var m=za(e,g);d.onclick=function(){M(m);O(ha);window.location.hash="verse"+e+"-"+g}}G.favorites.includes(l)?(f.classList.add("favorited"),f.title="Remove from Favorites"):f.title="Add to Favorites";l===G.bookmark?(h.classList.add("favorited"),h.title="Remove Bookmark"):
-h.title="Bookmark";f.addEventListener("animationend",function(){f.classList.remove("animated","pulse","tada");Q()});h.addEventListener("animationend",function(){h.classList.remove("animated","pulse","tada");Q()});f.onclick=function(){G.favorites.includes(l)?(G.favorites.splice(G.favorites.indexOf(l),1),f.classList.remove("favorited"),f.classList.add("animated","pulse")):(G.favorites.push(l),G.favorites.sort(Aa),f.classList.add("favorited","animated","tada"));Ba()};h.onclick=function(){G.bookmark===
-l?(G.bookmark=!1,h.classList.remove("favorited"),h.classList.add("animated","pulse")):G.bookmark!==l&&(G.bookmark=l,h.classList.add("favorited","animated","tada"));Ba()}}}function U(a){return a&&-1<a.indexOf(":")?(a=a.split(":"),{b:parseInt(a[0],10),g:parseInt(a[1],10)}):null}function Aa(a,b){a=U(a);var c=U(b);return a.b<c.b?-1:a.b>c.b?1:a.g<b.g?-1:a.g>c.g?1:0}
-function za(a,b){if(a&&b){var c=H.verseGroups[a-1].groups;if(c)for(var d=0;d<c.length;d++){var f=c[d],h=f.split("-"),e=parseInt(h[1],10);if(b>=parseInt(h[0],10)&&b<=e)return a+":"+f}console.log("ERROR: getVerseGroupByPartVerse parameters ("+a+", "+b+") not found.");return null}console.log("ERROR: getVerseGroupByPartVerse parameters (part, verse) are not valid.")}
-function N(){y.style.display="";z.style.display="";var a;if(a=F.selectedVerseGroup){a=a.split(":");var b=a[1],c=b.split("-");a={b:parseInt(a[0],10),C:parseInt(c[0],10),s:parseInt(c[1],10),D:b}}else a=null;if(a){D.innerHTML="";for(b=a.C;b<=a.s;b++){c=R(a.b,b);var d=document.createElement("div");d.innerHTML=S(c,"group",null);T(d,c);D.appendChild(d)}b=a.b;var f="",h="";c=H.verseGroups[b-1];d=c.groups.length;for(var e=0;e<d;e++)a.D===c.groups[e]&&(0<e?f=b+":"+c.groups[e-1]:1===b?(f=H.verseGroups[16].groups,
-f="17:"+f[f.length-1]):(f=b-1,h=H.verseGroups[f-1].groups,f=f+":"+h[h.length-1]),h=e<d-1?b+":"+c.groups[e+1]:17===b?"1:"+H.verseGroups[0].groups[0]:b+1+":"+H.verseGroups[b].groups[0]);Ca(f,h)}}
-function va(){y.style.display="none";z.style.display="none";var a=G.favorites;if(G.bookmark){var b=U(G.bookmark);A.innerHTML="<h3>Bookmark</h3>"+S(R(b.b,b.g),"favorites","");T(A,b)}else A.innerHTML="";a&&0<a.length&&(la.innerHTML='<h3 style="border-bottom: 1px solid gray;">Favorites</h3>',a.map(function(c){c=U(c);var d=document.createElement("div");d.innerHTML=S(R(c.b,c.g),"favorites","");T(d,c);la.appendChild(d)}))}
-function ua(){y.style.display="none";z.style.display="none";var a=F.searchStr;if(a){var b=0,c=[],d=H.verses.length;C.innerHTML="";for(var f=0;f<d;f++){var h=H.verses[f],e=new RegExp(a,"i"),g=document.createElement("div"),l=[];F.searchOptions.showRomanized&&l.push(h.ro);F.searchOptions.showJapanese&&l.push(h.jp1+h.jp2);F.searchOptions.showEnglish&&l.push(h.en_6th_ed);F.searchOptions.showPortuguese&&l.push(h.pt);F.searchOptions.showKanji&&l.push(h.kanji);l.join(" ").match(e)&&(b++,g.innerHTML=S(h,"search",
-a),T(g,h),c.push(g))}d=document.createElement("div");d.innerHTML='<p>Search "'+a+'" yields '+b+" results.</p>";C.appendChild(d);for(a=0;a<c.length;a++)C.appendChild(c[a])}else C.innerHTML="<p>Enter a search term.</p>";B.select()}function Da(){var a=[];H.verseGroups.map(function(b){var c=b.part;a.push('<option value="" disabled="true">- Part '+c+" -</option>");b.groups.map(function(d){d=c+":"+d;a.push('<option value="'+d+'">'+d+"</option>")})});x.innerHTML=a.join("")}
-function Ca(a,b){function c(){D.classList.add("animated","slideOutLeft");D.addEventListener("animationend",function(){M(b);N();D.className="";D.classList.add("animated","slideInRight");D.addEventListener("animationend",function(){D.className=""})})}function d(){D.classList.add("animated","slideOutRight");D.addEventListener("animationend",function(){M(a);N();D.className="";D.classList.add("animated","slideInLeft");D.addEventListener("animationend",function(){D.className=""})})}X(y,F.selectedVerseGroup,
-d,c);X(z,F.selectedVerseGroup,d,c)}function ya(){function a(){J(f.part);K(f.verse);L()}function b(){J(d.part);K(d.verse);L()}var c="Verse "+I.part+":"+I.verse,d=xa(I.id-1),f=xa(I.id+1);X(y,c,b,a);X(z,c,b,a)}function X(a,b,c,d){a.innerHTML=ka.innerHTML;var f=a.getElementsByClassName("verse-nav-next-btn")[0],h=a.getElementsByClassName("verse-nav-middle")[0];a.getElementsByClassName("verse-nav-prev-btn")[0].onclick=c;f.onclick=d;h.innerHTML=b}
-function S(a,b,c){c=c||!1;if(a){var d=a.part+":"+a.verse,f=Y(a.ro.split(/\s{2,}/g).join("<br/>"),c),h=Y(a.kanji.split(/\s{2,}/g).join("<br/>"),c),e=Y(a.en_6th_ed,c),g=Y(a.pt,c);c=Y(a.jp1+"<br/>"+a.jp2,c);return'<div class="verse-display">'+(F[b+"Options"].showRomanized?"<blockquote>"+f+"</blockquote>":"")+(F[b+"Options"].showJapanese?"<blockquote>"+c+"</blockquote>":"")+(F[b+"Options"].showEnglish?"<blockquote>"+e+"</blockquote>":"")+(F[b+"Options"].showPortuguese?"<blockquote>"+g+"</blockquote>":
-"")+(F[b+"Options"].showKanji?"<blockquote>"+h+"</blockquote>":"")+'<table class="of-verse-controls"><tbody><tr><td><button class="favorite-btn btn circle"><i class="fa fa-fw fa-star"></i></button><button class="bookmark-btn btn circle"><i class="fa fa-fw fa-bookmark"></i></button></td><td>'+(a.in_life_of_oyasama?'<span class="of-tag">Life of Oyasama</span>':"")+(a.in_doctrine?'<span class="of-tag">Doctrine</span>':"")+"</td><td>"+d+"</td><td>"+("group"!==b?'<button class="read-btn btn circle" title="View in Read"><i class="fab fa-fw fa-readme"></i></button>':
-"")+("verse"!==b?'<button class="verse-btn btn circle" title="View in Browse"><i class="fa fa-fw fa-eye"></i></button>':"")+"</td></tr></tbody></table></div>"}return"Verse not found."}function Y(a,b){if(!b)return a;b=new RegExp(b,"i");var c='<span class="highlight">'+a.match(b)+"</span>";return a.replace(b,c)}
-function Ea(){n.map(function(a){for(var b=ma.cloneNode(!0),c=b.querySelectorAll("input"),d=b.querySelectorAll("label"),f={},h=0;h<c.length;f={j:f.j},h++){var e=c[h],g=e.id.replace("-verse","-"+a);f.j=e.id.replace("-verse","").replace("show","").replace("Cbx","");e.id=g;e.onchange=function(l){return function(){var m=l.j,q=document.getElementById("show"+m+"Cbx-"+a);if(q){var u=F[a+"Options"]["show"+m];"undefined"===u&&(u=!1);F[a+"Options"]["show"+m]=!u;q.checked=!u}Q()}}(f);e.checked=F[a+"Options"]["show"+
-f.j]}for(c=0;c<d.length;c++)d[c].htmlFor=d[c].htmlFor.replace("-verse","-"+a);d=document.getElementById(a+"OptionsRow");d.innerHTML="";d.appendChild(b);document.getElementById(a+"ViewMenuItem").onclick=function(){O(n.indexOf(a))}})}function wa(a){var b=[];H.verses.map(function(c){c.part===parseInt(a,10)&&(c=c.verse,b.push('<option value="'+c+'"'+(F.selectedVerse===c?' selected="selected"':"")+">"+c+"</option>"))});v.innerHTML=b.join("");v.value=F.selectedVerse}
-window.onload=function(){Fa().then(function(){return Ga("ofudesaki.json")}).then(function(a){H=JSON.parse(a.responseText);return Ga("keywords.json")}).then(function(a){JSON.parse(a.responseText);P();a=[];for(var b=1;18>=b;b++)a.push('<option value="'+b+'">'+b+"</option>");r.innerHTML=a.join("");wa(F.selectedPart);Da();pa();Ea();F.isDataLoaded=!0}).catch(function(a){console.log("Something went wrong.",a)})};window.onunload=function(){F.isDataLoaded&&(P(),Ba())};
-function Fa(){return new Promise(function(a,b){var c=window.localStorage.getItem("ofudesaki-browser"),d=window.localStorage.getItem("ofudesaki-browser-favorites");c&&((c=JSON.parse(c))?(F=c,F.favoritesOptions||(F.favoritesOptions={showRomanized:!0,showJapanese:!0,showEnglish:!0,showPortuguese:!0,showKanji:!0,showEnglish2:!1})):b(Error("Failed to load data from local storage.")));d&&((d=JSON.parse(d))?G=d:b(Error("Failed to load fav data from local storage.")));a("Data loaded from local storage.")})}
-function P(){window.localStorage.setItem("ofudesaki-browser",JSON.stringify(F))}function Ba(){window.localStorage.setItem("ofudesaki-browser-favorites",JSON.stringify(G))}function Ga(a){var b=void 0===b?"GET":b;var c=new XMLHttpRequest;return new Promise(function(d,f){c.onreadystatechange=function(){4===c.readyState&&(200<=c.status&&300>c.status?d(c):f({status:c.status,statusText:c.statusText}))};c.open(b||"GET",a,!0);c.send()})}
-function Z(a){for(var b=a.className.split(/\s+/),c=b.length,d=0;d<c;d++)if("active"===b[d]){b.splice(d,1);break}c===b.length&&b.push("active");a.className=b.join(" ")}function ta(a,b){for(var c=a.className.split(/\s+/),d=c.length,f=0;f<d;f++)if(c[f]===b){c.splice(f,1);break}a.className=c.join(" ")}function sa(a,b){var c=a.className.split(/\s+/);c.push(b);a.className=c.join(" ")}
-(function(a,b){var c=b.getElementById("layout"),d=b.getElementById("menu"),f=b.getElementById("menuLink");a=b.getElementById("main");f.onclick=function(h){h.preventDefault();Z(c);Z(d);Z(f)};a.onclick=function(h){-1!==d.className.indexOf("active")&&(h.preventDefault(),Z(c),Z(d),Z(f))}})(window,window.document);
+const APP_DATA_KEY = "ofudesaki-browser";
+const FAV_DATA_KEY = "ofudesaki-browser-favorites";
+
+const VIEWS = ["verse", "group", "search", "favorites"];
+const LANGUAGES = ["Romanized", "Japanese", "English", "Portuguese", "Kanji"];
+const VERSE_VIEW = "verse";
+const READ_VIEW = "group";
+const SEARCH_VIEW = "search";
+const FAVORITES_VIEW = "favorites";
+const VERSE_VIEW_INDEX = VIEWS.indexOf(VERSE_VIEW);
+const READ_VIEW_INDEX = VIEWS.indexOf(READ_VIEW);
+const SEARCH_VIEW_INDEX = VIEWS.indexOf(SEARCH_VIEW);
+const FAVORITES_VIEW_INDEX = VIEWS.indexOf(FAVORITES_VIEW);
+const LAST_VERSE_GROUP_PART = 17;
+const PART_COUNT = 18;
+
+const EM_HEAVY_CHECK = "&#9989;"; //✅
+const EM_CROSS_MARK = "&#10060;"; //❌
+
+const verseDisplay = document.getElementById("verseDisplay");
+const partSelect = document.getElementById("partSelect");
+const verseSelect = document.getElementById("verseSelect");
+const verseGroupSelect = document.getElementById("verseGroupSelect");
+
+const verseNavTop = document.getElementById("verseNavTop");
+const verseNavBottom = document.getElementById("verseNavBottom");
+const verseNavTemplate = verseNavTop.cloneNode(true);
+
+//favorites
+const bookmarkDisplay = document.getElementById("bookmarkDisplay");
+const favoritesDisplay = document.getElementById("favoritesDisplay");
+
+//const verseOptionTemplate = document.getElementById("verseOptionsRow");
+const verseOptionTemplate = document.querySelector(".verse-options");
+
+const searchTxt = document.getElementById("searchTxt");
+const searchBtn = document.getElementById("searchBtn");
+const searchClearBtn = document.getElementById("searchClearBtn");
+const searchResults = document.getElementById("searchResults");
+
+const groupView = document.getElementById("groupView");
+const favoritesView = document.getElementById("favoritesView");
+
+const hideButtonLabelCbx = document.getElementById("hideButtonLabelCbx");
+
+let count = 0;
+let data = {
+  'view': 0,
+  'selectedPart': 1,
+  'selectedVerse': 1,
+  'selectedVerseGroup': "1:1-20",
+  'searchStr': "",
+  'hideButtonLabel': false,
+  'verseOptions': {
+    'showRomanized': true,
+    'showJapanese': true,
+    'showEnglish': true,
+    'showPortuguese': true,
+    'showKanji': true,
+    'showEnglish2': false
+  },
+  'groupOptions': {
+    'showRomanized': true,
+    'showJapanese': true,
+    'showEnglish': true,
+    'showPortuguese': true,
+    'showKanji': false,
+    'showEnglish2': false
+  },
+  'searchOptions': {
+    'showRomanized': true,
+    'showJapanese': true,
+    'showEnglish': true,
+    'showPortuguese': true,
+    'showKanji': true,
+    'showEnglish2': false
+  },
+  'favoritesOptions': {
+    'showRomanized': true,
+    'showJapanese': true,
+    'showEnglish': true,
+    'showPortuguese': true,
+    'showKanji': true,
+    'showEnglish2': false
+  },
+  "isDataLoaded": false, // "localStorage" with default data is prevented.
+};
+let favoritesData = {
+  'favorites': [],
+  'bookmark': 0
+};
+let ofData = null;
+let keywords = null;
+let selectedVerse = null;
+
+function myParseInt(str) {
+  return parseInt(str, 10);
+}
+function initUi() {
+  const modalWin = document.querySelector('.modal-window');
+  if (modalWin) modalWin.onclick = () => { window.location = "#"; };
+  partSelect.onchange = function(e) {
+    selectPart(myParseInt(partSelect.value));
+    selectVerse(1);
+    displayVerseView();
+  };
+  verseSelect.onchange = function() {
+    selectVerse(myParseInt(verseSelect.value));
+    displayVerseView();
+  };
+  verseGroupSelect.onchange = function() {
+    selectVerseGroup(verseGroupSelect.value);
+    displayReadView();
+  };
+  selectVerseGroup(data['selectedVerseGroup']);
+  selectPart(data['selectedPart']);
+  selectVerse(data['selectedVerse']);
+  displayView(data['view']);
+  searchTxt.onkeyup = function(e) {
+    if (e.keyCode === 13) { search(); }
+  };
+  searchTxt.value = data['searchStr'];
+  searchBtn.onclick = function() { search(); };
+  searchClearBtn.onclick = function() {
+    searchTxt.value = "";
+    searchTxt.focus();
+  };
+  initMenuLabels();
+}
+function initMenuLabels() {
+  const menuDiv = document.querySelector(".of-bottom-menu");
+  if (data['hideButtonLabel']) {
+    addClassName(menuDiv, 'of-hide-labels');
+  }
+  hideButtonLabelCbx.checked = data['hideButtonLabel'];
+  hideButtonLabelCbx.onclick = function() {
+    let optionFlag = data['hideButtonLabel'];
+    if (optionFlag === 'undefined') {
+      optionFlag = false;
+    }
+    data['hideButtonLabel'] = !optionFlag;
+    hideButtonLabelCbx.checked = !optionFlag;
+    if (!optionFlag) {
+      addClassName(menuDiv, 'of-hide-labels');
+    }
+    else {
+      removeClassName(menuDiv, 'of-hide-labels');
+    }
+    saveConfigData();
+  };
+}
+function search() {
+  data['searchStr'] = searchTxt.value.trim();
+  displaySearchView();
+}
+function renderView() {
+  if (data['view'] === VERSE_VIEW_INDEX) {
+    displayVerseView();
+  }
+  else if (data['view'] === READ_VIEW_INDEX) {
+    displayReadView();
+  }
+  else if (data['view'] === SEARCH_VIEW_INDEX) {
+    displaySearchView();
+  }
+  else if (data['view'] === FAVORITES_VIEW_INDEX) {
+    displayFavoritesView();
+  }
+}
+function selectPart(part) {
+  data['selectedPart'] = part;
+  partSelect.value = data['selectedPart'];
+  displayVerseSelect(part);
+}
+function selectVerse(verseNum) {
+  data['selectedVerse'] = verseNum;
+  verseSelect.value = data['selectedVerse'];
+}
+function selectVerseGroup(verseGroupStr) {
+  data['selectedVerseGroup'] = verseGroupStr;
+  verseGroupSelect.value = data['selectedVerseGroup'];
+}
+function getById(id) {
+  let size = ofData['verses'].length;
+  if (id <= 0) {
+    return ofData['verses'][size - 1]
+  }
+  else if (id > size) {
+    return ofData['verses'][0];
+  }
+  return ofData['verses'][id - 1];
+}
+function getByPartAndVerse(partNum, verseNum) {
+  let size = ofData['verses'].length;
+  for (let i = 0; i < size; i++) {
+    const verse = ofData['verses'][i];
+    if (verse['part'] === partNum && verse['verse'] === verseNum) {
+      return verse;
+    }
+  }
+  return null;
+}
+function displayView(viewCode) {
+  data['view'] = viewCode;
+  //hide other views
+  VIEWS.map(viewName => {
+    const viewDiv = document.getElementById(viewName + "View");
+    if (viewDiv) {
+      viewDiv.style.display = "none";
+    }
+    const viewDivs = document.querySelectorAll("." + viewName + "-view");
+    for (let i = 0; i < viewDivs.length; i++) {
+      viewDivs[i].style.display = "none";
+    }
+    const menuItem = document.getElementById(viewName + "ViewMenuItem");
+    if (!menuItem) {
+      console.log(viewName + "ViewMenuItem not found.");
+    }
+    removeClassName(menuItem, "selected");
+  });
+  const viewName = VIEWS[viewCode];
+  const viewDiv = document.getElementById(viewName + "View");
+  const viewElems = document.querySelectorAll("." + viewName + "-view");
+  viewDiv.style.display = "";
+  viewDiv.classList.add('animated', 'fadeIn');
+  viewDiv.addEventListener('animationend', function() {  });
+  for (let i = 0; i < viewElems.length; i++) {
+    viewElems[i].style.display = "";
+  }
+  const menuItem = document.querySelector("#" + viewName + "ViewMenuItem");
+  addClassName(menuItem, "selected");
+  saveConfigData();
+  renderView();
+}
+function displayVerseView() {
+  const partNum = data['selectedPart'];
+  const verseNum = data['selectedVerse'];
+  selectedVerse = getByPartAndVerse(partNum, verseNum);
+  //id,part,verse,in_doctrine,in_life_of_oyasama,en_6th_ed,romanization,jp1,jp2,kanji,en
+  if (selectedVerse) {
+    const verseStr = "Verse " + selectedVerse['part'] + ":" + selectedVerse['verse']
+    displayVerseNavBtns(verseStr);
+    verseDisplay.innerHTML = displayVerseByViewStr(selectedVerse, VERSE_VIEW, null);
+    applyVerseControls(verseDisplay, selectedVerse);
+  }
+  else {
+    verseDisplay.innerHTML = "Verse " + partNum + ":" + verseNum + " not found!";
+  }
+}
+function applyVerseControls(verseDisplay, selectedVerse) {
+  if (!verseDisplay || !selectedVerse) {
+    return;
+  }
+  const verseBtn = verseDisplay.querySelector(".verse-btn");
+  const readBtn = verseDisplay.querySelector(".read-btn");
+  const favoriteBtn = verseDisplay.querySelector(".favorite-btn");
+  const bookmarkBtn = verseDisplay.querySelector(".bookmark-btn");
+  const part = selectedVerse['part'];
+  const verse = selectedVerse['verse'];
+  const partVerse = `${part}:${verse}`;
+  if (verseBtn) {
+    verseBtn.onclick = function() {
+      selectPart(part);
+      selectVerse(verse);
+      displayView(VERSE_VIEW_INDEX);
+    };
+  }
+  if (readBtn) {
+    const verseGroup = getVerseGroupByPartVerse(part, verse);
+    readBtn.onclick = function() {
+      selectVerseGroup(verseGroup);
+      displayView(READ_VIEW_INDEX);
+      window.location.hash = "verse" + part + "-" + verse;
+    };
+  }
+  const favorites = favoritesData['favorites'];
+  if (favorites.includes(partVerse)) {
+    favoriteBtn.classList.add('favorited');
+    favoriteBtn.title = "Remove from Favorites";
+  }
+  else {
+    favoriteBtn.title = "Add to Favorites";
+  }
+  if (partVerse === favoritesData['bookmark']) {
+    bookmarkBtn.classList.add('favorited');
+    bookmarkBtn.title = "Remove Bookmark";
+  }
+  else {
+    bookmarkBtn.title = "Bookmark";
+  }
+  favoriteBtn.addEventListener('animationend', () => {
+    favoriteBtn.classList.remove('animated', 'pulse', 'tada');
+    renderView();
+  });
+  bookmarkBtn.addEventListener('animationend', () => {
+    bookmarkBtn.classList.remove('animated', 'pulse', 'tada');
+    renderView();
+  });
+  favoriteBtn.onclick = function() {
+    const favorites = favoritesData['favorites'];
+    if (favorites.includes(partVerse)) {
+      const favIndex = favoritesData['favorites'].indexOf(partVerse);
+      favoritesData['favorites'].splice(favIndex, 1);
+      favoriteBtn.classList.remove('favorited');
+      favoriteBtn.classList.add('animated', 'pulse');
+    }
+    else {
+      favoritesData['favorites'].push(partVerse);
+      favoritesData['favorites'].sort(verseSort);
+      favoriteBtn.classList.add('favorited', 'animated', 'tada');
+    };
+    saveFavData();
+  };
+  bookmarkBtn.onclick = function() {
+    if (favoritesData["bookmark"] === partVerse) {
+      favoritesData['bookmark'] = false;
+      bookmarkBtn.classList.remove('favorited');
+      bookmarkBtn.classList.add('animated', 'pulse');
+    }
+    else if (favoritesData["bookmark"] !== partVerse) {
+      favoritesData['bookmark'] = partVerse;
+      bookmarkBtn.classList.add('favorited', 'animated', 'tada');
+    }
+    saveFavData();
+  };
+}
+const parsePartVerseStr = partVerse => {
+  if (partVerse && partVerse.indexOf(":") > -1) {
+    const arr = partVerse.split(":");
+    return { part: myParseInt(arr[0]), verse: myParseInt(arr[1]) };
+  }
+  return null;
+};
+const verseSort = (a, b) => {
+  const partVerseA = parsePartVerseStr(a);
+  const partVerseB = parsePartVerseStr(b);
+  if (partVerseA.part < partVerseB.part) return -1;
+  else if (partVerseA.part > partVerseB.part) return 1;
+  if (partVerseA.verse < b.verse) return -1;
+  else if (partVerseA.verse > partVerseB.verse) return 1;
+  return 0;
+};
+function getVerseGroupByPartVerse(part, verse) {
+  if (!part || !verse) {
+    console.log("ERROR: getVerseGroupByPartVerse parameters (part, verse) are not valid.")
+    return;
+  }
+  const groups = ofData['verseGroups'][part - 1]['groups'];
+  if (groups) {
+    for (let i = 0; i < groups.length; i++) {
+      const verseGroupStr = groups[i];
+      const verseStrArr = verseGroupStr.split("-");
+      const startVerse = myParseInt(verseStrArr[0]);
+      const endVerse = myParseInt(verseStrArr[1]);
+      if (verse >= startVerse && verse <= endVerse) {
+        return part + ":" + verseGroupStr;
+      }
+    }
+  }
+  console.log("ERROR: getVerseGroupByPartVerse parameters (" + part + ", " + verse + ") not found.")
+  return null;
+}
+function parseVerseGroup(partVerseGroupStr) {
+  if (!partVerseGroupStr) {
+    return null;
+  }
+  const partVerseGroupArr = partVerseGroupStr.split(":");
+  const partNum = myParseInt(partVerseGroupArr[0]);
+  const verseGroupStr = partVerseGroupArr[1];
+  const verseGroupArr = verseGroupStr.split("-");
+  const startVerseNum = myParseInt(verseGroupArr[0]);
+  const endVerseNum = myParseInt(verseGroupArr[1]);
+  return {
+    part: partNum,
+    startVerse: startVerseNum,
+    endVerse: endVerseNum,
+    verseGroup: verseGroupStr //i.e. 1-21
+  }
+}
+function displayReadView() {
+  verseNavTop.style.display = '';
+  verseNavBottom.style.display = '';
+  const partVerseGroupStr = data['selectedVerseGroup'];
+  const verseGroup = parseVerseGroup(partVerseGroupStr);
+  if (verseGroup) {
+    groupView.innerHTML = "";
+    for (let verseNum = verseGroup.startVerse; verseNum <= verseGroup.endVerse; verseNum++) {
+      const verse = getByPartAndVerse(verseGroup.part, verseNum);
+      const elem = document.createElement("div");
+      elem.innerHTML = displayVerseByViewStr(verse, READ_VIEW, null);
+      applyVerseControls(elem, verse);
+      groupView.appendChild(elem);
+    }
+    displayReadNavBtns(verseGroup.part, verseGroup.verseGroup);
+  }
+}
+function displayReadNavBtns(partNum, verseGroupStr) {
+  let prevVerseGroupStr = "";
+  let nextVerseGroupStr = "";
+  const verseGroup = ofData['verseGroups'][partNum - 1];
+  const size = verseGroup['groups'].length;
+  for (let j = 0; j < size; j++) {
+    const group = verseGroup['groups'][j];
+    if (verseGroupStr === group) {
+      //prev
+      if (j > 0) {
+        prevVerseGroupStr = partNum + ":" + verseGroup['groups'][j - 1];
+      }
+      else {
+        if (partNum === 1) {
+          const lastVerseGroups = ofData['verseGroups'][LAST_VERSE_GROUP_PART - 1]['groups'];
+          prevVerseGroupStr = LAST_VERSE_GROUP_PART + ":" + lastVerseGroups[lastVerseGroups.length - 1];
+        }
+        else {
+          const prevPart = partNum - 1;
+          const prevVerseGroups = ofData['verseGroups'][prevPart - 1]['groups'];
+          prevVerseGroupStr = prevPart + ":" + prevVerseGroups[prevVerseGroups.length - 1];
+        }
+      }
+      //next
+      if (j < size - 1) {
+        nextVerseGroupStr = partNum + ":" + verseGroup['groups'][j + 1];
+      }
+      else {
+        if (partNum === LAST_VERSE_GROUP_PART) {
+          const firstVerseGroups = ofData['verseGroups'][0]['groups'];
+          nextVerseGroupStr = 1 + ":" + firstVerseGroups[0];
+        }
+        else {
+          const nextVerseGroups = ofData['verseGroups'][partNum]['groups'];
+          nextVerseGroupStr = (partNum + 1) + ":" + nextVerseGroups[0];
+        }
+      }
+    }
+  }
+  displayVerseGroupNavBtns(prevVerseGroupStr, nextVerseGroupStr);
+}
+function displayFavoritesView() {
+  //hide stuff
+  verseNavTop.style.display = 'none';
+  verseNavBottom.style.display = 'none';
+  const bookmark = favoritesData['bookmark'];
+  const favorites = favoritesData['favorites'];
+  if (!bookmark && (!favorites || favorites.length === 0)) {
+    bookmarkDisplay.innerHTML = "Bookmark nor favorites have been set.";
+    favoritesDisplay.innerHTML = "";
+    return;
+  }
+  if (bookmark) {
+    //display book mark
+    const bookmarkPartVerse = parsePartVerseStr(favoritesData['bookmark']);
+    const partVerse = getByPartAndVerse(bookmarkPartVerse.part, bookmarkPartVerse.verse);
+    bookmarkDisplay.innerHTML = '<h3>Bookmark</h3>' + displayVerseByViewStr(partVerse, 'favorites', '');
+    applyVerseControls(bookmarkDisplay, bookmarkPartVerse);
+  }
+  else {
+    bookmarkDisplay.innerHTML = '';
+  }
+  if (favorites && favorites.length > 0) {
+    favoritesDisplay.innerHTML = '<h3 style="border-bottom: 1px solid gray;">Favorites</h3>';
+    favorites.map(a => {
+      const favPartVerse = parsePartVerseStr(a);
+      const partVerse = getByPartAndVerse(favPartVerse.part, favPartVerse.verse);
+      const elem = document.createElement("div");
+      elem.innerHTML = displayVerseByViewStr(partVerse, 'favorites', '');
+      applyVerseControls(elem, favPartVerse);
+      favoritesDisplay.appendChild(elem);
+    });
+  }
+}
+function displaySearchView() {
+  //hide stuff
+  verseNavTop.style.display = 'none';
+  verseNavBottom.style.display = 'none';
+
+  const searchStr = data['searchStr'];
+  if (searchStr) {
+    let count = 0;
+    let resultDivArr = [];
+    let size = ofData['verses'].length;
+    searchResults.innerHTML = "";
+    for (let i = 0; i < size; i++) {
+      const verse = ofData['verses'][i];
+      const re = new RegExp(searchStr, 'i');
+      const elem = document.createElement("div");
+      const searchBodyArr = [];
+      if (data['searchOptions']['showRomanized']) { searchBodyArr.push(verse['ro']); }
+      if (data['searchOptions']['showJapanese']) { searchBodyArr.push(verse['jp1'] + verse['jp2']); }
+      if (data['searchOptions']['showEnglish']) { searchBodyArr.push(verse['en_6th_ed']); }
+      if (data['searchOptions']['showPortuguese']) { searchBodyArr.push(verse['pt']); }
+      if (data['searchOptions']['showKanji']) { searchBodyArr.push(verse['kanji']); }
+      const matchResult = (searchBodyArr.join(" ")).match(re);
+      if (matchResult) {
+        count++;
+        elem.innerHTML = displayVerseByViewStr(verse, SEARCH_VIEW, searchStr);
+        applyVerseControls(elem, verse);
+        resultDivArr.push(elem);
+      }
+    }
+    const yieldsDiv = document.createElement("div");
+    yieldsDiv.innerHTML = '<p>Search "' + searchStr + '" yields ' + count + ' results.</p>';
+    searchResults.appendChild(yieldsDiv);
+    for (let i = 0; i < resultDivArr.length; i++) {
+      searchResults.appendChild(resultDivArr[i]);
+    }
+  }
+  else {
+    searchResults.innerHTML = "<p>Enter a search term.</p>";
+  }
+  searchTxt.select();
+}
+function displayVerseGroupSelect() {
+  let options = [];
+  ofData['verseGroups'].map(verseGroup => {
+    const part = verseGroup['part'];
+    options.push('<option value="" disabled="true">- Part ' + part + ' -</option>');
+    verseGroup['groups'].map(group => {
+      const partVerseGroup = part + ":" + group;
+      options.push('<option value="' + partVerseGroup + '">' + partVerseGroup + '</option>');
+    });
+  });
+  verseGroupSelect.innerHTML = options.join("");
+}
+function displayVerseGroupNavBtns(prevVerseGroupStr, nextVerseGroupStr) {
+  const prevFunc = function() {
+    groupView.classList.add('animated', 'slideOutRight');
+    groupView.addEventListener('animationend', function() {
+      selectVerseGroup(prevVerseGroupStr);
+      displayReadView();
+      groupView.className = "";
+      groupView.classList.add('animated', 'slideInLeft');
+      groupView.addEventListener('animationend', function() {
+        groupView.className = "";
+      });
+    });
+  };
+  const nextFunc = function() {
+    groupView.classList.add('animated', 'slideOutLeft');
+    groupView.addEventListener('animationend', function() {
+      selectVerseGroup(nextVerseGroupStr);
+      displayReadView();
+      groupView.className = "";
+      groupView.classList.add('animated', 'slideInRight');
+      groupView.addEventListener('animationend', function() {
+        groupView.className = "";
+      });
+    });
+  };
+  setupNav(verseNavTop, data['selectedVerseGroup'], prevFunc, nextFunc);
+  setupNav(verseNavBottom, data['selectedVerseGroup'], prevFunc, nextFunc);
+}
+function displayVerseNavBtns(verseStr) {
+  const prevVerse = getById(selectedVerse.id - 1);
+  const nextVerse = getById(selectedVerse.id + 1);
+  const prevFunc = function() {
+    selectPart(prevVerse['part']);
+    selectVerse(prevVerse['verse']);
+    displayVerseView();
+  };
+  const nextFunc = function() {
+    selectPart(nextVerse['part']);
+    selectVerse(nextVerse['verse']);
+    displayVerseView();
+  };
+  setupNav(verseNavTop, verseStr, prevFunc, nextFunc);
+  setupNav(verseNavBottom, verseStr, prevFunc, nextFunc);
+}
+function setupNav(versNav, middleStr, prevFunc, nextFunc) {
+  //copy template
+  versNav.innerHTML = verseNavTemplate.innerHTML;
+  //find the buttons and middle elements
+  const prevVerseBtn = versNav.getElementsByClassName('verse-nav-prev-btn')[0];
+  const nextVerseBtn = versNav.getElementsByClassName('verse-nav-next-btn')[0];
+  const verseMiddle = versNav.getElementsByClassName('verse-nav-middle')[0];
+  prevVerseBtn.onclick = prevFunc;
+  nextVerseBtn.onclick = nextFunc;
+  verseMiddle.innerHTML = middleStr;
+}
+function displayVerseByViewStr(verse, viewName, highlight) {
+  highlight = highlight || false;
+  if (verse) {
+    const verseStr = verse['part'] + ":" + verse['verse'];
+    const ro = highlightText(verse['ro'].split(/\s{2,}/g).join("<br/>"), highlight);
+    const kanji = highlightText(verse['kanji'].split(/\s{2,}/g).join("<br/>"), highlight);
+    const english = highlightText(verse['en_6th_ed'], highlight);
+    const pt = highlightText(verse['pt'], highlight);
+    const japanese = highlightText(verse['jp1'] + "<br/>" + verse['jp2'], highlight);
+    return '<div class="verse-display">'
+      + (data[viewName + 'Options']['showRomanized'] ? "<blockquote>" + ro + "</blockquote>" : '')
+      + (data[viewName + 'Options']['showJapanese'] ? "<blockquote>" + japanese + "</blockquote>" : '')
+      + (data[viewName + 'Options']['showEnglish'] ?  "<blockquote>" + english + "</blockquote>" : '')
+      //+ (data[viewName + 'Options']['showEnglish2'] ?  "<blockquote>" + verse['en'] + "</blockquote>" : '')
+      + (data[viewName + 'Options']['showPortuguese'] ?  "<blockquote>" + pt + "</blockquote>" : '')
+      + (data[viewName + 'Options']['showKanji'] ? "<blockquote>" + kanji + "</blockquote>" : '')
+      + '<table class="of-verse-controls"><tbody><tr>'
+      + '<td>'
+      + '<button class="favorite-btn btn circle"><i class="fa fa-fw fa-star"></i></button>'
+      + '<button class="bookmark-btn btn circle"><i class="fa fa-fw fa-bookmark"></i></button>'
+      + '</td>'
+      + '<td>'
+      + (verse['in_life_of_oyasama']  ? '<span class="of-tag">Life of Oyasama</span>' : '')
+      +  (verse['in_doctrine']  ? '<span class="of-tag">Doctrine</span>' : '')
+      + "</td><td>" + verseStr + '</td>'
+      + '<td>'
+      + (viewName !== 'group' ? '<button class="read-btn btn circle" title="View in Read"><i class="fab fa-fw fa-readme"></i></button>' : "")
+      + (viewName !== 'verse' ? '<button class="verse-btn btn circle" title="View in Browse"><i class="fa fa-fw fa-eye"></i></button>' : "")
+      + '</td>'
+      + '</tr></tbody></table>'
+      + "</div>"
+    ;
+  }
+  return "Verse not found.";
+}
+function highlightText(str, search) {
+  if (!search) {
+    return str;
+  }
+  const re = new RegExp(search, "i");
+  const highlight = '<span class="highlight">' + str.match(re) + '</span>';
+  return str.replace(re, highlight);
+}
+function initViewOptions() {
+  VIEWS.map(viewName => {
+    //create show toggle tables
+    const optionsDiv = verseOptionTemplate.cloneNode(true);
+    const inputs = optionsDiv.querySelectorAll("input");
+    const labels = optionsDiv.querySelectorAll("label");
+    for (let j = 0; j < inputs.length; j++) {
+      const input = inputs[j];
+      const id = input.id.replace("-verse", "-" + viewName);
+      const optionName = input.id.replace("-verse","").replace("show","").replace("Cbx","");
+      input.id = id;
+      input.onchange = function() { toggleOption(viewName, optionName); };
+      input.checked = data[viewName + "Options"]["show" + optionName];
+    }
+    for (let j = 0; j < labels.length; j++) {
+      labels[j].htmlFor = labels[j].htmlFor.replace("-verse", "-" + viewName);
+    }
+    let viewOptionsDiv = document.getElementById(viewName + "OptionsRow");
+    viewOptionsDiv.innerHTML = "";
+    viewOptionsDiv.appendChild(optionsDiv);
+
+    //configure menu links
+    const menuLink = document.getElementById(viewName + "ViewMenuItem")
+    menuLink.onclick = function() {
+      const index = VIEWS.indexOf(viewName);
+      displayView(index);
+    };
+  });
+
+}
+function toggleOption(viewName, optionName) {
+  const input = document.getElementById("show" + optionName + "Cbx-" + viewName);
+  if (input) {
+    let optionFlag = data[viewName + "Options"]["show" + optionName];
+    if (optionFlag === 'undefined') {
+      optionFlag = false;
+    }
+    data[viewName + "Options"]["show" + optionName] = !optionFlag;
+    input.checked = !optionFlag;
+  }
+  renderView();
+}
+function displayPartSelect() {
+  let options = [];
+  for (let i = 1; i <= PART_COUNT; i++) {
+    options.push('<option value="' + i + '">' + i + '</option>');
+  }
+  partSelect.innerHTML = options.join("");
+}
+function displayVerseSelect(part) {
+  let options = [];
+  ofData['verses'].map(verse => {
+    if (verse['part'] === myParseInt(part)) {
+      const verseNum = verse['verse'];
+      const selected = data['selectedVerse'] === verseNum ? ' selected="selected"' : '';
+      options.push('<option value="' + verseNum + '"' + selected + '>' + verseNum + '</option>');
+    }
+  });
+  verseSelect.innerHTML = options.join("");
+  verseSelect.value = data['selectedVerse'];
+}
+function displayData() {
+  saveConfigData();
+  displayPartSelect();
+  displayVerseSelect(data['selectedPart']);
+  displayVerseGroupSelect();
+}
+window.onload = function() {
+  loadData().then(function() {
+    return makeRequest('ofudesaki.json');
+  })
+  .then(function (request) {
+    ofData = JSON.parse(request.responseText);
+    return makeRequest('keywords.json');
+  })
+  .then(function (request) {
+    keywords = JSON.parse(request.responseText);
+    displayData();
+    initUi();
+    initViewOptions();
+    data['isDataLoaded'] = true;
+  })
+  .catch(function (error) { console.log('Something went wrong.', error); });
+};
+window.onunload = function() {
+  saveData();
+};
+/*
+window.addEventListener("beforeunload", function (e) { saveData(); });
+window.addEventListener("unload", function (e) { saveData(); });
+*/
+function loadData() {
+  var promise = new Promise(function(resolve, reject) {
+    const localData = window.localStorage.getItem(APP_DATA_KEY);
+    const localFavData = window.localStorage.getItem(FAV_DATA_KEY);
+    if (localData) {
+      const parsedData = JSON.parse(localData);
+      if (parsedData) {
+        data = parsedData;
+        correctData();
+      }
+      else {
+        reject(Error("Failed to load data from local storage."));
+      }
+    }
+    if (localFavData) {
+      const parsedFavData = JSON.parse(localFavData);
+      if (parsedFavData) {
+        favoritesData = parsedFavData;
+      }
+      else {
+        reject(Error("Failed to load fav data from local storage."));
+      }
+    }
+    resolve("Data loaded from local storage.");
+  });
+  return promise;
+}
+function saveData() {
+  //this prevents refreshing sequentially too fast from overwriting your saved data.
+  if (data['isDataLoaded']) {
+    saveConfigData();
+    saveFavData();
+  }
+}
+const saveConfigData = () => {
+  window.localStorage.setItem(APP_DATA_KEY, JSON.stringify(data));
+};
+const saveFavData = () => {
+  window.localStorage.setItem(FAV_DATA_KEY, JSON.stringify(favoritesData));
+};
+function correctData() {
+  if (!data['favoritesOptions']) {
+    data['favoritesOptions'] = {
+      'showRomanized': true,
+      'showJapanese': true,
+      'showEnglish': true,
+      'showPortuguese': true,
+      'showKanji': true,
+      'showEnglish2': false
+    };
+  }
+}
+/**
+ * Promise-based XMLHttpRequest method.
+ * @param {string} url Expected location of REST URL.
+ * @param {string} method Possible values: GET, POST, PUT
+ */
+const makeRequest = function (url, method = "GET") {
+  var request = new XMLHttpRequest();
+  return new Promise(function (resolve, reject) {
+    // Setup our listener to process compeleted requests
+    request.onreadystatechange = function () {
+      // Only run if the request is complete
+      if (request.readyState !== 4) return;
+      // Process the response
+      if (request.status >= 200 && request.status < 300) {
+        // If successful
+        resolve(request);
+      }
+      else {
+        // If failed
+        reject({
+          status: request.status,
+          statusText: request.statusText
+        });
+      }
+    };
+    request.open(method || 'GET', url, true);
+    request.send();
+  });
+};
+function toggleClass(elem, className) {
+  let classes = elem.className.split(/\s+/);
+  let length = classes.length;
+  for (let i = 0; i < length; i++) {
+    if (classes[i] === className) {
+      classes.splice(i, 1);
+      break;
+    }
+  }
+  if (length === classes.length) {//The className is not found
+    classes.push(className);
+  }
+  elem.className = classes.join(' ');
+}
+function removeClassName(elem, className) {
+  let classes = elem.className.split(/\s+/);
+  let length = classes.length;
+  for (let i = 0; i < length; i++) {
+    if (classes[i] === className) {
+      classes.splice(i, 1);
+      break;
+    }
+  }
+  elem.className = classes.join(' ');
+}
+function addClassName(elem, className) {
+  let classes = elem.className.split(/\s+/);
+  classes.push(className);
+  elem.className = classes.join(' ');
+}
+
+//ui.js, source: PureCSS
+(function (window, document) {
+  var layout = document.getElementById('layout'),
+    menu = document.getElementById('menu'),
+    menuLink = document.getElementById('menuLink'),
+    content = document.getElementById('main')
+  ;
+  function toggleAll(e) {
+    var active = 'active';
+    e.preventDefault();
+    toggleClass(layout, active);
+    toggleClass(menu, active);
+    toggleClass(menuLink, active);
+  }
+  menuLink.onclick = function (e) {
+    toggleAll(e);
+  };
+  content.onclick = function (e) {
+    if (menu.className.indexOf('active') !== -1) {
+      toggleAll(e);
+    }
+  };
+}
+(window, window.document));

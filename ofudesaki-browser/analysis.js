@@ -1,14 +1,272 @@
-var g="function"==typeof Object.defineProperties?Object.defineProperty:function(a,b,c){a!=Array.prototype&&a!=Object.prototype&&(a[b]=c.value)};function k(a){a=["object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global,a];for(var b=0;b<a.length;++b){var c=a[b];if(c&&c.Math==Math)return c}throw Error("Cannot find global object");}var l=k(this);
-function m(a,b){if(b){var c=l;a=a.split(".");for(var d=0;d<a.length-1;d++){var e=a[d];e in c||(c[e]={});c=c[e]}a=a[a.length-1];d=c[a];b=b(d);b!=d&&null!=b&&g(c,a,{configurable:!0,writable:!0,value:b})}}m("Object.is",function(a){return a?a:function(b,c){return b===c?0!==b||1/b===1/c:b!==b&&c!==c}});
-m("Array.prototype.includes",function(a){return a?a:function(b,c){var d=this;d instanceof String&&(d=String(d));var e=d.length;c=c||0;for(0>c&&(c=Math.max(c+e,0));c<e;c++){var f=d[c];if(f===b||Object.is(f,b))return!0}return!1}});
-m("String.prototype.includes",function(a){return a?a:function(b,c){if(null==this)throw new TypeError("The 'this' value for String.prototype.includes must not be null or undefined");if(b instanceof RegExp)throw new TypeError("First argument to String.prototype.includes must not be a regular expression");return-1!==this.indexOf(b,c||0)}});
-var p=document.getElementById("wordView"),q=document.getElementById("roWordView"),r=document.getElementById("keyword"),t=document.getElementById("verseList"),u=document.getElementById("verseDisplay"),v=document.getElementById("englishViewBtn"),w=document.getElementById("englishCountViewBtn"),x=document.getElementById("romanizedViewBtn"),y=document.getElementById("romanizedCountViewBtn"),z={},A={},B=null,C={selectedView:"word",selectedWordStr:"",selectedPartVerse:"",wordSortBy:"count",selectedRoWordStr:"",
-selectedRoPartVerse:"",roWordSortBy:"count",isDataLoaded:!1};window.onload=function(){D();E()};function E(){v.onclick=function(){C.selectedView="word";C.wordSortBy="A-Z";F()};w.onclick=function(){C.selectedView="word";C.wordSortBy="count";F()};x.onclick=function(){C.selectedView="roWord";C.roWordSortBy="A-Z";F()};y.onclick=function(){C.selectedView="roWord";C.roWordSortBy="count";F()}}
-function G(a,b){B.verses.map(function(c){var d=c.part+":"+c.verse;c=c[a].replace(/[^\w\s']/g,"").toLowerCase().split(/\s+/g);for(var e=c.length,f=0;f<e;f++)f<e-2&&c.push(c[f]+" "+c[f+1]);c.map(function(h){h&&(b[h]?(b[h].count++,h=b[h].verses,h.includes(d)||h.push(d)):b[h]={count:1,verses:[d]})})});Object.keys(b).map(function(c){1===b[c].count&&delete b[c]})}function F(){p.style.display="none";q.style.display="none";"word"===C.selectedView?H("word",z):"roWord"===C.selectedView&&H("roWord",A)}
-function H(a,b){var c=document.getElementById(a+"View"),d=C[a+"SortBy"],e=Object.keys(b),f=[];c.style.display="block";c.innerHTML="";("count"===d?e.sort(function(h,n){return b[n].count-b[h].count}):e.sort()).map(function(h){f.push("<a href='#verse' class='word'>"+h+" ("+b[h].count+")</a>")});c.innerHTML=f.length+" "+("word"===a?"English":"Romanized")+" words and word-pairs found (Sorted by "+d+").<br/>"+f.join("");a=c.querySelectorAll(".word");c=a.length;d={};for(e=0;e<c;d={a:d.a},e++)d.a=a[e],d.a.onclick=
-function(h){return function(){var n=h.a.innerHTML;I(n.substr(0,n.lastIndexOf(" ")),b)}}(d)}
-function I(a,b){console.log(a);if(a){C.selectedWordStr=a;var c=b[a].count;r.innerHTML="<strong>Keyword:</strong> "+a;t.innerHTML="<strong>Found in "+c+" verses:</strong> <a href='#verse' class='verse-link'>"+b[a].verses.join("</a>, <a href='#verse' class='verse-link'>")+"</a>";b=t.querySelectorAll(".verse-link");c=b.length;for(var d={},e=0;e<c;d={b:d.b},e++){var f=b[e];d.b=f.innerHTML;f.onclick=function(h){return function(){J(h.b,a)}}(d)}J(b[0].innerHTML,a)}}
-function J(a,b){C.selectedPartVerse=a;a:{if(a){var c=a.split(":");var d=parseInt(c[0],10);c=parseInt(c[1],10);for(var e=B.verses.length,f=0;f<e;f++){var h=B.verses[f];if(d===h.part&&c===h.verse){d=h;break a}}}d=null}d&&(c=K(d.ro.split(/\s{2,}/g).join("<br/>"),b),e=d.jp1+"<br/>"+d.jp2,b=K(d.en_6th_ed,b),u.innerHTML="<blockquote>"+c+"</blockquote><blockquote>"+e+"</blockquote><blockquote>"+b+"</blockquote><blockquote>"+d.kanji.split(/\s{2,}/g).join("<br/>")+"</blockquote>In Life of Oyasama?: "+(d.in_life_of_oyasama?
-"&#9989;":"&#10060;")+"In Doctrine?: "+(d.in_doctrine?"&#9989;":"&#10060;")+"<span style='float: right;'>"+a+"</span>")}function K(a,b){if(!b)return a;b=new RegExp(b,"i");var c='<span class="highlight">'+a.match(b)+"</span>";return a.replace(b,c)}
-function D(){fetch("ofudesaki.json").then(function(a){return a.json()}).then(function(a){(B=a)?((a=window.localStorage.getItem("ofudesaki-analysis"))&&(a=JSON.parse(a))&&(C=a),G("en_6th_ed",z),G("ro",A),I(C.selectedWordStr,z),J(C.selectedPartVerse,C.selectedWordStr),I(C.selectedRoWordStr,A),J(C.selectedRoPartVerse,C.selectedRoWordStr),C.isDataLoaded=!0,F()):alert("data not loaded")})}window.onunload=function(){C.isDataLoaded&&window.localStorage.setItem("ofudesaki-analysis",JSON.stringify(C))};
-function L(a){for(var b=a.className.split(/\s+/),c=b.length,d=0;d<c;d++)if("active"===b[d]){b.splice(d,1);break}c===b.length&&b.push("active");a.className=b.join(" ")}(function(a,b){var c=b.getElementById("layout"),d=b.getElementById("menu"),e=b.getElementById("menuLink");a=b.getElementById("main");e.onclick=function(f){f.preventDefault();L(c);L(d);L(e)};a.onclick=function(f){-1!==d.className.indexOf("active")&&(f.preventDefault(),L(c),L(d),L(e))}})(window,window.document);
+const APP_DATA_KEY = "ofudesaki-analysis";
+
+const WORD_VIEW = "word";
+const RO_WORD_VIEW = "roWord";
+
+const wordView = document.getElementById("wordView");
+const roWordView = document.getElementById("roWordView");
+const keywordDiv = document.getElementById("keyword");
+const verseListDiv = document.getElementById("verseList");
+const verseDisplayDiv = document.getElementById("verseDisplay");
+
+const englishViewBtn = document.getElementById("englishViewBtn");
+const englishCountViewBtn = document.getElementById("englishCountViewBtn");
+const romanizedViewBtn = document.getElementById("romanizedViewBtn");
+const romanizedCountViewBtn = document.getElementById("romanizedCountViewBtn");
+
+const EM_HEAVY_CHECK = "&#9989;"; //✅
+const EM_CROSS_MARK = "&#10060;"; //❌
+let words = {};
+let roWords = {};
+let ofData = null;
+let data = {
+  'selectedView': WORD_VIEW,
+  'selectedWordStr': "",
+  'selectedPartVerse': "",
+  'wordSortBy': 'count',
+
+  'selectedRoWordStr': "",
+  'selectedRoPartVerse': "",
+  'roWordSortBy': 'count',
+  'isDataLoaded': false
+};
+window.onload = function() {
+  initJsonData();
+  initUi();
+};
+function loadData() {
+  loadLocalStorageData();
+  generateWordHash('en_6th_ed', words);
+  generateWordHash('ro', roWords);
+  showWordModal(data['selectedWordStr'], words);
+  showVerse(data['selectedPartVerse'], data['selectedWordStr']);
+  showWordModal(data['selectedRoWordStr'], roWords);
+  showVerse(data['selectedRoPartVerse'], data['selectedRoWordStr']);
+  data['isDataLoaded'] = true;
+}
+function initUi() {
+  englishViewBtn.onclick = function() {
+    data['selectedView'] = WORD_VIEW;
+    data['wordSortBy'] = 'A-Z';
+    displayData();
+  };
+  englishCountViewBtn.onclick = function() {
+    data['selectedView'] = WORD_VIEW;
+    data['wordSortBy'] = 'count';
+    displayData();
+  };
+  romanizedViewBtn.onclick = function() {
+    data['selectedView'] = RO_WORD_VIEW;
+    data['roWordSortBy'] = 'A-Z';
+    displayData();
+  };
+  romanizedCountViewBtn.onclick = function() {
+    data['selectedView'] = RO_WORD_VIEW;
+    data['roWordSortBy'] = 'count';
+    displayData();
+  };
+
+}
+function generateWordHash(verseLang, hashObj) {
+  ofData['verses'].map(verse => {
+    const partVerse = verse['part'] + ":" + verse['verse'];
+    const wordArr = verse[verseLang].replace(/[^\w\s']/g,"").toLowerCase().split(/\s+/g);
+    const size = wordArr.length;
+    for (let i = 0; i < size; i++) {
+      if (i < size - 2) {
+        wordArr.push(wordArr[i] + " " + wordArr[i + 1]);
+      }
+    }
+    wordArr.map(word => {
+      if (word) {
+        if (hashObj[word]) {
+          hashObj[word]['count']++;
+          const verses = hashObj[word]['verses'];
+          if (!verses.includes(partVerse)) {
+            verses.push(partVerse);
+          }
+        }
+        else {
+          hashObj[word] = { 'count': 1, 'verses': [partVerse] };
+        }
+      }
+    });
+  });
+  //remove single instances
+  Object.keys(hashObj).map(key => {
+    if (hashObj[key]['count'] === 1) {
+      delete hashObj[key];
+    }
+  });
+}
+function displayData() {
+  wordView.style.display = "none";
+  roWordView.style.display = "none";
+  if (data['selectedView'] === WORD_VIEW) {
+    displayWordHash("word", words);
+  }
+  else if (data['selectedView'] === RO_WORD_VIEW) {
+    displayWordHash("roWord", roWords);
+  }
+}
+function displayWordHash(viewStr, hashObj) {
+  const view = document.getElementById(viewStr + "View");
+  const sortBy = data[viewStr + "SortBy"];
+  const arr = Object.keys(hashObj);
+  const textOutput = [];
+  view.style.display = "block";
+  view.innerHTML = "";
+  (sortBy === 'count' ? arr.sort(function(a,b){return hashObj[b]['count']-hashObj[a]['count']}) : arr.sort())
+  .map(key => {
+    textOutput.push("<a href='#verse' class='word'>" + key + " (" + hashObj[key]['count'] + ")</a>");
+  });
+  view.innerHTML = textOutput.length + " " + (viewStr === 'word' ? 'English' : 'Romanized')
+    + " words and word-pairs found (Sorted by " + sortBy + ").<br/>" + textOutput.join("");
+
+  //add keyword onclick functionality
+  const wordLinks = view.querySelectorAll(".word");
+  const size = wordLinks.length;
+  for (let i = 0; i < size; i++) {
+    const keywordLink = wordLinks[i];
+    keywordLink.onclick = function() {
+      const text = keywordLink.innerHTML;
+      //showWordModal(text.substr(0, text.lastIndexOf(" ") - 1), hashObj);
+      showWordModal(text.substr(0, text.lastIndexOf(" ")), hashObj);
+    };
+  }
+}
+function showWordModal(wordStr, hashObj) {
+  console.log(wordStr);
+  if (!wordStr) {
+    return;
+  }
+  data['selectedWordStr'] = wordStr;
+  const count = hashObj[wordStr]['count'];
+  const linkStart = "<a href='#verse' class='verse-link'>";
+  const linkEnd = "</a>";
+  keywordDiv.innerHTML = "<strong>Keyword:</strong> " + wordStr;
+  verseListDiv.innerHTML = "<strong>Found in " + count + " verses:</strong> "
+    + linkStart + hashObj[wordStr]['verses'].join(linkEnd + ", " + linkStart) + linkEnd;
+
+  const verseLinks = verseListDiv.querySelectorAll('.verse-link');
+  const size = verseLinks.length;
+  for (let j = 0; j < size; j++) {
+    const verseLink = verseLinks[j];
+    const versePart = verseLink.innerHTML;
+    verseLink.onclick = function() { showVerse(versePart, wordStr); };
+  }
+  showVerse(verseLinks[0].innerHTML, wordStr);
+}
+function showVerse(versePart, wordStr) {
+  data['selectedPartVerse'] = versePart;
+  const verse = getByVersePart(versePart);
+  if (verse) {
+    const ro = highlightText(verse['ro'].split(/\s{2,}/g).join("<br/>"), wordStr);
+    const jp = verse['jp1'] + "<br/>" + verse['jp2'];
+    const en = highlightText(verse['en_6th_ed'], wordStr);
+    const kanji = verse['kanji'].split(/\s{2,}/g).join("<br/>");
+    verseDisplayDiv.innerHTML = "<blockquote>" + ro + "</blockquote>"
+      + "<blockquote>" + jp + "</blockquote>"
+      + "<blockquote>" + en + "</blockquote>"
+      + "<blockquote>" + kanji + "</blockquote>"
+      + "In Life of Oyasama?: " + (verse['in_life_of_oyasama']  ? EM_HEAVY_CHECK : EM_CROSS_MARK)
+      + "In Doctrine?: " + (verse['in_doctrine']  ? EM_HEAVY_CHECK : EM_CROSS_MARK)
+      + "<span style='float: right;'>" + versePart + "</span>"
+    ;
+  }
+}
+function highlightText(str, search) {
+  if (!search) {
+    return str;
+  }
+  const re = new RegExp(search, "i");
+  const highlight = '<span class="highlight">' + str.match(re) + '</span>';
+  return str.replace(re, highlight);
+}
+function getByVersePart(versePart) {
+  if (versePart) {
+    const versePartArr = versePart.split(":");
+    const partNum = parseInt(versePartArr[0], 10);
+    const verseNum = parseInt(versePartArr[1], 10);
+    const size = ofData['verses'].length;
+    for (let i = 0; i < size; i++) {
+      const verse = ofData['verses'][i];
+      if (partNum === verse['part'] && verseNum === verse['verse']) {
+        return verse;
+      }
+    }
+  }
+  return null;
+}
+function initJsonData() {
+  fetch('ofudesaki.json')
+    .then(response => {
+      return response.json();
+    })
+    .then(myJson => {
+      ofData = myJson;
+      if (ofData) {
+        loadData();
+        displayData();
+      }
+      else {
+        alert('data not loaded');
+      }
+    })
+  ;
+}
+function loadLocalStorageData() {
+  const localData = window.localStorage.getItem(APP_DATA_KEY);
+  if (localData) {
+    const parsedData = JSON.parse(localData);
+    if (parsedData) {
+      data = parsedData;
+    }
+  }
+}
+function saveData() {
+  if (data['isDataLoaded']) {
+    window.localStorage.setItem(APP_DATA_KEY, JSON.stringify(data));
+  }
+}
+window.onunload = function() {
+  saveData();
+};
+function toggleClass(elem, className) {
+  let classes = elem.className.split(/\s+/);
+  let length = classes.length;
+  for (let i = 0; i < length; i++) {
+    if (classes[i] === className) {
+      classes.splice(i, 1);
+      break;
+    }
+  }
+  if (length === classes.length) {//The className is not found
+    classes.push(className);
+  }
+  elem.className = classes.join(' ');
+}
+//ui.js, source: PureCSS
+(function (window, document) {
+  var layout = document.getElementById('layout'),
+    menu = document.getElementById('menu'),
+    menuLink = document.getElementById('menuLink'),
+    content = document.getElementById('main')
+  ;
+  function toggleAll(e) {
+    var active = 'active';
+    e.preventDefault();
+    toggleClass(layout, active);
+    toggleClass(menu, active);
+    toggleClass(menuLink, active);
+  }
+  menuLink.onclick = function (e) {
+    toggleAll(e);
+  };
+  content.onclick = function (e) {
+    if (menu.className.indexOf('active') !== -1) {
+      toggleAll(e);
+    }
+  };
+}
+(window, window.document));
