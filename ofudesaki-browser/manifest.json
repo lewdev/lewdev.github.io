@@ -1,0 +1,30 @@
+{
+  "name": "Ofudesaki Browser",
+  "short_name": "Ofudesaki Browser",
+  "lang": "en-US",
+  "start_url": "index.html",
+  "display": "standalone",
+  "theme_color": "#6FBEF3",
+  "background_color": "#FFFFF",
+  "icons": [
+    {
+      "src": "img/ofudesaki-browser.png",
+      "sizes": "200x200"
+    },
+    {
+      "src": "img/android-chrome-192x192.png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "img/apple-touch-icon.png",
+      "sizes": "180x180"
+    },
+    {
+      "src": "img/favicon-32x32.png",
+      "sizes": "32x32"
+    },
+    {
+      "src": "img/safari-pinned-tab.svg"
+    }
+  ]
+}
