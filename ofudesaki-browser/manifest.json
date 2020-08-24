@@ -24,7 +24,9 @@
       "sizes": "32x32"
     },
     {
-      "src": "img/safari-pinned-tab.svg"
+      "src": "img/safari-pinned-tab.svg",
+      "type": "image/svg",
+      "purpose": "any maskable"
     }
   ]
 }
