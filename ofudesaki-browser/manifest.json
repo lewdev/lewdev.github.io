@@ -25,7 +25,7 @@
     },
     {
       "src": "img/safari-pinned-tab.svg",
-      "type": "image/svg",
+      "type": "image/svg+xml",
       "purpose": "any maskable"
     }
   ]
