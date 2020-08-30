@@ -9,19 +9,19 @@ Projects
 * [HW Gen](https://lewdev.github.io/apps/hw-gen) ([View Source](https://github.com/lewdev/hw-gen)) Randomly generates math homework.
 * [Ofudesaki Browser](https://lewdev.github.io/ofudesaki-browser/)
 * [Regex Find & Format Tool](https://lewdev.github.io/apps/regex-find-and-format)
-* [Narimono App (prototype)](https://lewdev.github.io/narimono-prototype/) ([View Source](https://github.com/lewdev/narimono))
-* [Kanrodai App](https://lewdev.github.io/kanrodai-app/) ([View Source](https://github.com/lewdev/kanrodai-app))
-* [trans](https://lewdev.github.io/trans/) ([View Source](https://github.com/lewdev/trans)) A Google Translate link generator with link history.
+* [Narimono App (prototype)](https://lewdev.github.io/apps/narimono-prototype/) ([View Source](https://github.com/lewdev/narimono))
+* [Kanrodai App](https://lewdev.github.io/app/kanrodai-app/) ([View Source](https://github.com/lewdev/apps/kanrodai-app))
+* [trans](https://lewdev.github.io/apps/trans/) ([View Source](https://github.com/lewdev/trans)) A Google Translate link generator with link history.
 
 Games
 =====
 * [Burger Builder](https://lewdev.github.io/apps/burger-builder) ([View Source](https://github.com/lewdev/burger-builder))
-* [Number Guessing Game](https://lewdev.github.io/apps/number-guess) ([View Source](https://github.com/lewdev/number-guess))
-* [Tick-Tack-Toe v1](https://lewdev.github.io/ticktacktoe/v1/) ([View Source](https://github.com/lewdev/ticktacktoe))
+* [Number Guessing Game](https://lewdev.github.io/apps/number-guess) ([View Source](https://github.com/lewdev/apps/number-guess))
+* [Tick-Tack-Toe v1](https://lewdev.github.io/apps/ticktacktoe/v1/) ([View Source](https://github.com/lewdev/apps/ticktacktoe))
 
 Other Links
 ===========
-* [My resume (pdf)](https://drive.google.com/open?id=1neZuwiGy5SBrFOiJnbcvcx1Bb-LV8iPP)
+* [My resume](https://docs.google.com/document/d/e/2PACX-1vSE8xfQwOKlVGXZPtW9wMp8-vwlNVz_z6LnrFje_E25GfbQjWWMgyNzQ1e4CjSfDWrsVtUGMhKuE9pU/pub)
 * [Github Profile](https://github.com/lewdev)
 * [LinkedIn Profile](https://www.linkedin.com/in/lewisnakao)
 * [StackOverflow](http://stackoverflow.com/cv/lewis.nakao)
