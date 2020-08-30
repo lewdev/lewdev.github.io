@@ -2,10 +2,10 @@
   "name": "Ofudesaki Browser",
   "short_name": "Ofudesaki Browser",
   "lang": "en-US",
-  "start_url": "index.html",
+  "start_url": "./index.html",
   "display": "standalone",
   "theme_color": "#6FBEF3",
-  "background_color": "#FFFFF",
+  "background_color": "#FFFFFF",
   "icons": [
     {
       "src": "img/ofudesaki-browser.png",
