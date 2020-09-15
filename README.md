@@ -2,11 +2,21 @@
 
 I am a Software Engineer with over 8 years of experience in the full-software development lifecycle including user support and maintenance. With a Master’s degree in Computer Science, I have experience leading projects and providing technical guidance to clients, stakeholders, and users. Over my career, I have provided mentorship and on-boarding support for developers at all levels of experience. Specializing in Java and JavaScript web-based software development, I would be interested in challenging lead or senior software engineering roles.
 
-Contact me: [lewdev@gmail.com](mailto:lewdev@gmail.com)
+<table width="100%"><tr>
+  <td>
+    <img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/lewdev?style=social">
+  </td>
+  <td>
+    <a href="https://github.com/sponsors/lewdev">❤️Sponsor me</a> (<a href="https://docs.github.com/articles/sponsoring-an-open-source-contributor">about sponsoring</a>)
+  </td>
+  <td>
+    Contact: <a href="mailto:lewdev@gmail.com">lewdev@gmail.com</a>
+  </td>
+</tr></table>
 
 Projects
 ========
-* [HW Gen](https://lewdev.github.io/apps/hw-gen) ([View Source](https://github.com/lewdev/hw-gen)) Randomly generates math homework.
+* [Math Homework Generator](https://lewdev.github.io/apps/hw-gen) ([View Source](https://github.com/lewdev/hw-gen)) Randomly generates printable worksheets.
 * [Ofudesaki Browser](https://lewdev.github.io/ofudesaki-browser/)
 * [Regex Find & Format Tool](https://lewdev.github.io/apps/regex-find-and-format)
 * [Narimono App (prototype)](https://lewdev.github.io/apps/narimono-prototype/) ([View Source](https://github.com/lewdev/narimono))
