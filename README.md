@@ -17,6 +17,7 @@ I am a Software Engineer with over 8 years of experience in the full-software de
 Projects
 ========
 * [Math Homework Generator](https://lewdev.github.io/apps/hw-gen) ([View Source](https://github.com/lewdev/hw-gen)) Randomly generates printable worksheets.
+* [Meta Tag Generator](https://lewdev.github.io/apps/meta-tag-gen) ([View Source](https://github.com/lewdev/meta-tag-gen)) Using few basic inputs (title, description, url, image url, etc.) you can quickly get your standard meta tags.
 * [Ofudesaki Browser](https://lewdev.github.io/ofudesaki-browser/)
 * [Regex Find & Format Tool](https://lewdev.github.io/apps/regex-find-and-format)
 * [Narimono App (prototype)](https://lewdev.github.io/apps/narimono-prototype/) ([View Source](https://github.com/lewdev/narimono))
