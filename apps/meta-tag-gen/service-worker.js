@@ -1,5 +1,3 @@
-"use strict";
-var caches;
 function setOfCachedUrls(e) {
   return e.keys().then(function (e) {
     return e.map(function (e) {
@@ -15,21 +13,18 @@ var APP_PREFIX = "meta-tag-gen-", VERSION = 'v1'
     ["./", "-214489181"]
     , ["index.html", "1763771178"]
     , ["script.js", "-2071138039"]
-    //css
     , ["style.css", "-516880381"]
-    , ["assets/bootstrap.min.css", "-1808909877"]
-    , ["assets/css-modal.css", "-1808909877"]
+    , ["site.webmanifest", "-416130381"]
     //favicons
-    , ["img/android-chrome-192x192.png", "-1001836975"]
-    , ["img/android-chrome-512x512.png", "-1001836975"]
-    , ["img/apple-touch-icon.png", "-158250428"]
-    , ["img/browserconfig.xml", "-1573387900"]
-    , ["img/favicon.ico", "-1513505428"]
-    , ["img/favicon-16x16.png", "1121418251"]
-    , ["img/favicon-32x32.png", "-821233205"]
-    , ["img/mstile-150x150.png", "-1243791087"]
-    , ["img/safari-pinned-tab.svg", "-672604684"]
-    , ["favicon", "-672604684"]
+    , ["favicon/android-chrome-192x192.png", "-1001836975"]
+    , ["favicon/android-chrome-512x512.png", "-1001836973"]
+    , ["favicon/apple-touch-icon.png", "-158250428"]
+    , ["favicon/browserconfig.xml", "-1573387900"]
+    , ["favicon/favicon.ico", "-1513505428"]
+    , ["favicon/favicon-16x16.png", "1121418251"]
+    , ["favicon/favicon-32x32.png", "-821233205"]
+    , ["favicon/mstile-150x150.png", "-1243791087"]
+    , ["favicon/safari-pinned-tab.svg", "-672604684"]
   ]
   , ignoreUrlParametersMatching = [/^utm_/]
   , addDirectoryIndex = function (e, t) {
