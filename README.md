@@ -38,6 +38,12 @@ Other Links
 * [LinkedIn Profile](https://www.linkedin.com/in/lewisnakao)
 * [StackOverflow](http://stackoverflow.com/cv/lewis.nakao)
 
-![Lewis' Project Euler Progress](https://projecteuler.net/profile/lewdev.png "Lewis' Project Euler Progress")
-
+<table width="100%"><tr>
+  <td align="center">
+    <a href="https://stackoverflow.com/users/1675237/lewdev"><img src="https://stackoverflow.com/users/flair/1675237.png" width="208" height="58" alt="profile for lewdev at Stack Overflow, Q&amp;A for professional and enthusiast programmers" title="profile for lewdev at Stack Overflow, Q&amp;A for professional and enthusiast programmers"></a>
+  </td>
+  <td align="center">
+    <img src="https://projecteuler.net/profile/lewdev.png" title="Lewis' Project Euler Progress"/>
+  </td>
+</tr></table>
 {% include google_analytics.html %}
