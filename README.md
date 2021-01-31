@@ -18,10 +18,7 @@ Projects
 ========
 * [Math Homework Generator](https://lewdev.github.io/apps/hw-gen) ([View Source](https://github.com/lewdev/hw-gen)) Randomly generates printable worksheets.
 * [Meta Tag Generator](https://lewdev.github.io/apps/meta-tag-gen) ([View Source](https://github.com/lewdev/meta-tag-gen)) Using few basic inputs (title, description, url, image url, etc.) you can quickly get your standard meta tags.
-* [Ofudesaki Browser](https://lewdev.github.io/ofudesaki-browser/)
-* [Regex Find & Format Tool](https://lewdev.github.io/apps/regex-find-and-format)
-* [Narimono App (prototype)](https://lewdev.github.io/apps/narimono-prototype/) ([View Source](https://github.com/lewdev/narimono))
-* [Kanrodai App](https://lewdev.github.io/app/kanrodai-app/) ([View Source](https://github.com/lewdev/apps/kanrodai-app))
+* [Regex Find & Format Tool](https://lewdev.github.io/apps/regex-find-and-format) Perform regular expression search & replace operations on text.
 * [trans](https://lewdev.github.io/apps/trans/) ([View Source](https://github.com/lewdev/trans)) A Google Translate link generator with link history.
 
 Games
@@ -30,6 +27,13 @@ Games
 * [Burger Builder](https://lewdev.github.io/apps/burger-builder) ([View Source](https://github.com/lewdev/burger-builder))
 * [Number Guessing Game](https://lewdev.github.io/apps/number-guess) ([View Source](https://github.com/lewdev/apps/number-guess))
 * [Tick-Tack-Toe v1](https://lewdev.github.io/apps/ticktacktoe/v1/) ([View Source](https://github.com/lewdev/apps/ticktacktoe))
+
+[Tenrikyo](http://en.tenrikyo-resource.com/wiki/Tenrikyo) Apps
+=============
+* [Ofudesaki Browser](https://lewdev.github.io/ofudesaki-browser/) Browse and search a Tenrikyo scripture, the [Ofudesaki](http://en.tenrikyo-resource.com/wiki/Ofudesaki)
+* [Narimono App (prototype)](https://lewdev.github.io/apps/narimono-prototype/) ([View Source](https://github.com/lewdev/narimono)) A sound-board app of the instruments used in the Tenrikyo service. An unfinished project that was going to be a rhythm game.
+* [Kanrodai App](https://lewdev.github.io/app/kanrodai-app/) ([View Source](https://github.com/lewdev/apps/kanrodai-app)) Shows the location of the Kanrodai, a sacred location, relative to your location on a map.
+
 
 Other Links
 ===========
