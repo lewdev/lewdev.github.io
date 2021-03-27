@@ -46,6 +46,11 @@ const projects = [
 
 // Tenrikyo
 {
+  title: "Anecdotes Browser", url: "https://lewdev.github.io/apps/anecdotes-browser/", emoji: '📖',
+  description: "Browse the Anecdotes of Oyasama in English and Japanese.",
+  category: "Tenrikyo",
+},
+{
   title: "Ofudesaki Browser", url: "https://lewdev.github.io/ofudesaki-browser/", emoji: '📕',
   description: "Browse and search a Tenrikyo scripture, the Ofudesaki.",
   category: "Tenrikyo",
