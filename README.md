@@ -34,6 +34,10 @@ Games
 * [Narimono App (prototype)](https://lewdev.github.io/apps/narimono-prototype/) ([View Source](https://github.com/lewdev/narimono)) A sound-board app of the instruments used in the Tenrikyo service. An unfinished project that was going to be a rhythm game.
 * [Kanrodai App](https://lewdev.github.io/app/kanrodai-app/) ([View Source](https://github.com/lewdev/apps/kanrodai-app)) Shows the location of the Kanrodai, a sacred location, relative to your location on a map.
 
+Github Stats
+============
+[![Lewis Nakao's GitHub stats](https://github-readme-stats.vercel.app/api?theme=dracula&count_private=true&hide=contribs,prs&show_icons=true&username=lewdev)](https://github.com/anuraghazra/github-readme-stats)
+[![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?theme=dracula&count_private=true&hide=contribs,prs&show_icons=true&username=lewdev&exclude_repo=sangenten,phpscaffold_ci,my-dev-environment,simple-message-encryption)](https://github.com/anuraghazra/github-readme-stats)
 
 Other Links
 ===========

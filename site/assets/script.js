@@ -1,6 +1,103 @@
-var f=[{name:"Apps",a:"\ud83d\udcf2"},{name:"Games",a:"\ud83d\udc7e"},{name:"Tenrikyo",a:"\ud83d\ude4f"}],g=[{title:"Math Homework Generator",name:"hw-gen",a:"\ud83d\udcdd",description:"Randomly generates printable worksheets.",b:"Apps"},{title:"Meta Tag Generator",name:"meta-tag-gen",a:"\ud83e\udd16",description:"Quickly generate your standard meta tags for social media and SEO.",b:"Apps"},{title:"Regex Find & Format Tool",url:"https://lewdev.github.io/apps/regex-find-and-format",a:"\ud83d\udd0d",
-description:"Perform regular expression search & replace operations on text.",b:"Apps"},{title:"Google Translate Link Generator",name:"trans",a:"⛓️",description:"A Google Translate link generator with link history.",b:"Apps"},{title:"Moonshot Commander",name:"moonshot-commander",a:"\ud83d\udd79️",description:"Top-down shooter released 11/30/2020 for Game Off 2020",b:"Games"},{title:"Burger Builder",name:"burger-builder",a:"\ud83c\udf54",description:"Quickly build the ordered burgers before the time runs out.",
-b:"Games"},{title:"Number Guessing Game",name:"number-guess",a:"\ud83e\udd14",description:"Guess your number while it tracks your guesses and time. Has multiple difficulties.",b:"Games"},{title:"Ofudesaki Browser",url:"https://lewdev.github.io/ofudesaki-browser/",a:"\ud83d\udcd5",description:"Browse and search a Tenrikyo scripture, the Ofudesaki.",b:"Tenrikyo"},{title:"Narimono App (prototype)",name:"narimono",a:"\ud83c\udfb6",url:"https://lewdev.github.io/apps/narimono-prototype/",description:"A sound-board app of the instruments used in the Tenrikyo service. An unfinished project that was going to be a rhythm game.",
-b:"Tenrikyo"},{title:"Kanrodai App",name:"kanrodai-app",a:"\ud83d\uddfa️",description:"Shows the location of the Kanrodai, a sacred location, relative to your location on a map.",b:"Tenrikyo"}];(function(){function h(){var c=window.localStorage.getItem("lewis-nakao-site");c&&JSON.parse(c)}function k(c){var b=['<div class="card card-body p-0"><table class="table no-top-border mb-0"><tbody>'];c.forEach(function(a){var d=a.name?"https://github.com/lewdev/"+a.name:!1;b.push('\n      <tr>\n        <td>\n          <a href="'+(a.url?a.url:a.name?"https://lewdev.github.io/apps/"+a.name:!1)+'" target="_blank" title="Try '+a.title+' now!">'+a.a+" "+a.title+'</a>\n          <div class="text-secondary">'+
-a.description+'</div>\n        </td>\n        <td class="text-center">\n          '+(d?'<a href="'+d+'" target="_blank">\ud83d\udc68‍\ud83d\udcbb️ Source Code</a>':"-")+"\n        </td>\n      </tr>\n    ")});b.push("</tbody></table></div>");return b.join("")}function l(c){return k(g.filter(function(b){return b.b===c}))}function m(){var c=[];f.map(function(b){c.push('<h2 class="mt-3">'+b.a+" "+b.name+"</h2>");c.push(l(b.name))});n.innerHTML=c.join("")}var n=document.getElementById("projects"),e=document.getElementById("navbar"),
-p=document.getElementById("navbarToggleBtn");window.onload=function(){function c(b,a){function d(q){b!==q&&(a(),document.removeEventListener("click",d))}document.addEventListener("click",d)}h();m();p.onclick=function(b){function a(){return e.classList.toggle("show")}e.classList.contains("show")||(a(),c(b,a))}}})();
+const main = (() => {
+  const APP_DATA_KEY = "lewis-nakao-site";
+  const APPS_URL = "https://lewdev.github.io/apps";
+  const SRC_URL = "https://github.com/lewdev";
+
+  const projectsDiv = document.getElementById("projects");
+  const navbar = document.getElementById("navbar");
+  const navbarToggleBtn = document.getElementById("navbarToggleBtn");
+
+  let data = {};
+
+  window.onload = () => {
+    loadData();
+    displayData();
+
+    const OPEN_CLASS = 'show';
+    const addOffClick = (e, callback) => {
+      const offClick = evt => {
+        if (e !== evt) {
+          callback();
+          document.removeEventListener('click', offClick)
+        }
+      }
+      document.addEventListener('click', offClick)
+    };
+    const handleClick = (e) => {
+      const toggleMenu = () => navbar.classList.toggle(OPEN_CLASS)
+      //e.stopPropagation()
+      if (!navbar.classList.contains(OPEN_CLASS)) {
+        toggleMenu();
+        addOffClick(e, toggleMenu)
+      }
+    };
+    navbarToggleBtn.onclick = handleClick;
+  };
+  const displayData = () => {
+    const arr = [];
+    categories.map(c => {
+      arr.push(`<h2 class="mt-3">${c.emoji} ${c.name}</h2>`);
+      arr.push(displayCategory(c.name));
+    });
+    projectsDiv.innerHTML = arr.join("");
+  };
+  const displayCategory = category => {
+    return displayDataInTable(projects.filter(p => p.category === category));
+  };
+  const displayDataInTable = data => {
+    const arr = ['<div class="card card-body p-0"><table class="table no-top-border mb-0"><tbody>'];
+    data.forEach(p => {
+      let url = p.url ? p.url : p.name ? `${APPS_URL}/${p.name}` : false;
+      let srcUrl = p.name ? `${SRC_URL}/${p.name}` : false;
+      arr.push(`
+      <tr>
+        <td>
+          <a href="${url}" target="_blank" title="Try ${p.title} now!">${p.emoji} ${p.title}</a>
+          <div class="text-secondary">${p.description}</div>
+        </td>
+        <td class="text-center">
+          ${srcUrl ? `<a href="${srcUrl}" target="_blank">👨‍💻️ Source Code</a>` : '-'}
+        </td>
+      </tr>
+    `)});
+    arr.push('</tbody></table></div>');
+    return arr.join("");
+  };
+  const loadData = () => {
+    const localData = window.localStorage.getItem(APP_DATA_KEY);
+    if (localData) {
+      const parsedData = JSON.parse(localData);
+      if (parsedData) data = parsedData;
+    }
+  };
+  const saveData = () => window.localStorage.setItem(APP_DATA_KEY, JSON.stringify(data));
+  const clearData = () => window.localStorage.setItem(APP_DATA_KEY, JSON.stringify(data));
+})();
+
+function notifyMe() {
+  console.log("notifyMe");
+  // Let's check if the browser supports notifications
+  if (!("Notification" in window)) {
+    console.log("notifyMe 1");
+    alert("This browser does not support desktop notification");
+  }
+  // Let's check whether notification permissions have already been granted
+  else if (Notification.permission === "granted") {
+    console.log("notifyMe 2");
+    // If it's okay let's create a notification
+    var notification = new Notification("Hi there!");
+  }
+  // Otherwise, we need to ask the user for permission
+  else if (Notification.permission !== "denied") {
+    console.log("notifyMe 3");
+    Notification.requestPermission().then(function (permission) {
+      // If the user accepts, let's create a notification
+      if (permission === "granted") {
+        var notification = new Notification("Hi there!");
+      }
+    });
+  }
+  console.log("notifyMe 4");
+  // At last, if the user has denied notifications, and you
+  // want to be respectful there is no need to bother them any more.
+}

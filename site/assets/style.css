@@ -1,0 +1,33 @@
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin-top: 5rem !important;
+}
+.text-lg { font-size: 1.5rem; }
+input, textarea, select {
+  background-color: darkgray !important;
+  color: black !important;
+}
+.table.no-top-border > tbody > tr:first-child > td { border-top: 0;}
+
+span.navbar-brand { border-right: 0; }
+.navbarToggleBtn { display: none !important; }
+
+.footer-sm-links > div > a { display: block; }
+.footer-sm-links > div:first-child { border-left: 1px solid black; }
+.footer-sm-links > div {
+  border: 1px solid black;
+  position: relative;
+  padding: 0.75rem;
+  background-color: #32383e;
+  line-height: 1;
+  border-left: 0;
+  padding: 0.5rem;
+  white-space: nowrap;
+  text-align: center;
+}
+@media (max-width: 768px) {
+  div.footer-sm-links > div:first-child { border-top: 1px solid black; }
+  .footer-sm-links > div { border: 1px solid black; border-top: 0; }
+}
