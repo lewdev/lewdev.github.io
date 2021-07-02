@@ -238,22 +238,31 @@ const hwSets = {
     outputFunc: (eq, i, columns) => visualMultiEq(eq, i, columns, 9),
   },
   "multiplication-add-1": {
-    title: "Muliplication Add Equations", category: "Multiplication",
+    title: "Muliplication Add Equations Lvl 1", category: "Multiplication",
+    count: 16, columns: 2,
+    myGenEqList: () => {
+      const xList = [2,3,4,5];
+      const yList = [2,3,4,5];
+      const eqList = [];
+      xList.forEach(x => yList.forEach( y => eqList.push({x, y, z: x * y})));
+      eqList.sort(() => Math.random() - 0.5); //shuffle
+      eqList.sort(() => Math.random() - 0.5); //shuffle
+      return eqList;
+    },
+    outputFunc: (eq, i, columns) => multiAddEq(eq, i, columns, 8),
+  },
+  "multiplication-add-2": {
+    title: "Muliplication Add Equations Lvl 2", category: "Multiplication",
     count: 16, columns: 2,
     myGenEqList: () => {
       const xList = [6,7,8,9];
       const yList = [2,3,4,5];
       const eqList = [];
-      xList.forEach(xVar => yList.forEach(yVar => eqList.push({x: xVar, y: yVar, z: xVar * yVar})));
-      console.log(eqList);
+      xList.forEach(x => yList.forEach( y => eqList.push({x, y, z: x * y})));
+      //console.log({x, y, z: x * y});
       eqList.sort(() => Math.random() - 0.5); //shuffle
       eqList.sort(() => Math.random() - 0.5); //shuffle
       return eqList;
-    },
-    outputFunc: (eq, i, columns) => {
-      console.log(eq);
-      return eq ? multiAddEq(eq, i, columns) : 'zz';
-
     },
   },
   "multiplication": {

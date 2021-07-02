@@ -43,6 +43,5 @@ const strXTimes = (str, x) => {
   return new Array(x).fill().map((a, i) => str + (i > 0 && i % 4 === 0 ? '<br/>' : '')).join("")
 };
 const repeat = (str, x) => {
-  console.log("repeat", x);
-  return new Array(x).fill().map(() => str).join("")
+  return isNaN(x) ? '' : (new Array(x)).fill().map(() => str).join("")
 };
