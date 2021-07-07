@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta http-equiv="X-UA-Compatible" content="IE=edge">
+<link rel="stylesheet" href="assets/bootstrap.min.css">
+<title>🧩 Gram-e-Pic</title>
+<link rel="stylesheet" href="assets/style.css"/>
+</head><body>
+  <div id="intro" class="container text-center">
+    <h1>🧩 Gram-e-Pic</h1>
+    <div>A nonogram clone with editor.</div>
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10">
+        <button class="btn btn-primary btn-block" onclick="gramepic.goMenu();">▶ Start</button>
+        <button class="btn btn-primary btn-block" onclick="gramepic.goEditorMenu();">🎨 Editor</button>
+      </div>
+      <div class="col-1"></div>
+    </div>
+  </div>
+
+  <div id="menu" class="container text-center">
+    <div class="bg-info text-light pt-2 card card-body">
+      <div class="row">
+        <div class="col-2">
+          <button class="btn btn-secondary" onclick="gramepic.goIntro()">👈<br/>Back</button>
+        </div>
+        <div class="col-10"><h1>🧩 Gram-e-Pic Select</h1></div>
+      </div>
+    </div>
+
+    <div id="picMenu" class="row pic-menu"></div>
+  </div>
+
+  <div id="menuList" class="container text-center">
+    <div class="row mb-2">
+      <div class="col-2">
+        <button class="btn btn-secondary" onclick="gramepic.goMenu()">👈<br/>Back</button>
+      </div>
+      <div class="col-10">
+        <h1>🧩 Gram-e-Pic</h1>
+      </div>
+    </div>
+
+    <div id="picMenuList" class="row pic-menu"></div>
+  </div>
+
+  <div id="editorMenu" class="container text-center">
+    <div class="row">
+      <div class="col-2">
+        <button class="btn btn-secondary" onclick="gramepic.goMenu()">👈<br/>Back</button>
+      </div>
+      <div class="col-10">
+        <h1>🧩 Gram-e-Pic Editor Menu</h1>
+      </div>
+    </div>
+    <div class="bg-info text-light pt-2 card card-body">
+      <div class="row">
+        <div class="col-6 text-nowrap">
+          <h3>🎨 Custom Pics</h3>
+        </div>
+        <div class="col-6 text-nowrap text-right">
+          <button class="btn btn-secondary" onclick="gramepic.exportCustomPics()"
+            title="Export all pics to a file.">☁<br/>Export</button>
+          <button class="btn btn-secondary" onclick="PicEditor.createPic()">➕<br/>Create</button>
+        </div>
+      </div>
+    </div>
+    <div id="customPicMenu" class="row pic-menu"></div>
+  </div>
+
+  <div id="editor" class="container text-center">
+    <div class="row">
+      <div class="col-2">
+        <button class="btn btn-secondary" onclick="gramepic.goMenu()">👈<br/>Back</button>
+      </div>
+      <div class="col-10">
+        <h1>🧩 Gram-e-Pic Editor 🖌🎨</h1>
+      </div>
+    </div>
+
+    <div class="row mt-3 mb-3">
+      <div class="col-md-2 pt-3">
+        <label for="nameInput">Name:</label>
+      </div>
+      <div class="col-md-5 pt-2">
+        <input id="nameInput" type="text" class="form-control" maxlength="20" onkeyup="PicEditor.updateInput(this, 'name')"/>
+      </div>
+      <div class="col-md-1 pt-3">
+        <label for="sizeInput">Size:</label>
+      </div>
+      <div class="col-md-3 pt-2">
+        <select id="sizeInput" class="form-control" onchange="PicEditor.updateSize(this)">
+          <option>5x5</option>
+          <option>10x10</option>
+          <option>15x15</option>
+          <option>20x20</option>
+        </select>
+      </div>
+
+      <div class="col-md-2 pt-3">
+        <label for="authorInput">Author:</label>
+      </div>
+      <div class="col-md-4 pt-2">
+        <input id="authorInput" type="text" class="form-control" maxlength="15" onkeyup="PicEditor.updateInput(this, 'author')"/>
+      </div>
+      <div class="col-md-4 text-nowrap">
+        <table><tbody><tr>
+          <td class="p-2"><input id="isTwitterHandle" type="checkbox" class="form-control" onchange="PicEditor.updateIsTwitterHandle(this)" /></td>
+          <td class="p-2"><label for="isTwitterHandle">Twitter Handle?</label></td>
+        </tr></tbody></table>
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-secondary btn-block" onclick="PicEditor.save()">💾<br/>Save</button>
+      </div>
+    </div>
+    <div id="editorGrid">
+      <table class="grid-table ml-auto mr-auto"><tbody class="grid"></tbody></table>
+    </div>
+  </div>
+
+  <div id="game" class="container text-center">
+    <div class="row mb-2">
+      <div class="col-2">
+        <button class="btn btn-secondary" onclick="gramepic.goMenu()">👈<br/>Back</button>
+      </div>
+      <div class="col-10">
+        <h1>🧩 Gram-e-Pic</h1>
+      </div>
+    </div>
+    <div id="gameGrid">
+      <table class="grid-table ml-auto mr-auto"><tbody class="grid"></tbody></table>
+    </div>
+  </div>
+
+  <div id="toggleBtnDiv">
+    <div class="row">
+      <div class="col-10">
+        <button id="toggleBtn" class="border btn btn-lg btn-block btn-dark text-light"
+          onclick="gramepic.toggle()">Black</button>
+      </div>
+
+      <div class="col-2">
+        <span id="gameInfo" class="ml-3 text-nowrap badge badge-light btn-lg"></span>
+      </div>
+    </div>
+  </div>
+
+  <div id="endGame" class="container text-center full-grid">
+    End of Game
+    <table class="grid-table ml-auto mr-auto"><tbody class="grid"></tbody></table>
+    <div id="endGameMessage"></div>
+    <button class="border btn btn-lg btn-block btn-dark text-light" onclick="gramepic.goMenu()">
+      👈<br/>Back to Menu
+    </button>
+  </div>
+
+  <script src="assets/utils.js"></script>
+  <script src="assets/Pics.js"></script>
+  <script src="assets/PicUtil.js"></script>
+  <script src="assets/PicEditor.js"></script>
+  <script src="assets/script.js"></script>
+</body>
+</html>
