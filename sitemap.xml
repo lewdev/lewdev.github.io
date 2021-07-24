@@ -2,15 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url><loc>https://lewdev.github.io/</loc></url>
-<url><loc>https://lewdev.github.io/apps/moonshot-commander/</loc></url>
-<url><loc>https://lewdev.github.io/apps/hw-gen/</loc></url>
-<url><loc>https://lewdev.github.io/apps/meta-tag-gen/</loc></url>
 <url><loc>https://lewdev.github.io/ofudesaki-browser/</loc></url>
+<url><loc>https://lewdev.github.io/apps/meta-tag-gen/</loc></url>
+<url><loc>https://lewdev.github.io/apps/hw-gen/</loc></url>
+<url><loc>https://lewdev.github.io/apps/rock-paper-scissors-battle/</loc></url>
+<url><loc>https://lewdev.github.io/apps/burger-builder/</loc></url>
+<url><loc>https://lewdev.github.io/apps/moonshot-commander/</loc></url>
 <url><loc>https://lewdev.github.io/apps/regex-find-and-format/</loc></url>
 <url><loc>https://lewdev.github.io/apps/kanrodai-app/</loc></url>
 <url><loc>https://lewdev.github.io/apps/narimono-prototype/</loc></url>
 <url><loc>https://lewdev.github.io/apps/trans/</loc></url>
-<url><loc>https://lewdev.github.io/apps/burger-builder/</loc></url>
 <url><loc>https://lewdev.github.io/apps/number-guess/</loc></url>
 <url><loc>https://lewdev.github.io/apps/ticktacktoe/v1/</loc></url>
 </urlset>
