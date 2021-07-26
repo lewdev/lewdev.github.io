@@ -1,22 +1,178 @@
-var y=[{g:"\ud83e\udd16",name:"Robot"},{g:"\ud83d\udc69‍\ud83d\udcbb",name:"Woman Technologist"},{g:"\ud83d\udc68‍\ud83d\udcbb",name:"Man Technologist"},{g:"\ud83c\udfdd️",name:"Desert Island"},{g:"\ud83d\ude80",name:"Rocket"},{g:"\ud83d\udef8",name:"Flying Saucer"},{g:"\ud83d\udcd4",name:"Notebook with Decorative Cover"},{g:"\ud83d\udcd5",name:"Closed Book"},{g:"\ud83d\udcd6",name:"Open Book"},{g:"\ud83d\udcd7",name:"Green Book"},{g:"\ud83d\udcd8",name:"Blue Book"},{g:"\ud83d\udcd9",name:"Orange Book"},
-{g:"\ud83d\udcda",name:"Books"},{g:"\ud83d\udcd3",name:"Notebook"},{g:"\ud83d\udcd2",name:"Ledger"},{g:"\ud83d\udcc3",name:"Page with Curl"},{g:"\ud83d\udcdc",name:"Scroll"},{g:"\ud83d\udcc4",name:"Page Facing Up"},{g:"\ud83d\udcf0",name:"Newspaper"},{g:"\ud83d\uddde️ Rolled-Up",name:"Newspaper"},{g:"\ud83d\udcd1",name:"Bookmark Tabs"},{g:"\ud83d\udd16",name:"Bookmark"},{g:"\ud83c\udff7️",name:"Label"},{g:"\ud83d\udcb0",name:"Money Bag"},{g:"\ud83d\udd0d",name:"Magnifying Glass Tilted Left"},{g:"\ud83d\udd0e",
-name:"Magnifying Glass Tilted Right"},{g:"\ud83d\udd6f️",name:"Candle"},{g:"\ud83d\udca1",name:"Light Bulb"},{g:"\ud83d\udcfa",name:"Television"},{g:"\ud83d\udcf7",name:"Camera"},{g:"\ud83d\udcbb",name:"Laptop"},{g:"\ud83d\udda5️",name:"Desktop Computer"},{g:"\ud83d\udda8️",name:"Printer"},{g:"⌨️",name:"Keyboard"},{g:"\ud83d\uddb1️",name:"Computer Mouse"},{g:"❤️",name:"Red Heart"},{g:"\ud83e\udd7a",name:"Pleading Face"},{g:"✨",name:"Sparkles"},{g:"\ud83d\udd25",name:"Fire"},{g:"\ud83d\ude0a",name:"Smiling Face with Smiling Eyes"},
-{g:"\ud83e\udd70",name:"Smiling Face with Hearts"},{g:"\ud83c\udf83",name:"Jack-O-Lantern"},{g:"\ud83d\udc4d",name:"Thumbs Up"},{g:"\ud83d\uddfa️",name:"World Map"},{g:"\ud83d\uddbc️",name:"Framed Picture"},{g:"\ud83d\udcf1",name:"Mobile Phone"},{g:"\ud83c\udf89",name:"Party Popper"},{g:"\ud83c\udf8a",name:"Confetti Ball"},{g:"⌚",name:"Watch"},{g:"⏰",name:"Alarm Clock"},{g:"⏱️",name:"Stopwatch"},{g:"⏲️",name:"Timer Clock"},{g:"\ud83d\udd70️",name:"Mantelpiece Clock"},{g:"\ud83c\udfb8",name:"Guitar"},
-{g:"\ud83c\udfb9",name:"Musical Keyboard"},{g:"\ud83c\udfba",name:"Trumpet"},{g:"\ud83c\udfbb",name:"Violin"},{g:"\ud83e\udd41",name:"Drum"},{g:"\ud83c\udfac",name:"Clapper Board"},{g:"\ud83c\udff9",name:"Bow and Arrow"},{g:"\ud83c\udfb1",name:"Pool 8 Ball"},{g:"\ud83c\udfae",name:"Video Game"},{g:"\ud83c\udfb0",name:"Slot Machine"},{g:"\ud83c\udfb2",name:"Game Die"},{g:"♟️",name:"Chess Pawn"},{g:"\ud83c\udfad",name:"Performing Arts"},{g:"\ud83c\udfa8",name:"Artist Palette"},{g:"\ud83c\udfbc",name:"Musical Score"},
-{g:"\ud83c\udfa4",name:"Microphone"},{g:"\ud83c\udfa7",name:"Headphone"},{g:"\ud83c\udfaf",name:"Direct Hit"},{g:"⚽",name:"Soccer Ball"},{g:"⚾",name:"Baseball"},{g:"\ud83c\udfc0",name:"Basketball"},{g:"\ud83c\udfd0",name:"Volleyball"},{g:"\ud83c\udfc8",name:"American Football"},{g:"\ud83c\udfc9",name:"Rugby Football"},{g:"\ud83c\udfbe",name:"Tennis"},{g:"\ud83c\udfb3",name:"Bowling"},{g:"\ud83c\udf9f️",name:"Admission Tickets"},{g:"\ud83c\udfab",name:"Ticket"},{g:"\ud83c\udf96️",name:"Military Medal"},
-{g:"\ud83c\udfc6",name:"Trophy"},{g:"\ud83c\udfc5",name:"Sports Medal"},{g:"\ud83e\udd47",name:"1st Place Medal"},{g:"☕",name:"Hot Beverage"},{g:"\ud83c\udf54",name:"Hamburger"},{g:"\ud83c\udf5f",name:"French Fries"},{g:"\ud83c\udf55",name:"Pizza"},{g:"\ud83e\udd5e",name:"Pancakes"},{g:"\ud83e\uddc7",name:"Waffle"},{g:"\ud83e\uddc0",name:"Cheese Wedge"},{g:"\ud83c\udf56",name:"Meat on Bone"},{g:"\ud83e\udd65",name:"Coconut"},{g:"\ud83e\udd5d",name:"Kiwi Fruit"},{g:"\ud83c\udf45",name:"Tomato"},{g:"\ud83c\udf4a",
-name:"Tangerine"},{g:"\ud83c\udf4b",name:"Lemon"},{g:"\ud83c\udf4c",name:"Banana"},{g:"\ud83c\udf4d",name:"Pineapple"},{g:"\ud83e\udd6d",name:"Mango"},{g:"\ud83c\udf4e",name:"Red Apple"},{g:"\ud83c\udf4f",name:"Green Apple"},{g:"\ud83c\udf50",name:"Pear"},{g:"\ud83c\udf51",name:"Peach"},{g:"\ud83c\udf52",name:"Cherries"},{g:"\ud83c\udf53",name:"Strawberry"},{g:"\ud83c\udf08",name:"Rainbow"},{g:"☂️",name:"Umbrella"},{g:"☔",name:"Umbrella with Rain Drops"},{g:"⚡",name:"High Voltage"},{g:"❄️",name:"Snowflake"},
-{g:"☃️",name:"Snowman"},{g:"⛄",name:"Snowman Without Snow"},{g:"☄️",name:"Comet"},{g:"\ud83d\udd25",name:"Fire"},{g:"\ud83d\udca7",name:"Droplet"},{g:"\ud83c\udf0a",name:"Water Wave"},{g:"\ud83c\udf84",name:"Christmas Tree"},{g:"\ud83c\udf8b",name:"Tanabata Tree"},{g:"\ud83c\udf8d",name:"Pine Decoration"},{g:"⭐",name:"Star"},{g:"\ud83c\udf1f",name:"Glowing Star"},{g:"\ud83c\udf20",name:"Shooting Star"},{g:"☁️",name:"Cloud"},{g:"\ud83d\ude48 See-No-Evil",name:"Monkey"},{g:"\ud83d\ude49 Hear-No-Evil",
-name:"Monkey"},{g:"\ud83d\ude4a Speak-No-Evil",name:"Monkey"},{g:"\ud83d\udca5",name:"Collision"},{g:"\ud83d\udcab",name:"Dizzy"},{g:"\ud83d\udca6",name:"Sweat Droplets"},{g:"\ud83d\udca8",name:"Dashing Away"},{g:"\ud83d\udc35",name:"Monkey Face"},{g:"\ud83d\udc12",name:"Monkey"},{g:"\ud83e\udd8d",name:"Gorilla"},{g:"\ud83e\udda7",name:"Orangutan"},{g:"\ud83d\udc36",name:"Dog Face"},{g:"\ud83d\udc15",name:"Dog"},{g:"\ud83e\uddae",name:"Guide Dog"},{g:"\ud83d\udc15‍\ud83e\uddba",name:"Service Dog"},
-{g:"\ud83d\udc29",name:"Poodle"},{g:"\ud83d\udc3a",name:"Wolf"},{g:"\ud83e\udd8a",name:"Fox"},{g:"\ud83e\udd9d",name:"Raccoon"},{g:"\ud83d\udc31",name:"Cat Face"},{g:"\ud83e\udd81",name:"Lion"},{g:"\ud83d\udc2f",name:"Tiger Face"},{g:"\ud83e\udd84",name:"Unicorn"},{g:"\ud83e\udd93",name:"Zebra"},{g:"\ud83d\udc2e",name:"Cow Face"},{g:"\ud83d\udc37",name:"Pig Face"},{g:"\ud83d\udc16",name:"Pig"},{g:"\ud83d\udc17",name:"Boar"},{g:"\ud83d\udc2d",name:"Mouse Face"},{g:"\ud83d\udc3b",name:"Bear"},{g:"\ud83d\udc28",
-name:"Koala"},{g:"\ud83d\udc3c",name:"Panda"},{g:"\ud83d\udc14",name:"Chicken"},{g:"\ud83d\udc13",name:"Rooster"},{g:"\ud83d\udc23",name:"Hatching Chick"},{g:"\ud83e\udd89",name:"Owl"},{g:"\ud83d\udc38",name:"Frog"},{g:"\ud83d\udc1f",name:"Fish"},{g:"\ud83d\udc20",name:"Tropical Fish"},{g:"\ud83d\udc21",name:"Blowfish"},{g:"\ud83e\udd88",name:"Shark"},{g:"\ud83d\udc19",name:"Octopus"},{g:"\ud83d\udc1a",name:"Spiral Shell"},{g:"\ud83d\udc0c",name:"Snail"},{g:"\ud83e\udd8b",name:"Butterfly"},{g:"\ud83d\udc1b",
-name:"Bug"},{g:"\ud83d\udc1c",name:"Ant"},{g:"\ud83d\udc1d",name:"Honeybee"},{g:"\ud83d\udc1e",name:"Lady Beetle"},{g:"\ud83d\udd77️",name:"Spider"},{g:"\ud83d\udd78️",name:"Spider Web"},{g:"\ud83c\udf3a",name:"Hibiscus"},{g:"\ud83c\udf3b",name:"Sunflower"},{g:"\ud83c\udf3c",name:"Blossom"},{g:"\ud83c\udf37",name:"Tulip"},{g:"\ud83c\udf31",name:"Seedling"},{g:"\ud83c\udf32",name:"Evergreen Tree"},{g:"\ud83c\udf33",name:"Deciduous Tree"},{g:"\ud83c\udf34",name:"Palm Tree"},{g:"\ud83c\udf35",name:"Cactus"},
-{g:"\ud83c\udf3e",name:"Sheaf of Rice"},{g:"\ud83c\udf3f",name:"Herb"},{g:"☘️",name:"Shamrock"},{g:"\ud83c\udf40",name:"Four Leaf Clover"},{g:"\ud83c\udf41",name:"Maple Leaf"},{g:"\ud83c\udf0d",name:"Globe Showing Europe-Africa"},{g:"\ud83c\udf0e",name:"Globe Showing Americas"},{g:"\ud83c\udf0f",name:" Globe Showing Asia-Australia"},{g:"\ud83c\udf10",name:" Globe with Meridians"}];(function(){function r(){window.localStorage.setItem("meta-tags-gen",JSON.stringify(e))}function z(b){var a=window.localStorage.getItem("meta-tags-gen");a&&(a=JSON.parse(a))&&(e=a,b&&b())}function h(b,a,c,g){if(b&&(b=b.querySelectorAll("."+a),c=(c=c[a])?c:"",b)){var k,p=b.length;for(k=0;k<p;k++){var d=b[k];if("I"===d.tagName)d.className=a+" "+("TRUE"===c?"far fa-check-square":"far fa-square");else if("INPUT"===d.tagName||"TEXTAREA"===d.tagName)"checkbox"===d.getAttribute("type")?d.checked="TRUE"===
-c:d.value=c;else if("SELECT"===d.tagName){var n=d.querySelectorAll("option"),l,A=n.length,v=-1;for(l=0;l<A;l++)if(c===n[l].value){n[l].selected=!0;v=l;break}d.value=c;d.selectedIndex=v;if(n=d)"function"===typeof Event?d=new Event("change"):(d=document.createEvent("Event"),d.initEvent("change",!0,!0)),n.dispatchEvent(d)}else c&&""!==(c+"").trim()?c=c.replace(/\n/g,"<br/>").replace(/\s\s/g,"&nbsp;"):c=g?"":"N/A",d.innerHTML=c}}}function m(b,a,c){if(b=b.querySelector("."+a)){var g="checkbox"===b.getAttribute("type");
-c[a]=g?b.checked?"TRUE":"FALSE":b.value}else c[a]=""}function t(b){var a={};m(b,"emoji",a);m(b,"title",a);m(b,"description",a);m(b,"keywords",a);m(b,"author",a);m(b,"url",a);m(b,"imageUrl",a);m(b,"twitter",a);m(b,"fbAppId",a);a.url&&(a.j=B(a.url));a.i&&(a.h=a.i.trim().split(",").map(function(c){return"#"+c.replace(/[^\d\w_]/g,"")}).join(" "));return a}function B(b){b=b.split("/")[-1<b.indexOf("//")?2:0];b=b.split(":")[0];return b.split("?")[0]}function u(b,a){var c=f.querySelector("."+b);c.onblur=
-c.onkeyup=c.onchange=c.onload=function(){return w(b,a)};w(b,a)}function w(b,a){var c=a-f.querySelector("."+b).value.length;f.querySelector("."+b+"-char-count").innerHTML=(0>c?'<span class="text-danger">'+c+"</span>":c)+" of "+a+" chars left"}function C(){f.querySelector(".emoji").innerHTML=y.map(function(b){return'<option value="'+b.g+'">'+b.g+" "+b.name+"</option>"}).join("")}var f=document.getElementById("metaInputs"),q=document.getElementById("output"),D=document.getElementById("generateBtn"),
-E=document.getElementById("genTwitterPostBtn"),F=document.getElementById("genFacebookPostBtn"),G=document.getElementById("copyOutputBtn"),H=document.getElementById("navbarToggleBtn"),x=document.getElementById("navbarResponsive"),e={};window.onload=function(){function b(a,c){function g(k){a!==k&&(c(),document.removeEventListener("click",g))}document.addEventListener("click",g)}C();z(function(){var a=e;h(f,"emoji",a,!0);h(f,"title",a,!0);h(f,"description",a,!0);h(f,"keywords",a,!0);h(f,"author",a,!0);
-h(f,"url",a,!0);h(f,"imageUrl",a,!0);h(f,"twitter",a,!0);h(f,"fbAppId",a,!0);u("title",70);u("description",160);u("keywords",160)});D.onclick=function(){e=t(f);r();var a=e.emoji,c=e.title,g=e.description,k=e.keywords,p=e.author,d=e.imageUrl,n=e.twitter,l=e.fbAppId;q.innerHTML='<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />\n<meta http-equiv="X-UA-Compatible" content="IE=edge"/>\n<meta name="viewport" content="width=device-width, initial-scale=1"/>\n\n<title>'+c+"</title>\n"+
-(p?'<meta name="author" content="'+p+'">':"")+"\n"+(g?'<meta name="description" content="'+g+'">':"")+"\n"+(k?'<meta name="keywords" content="'+k+'">':"")+'\n\n\x3c!-- Twitter --\x3e\n<meta name="twitter:card" content="summary_large_image">\n<meta name="twitter:title" content="'+a+" "+c+'">\n<meta name="twitter:description" content="'+g+'">\n<meta name="twitter:site" content="@'+n+'">\n<meta name="twitter:creator" content="@'+n+'">\n<meta name="twitter:image" content="'+d+'">\n\n\x3c!-- Open Graph general (Facebook, Pinterest)--\x3e\n<meta property="og:title" content="'+
-a+" "+c+'">\n<meta property="og:description" content="'+g+'">\n<meta property="og:url" content="'+e.url+'">\n<meta property="og:site_name" content="'+e.siteName+'">\n<meta property="og:type" content="website">\n<meta property="og:image" content="'+d+'">\n\n'+(l?'<meta property="fb:app_id" content="'+l+'">\n':"")+"\n\x3c!-- https://realfavicongenerator.net --\x3e\n\n\x3c!-- CSS --\x3e\n";window.location="#outputSection"};E.onclick=function(){e=t(f);r();var a=e;q.innerHTML=a.g+" "+a.title+"\n"+a.description+
-"\n\ud83c\udff7️ "+a.h+"\n"+a.url+"\n";window.location="#outputSection"};F.onclick=function(){e=t(f);r();var a=e;q.innerHTML=a.g+" "+a.title+"\n"+a.description+"\n\ud83c\udff7️ "+a.h+"\n\ud83d\udc4d Follow me @"+a.l+"\n"+a.url+"\n";window.location="#outputSection"};G.onclick=function(){q.select();document.execCommand("copy")};H.onclick=function(a){function c(){return x.classList.toggle("show")}a.stopPropagation();x.classList.contains("show")||(c(),b(a,c))}}})();
+const metaTagsGen = (() => {
+  const APP_DATA_KEY = "meta-tags-gen";
+
+  const FIELDS = [
+    "emoji",
+    "title",
+    "description",
+    "keywords",
+    "author",
+    "url",
+    "imageUrl",
+    "twitter",
+    "fbAppId",
+  ];
+  const metaInputs = document.getElementById("metaInputs");
+  const output = document.getElementById("output");
+  const generateBtn = document.getElementById("generateBtn");
+  const genTwitterPostBtn = document.getElementById("genTwitterPostBtn");
+  const genFacebookPostBtn = document.getElementById("genFacebookPostBtn");
+  const copyOutputBtn = document.getElementById("copyOutputBtn");
+  const navbarToggleBtn = document.getElementById("navbarToggleBtn");
+  const navbar = document.getElementById('navbarResponsive');
+
+  let data = {};
+
+  window.onload = () => {
+    populateEmojiDropdown();
+    loadData(() => {
+      populateForm(metaInputs, data);
+      initCharCounter("title", 70);
+      initCharCounter("description", 160);
+      initCharCounter("keywords", 160);
+    });
+    generateBtn.onclick = () => genMetaTags();
+    genTwitterPostBtn.onclick = () => genTwitterPost();
+    genFacebookPostBtn.onclick = () => genFacebookPost();
+    copyOutputBtn.onclick = () => {
+      output.select();
+      document.execCommand('copy');
+    };
+    // navbarToggleBtn.onclick = () => navbar.classList.toggle('show');
+
+    const OPEN_CLASS = 'show';
+    const addOffClick = (e, cb) => {
+      const offClick = evt => {
+        if (e !== evt) {
+          cb()
+          document.removeEventListener('click', offClick)
+        }
+      }
+      document.addEventListener('click', offClick)
+    };
+    const handleClick = (e) => {
+      const toggleMenu = () => navbar.classList.toggle(OPEN_CLASS)
+      e.stopPropagation()
+      if (!navbar.classList.contains(OPEN_CLASS)) {
+        toggleMenu()
+        addOffClick(e, toggleMenu)
+      }
+    };
+    navbarToggleBtn.onclick = handleClick;
+
+  };
+  const populateEmojiDropdown = () => {
+    const select = metaInputs.querySelector(`.emoji`);
+    select.innerHTML = emojis.map(e => `<option value="${e.emoji}">${e.emoji} ${e.name}</option>`).join("");
+  };
+  const updateCharCount = (name, maxSize) => {
+    const input = metaInputs.querySelector(`.${name}`);
+    const elem = metaInputs.querySelector(`.${name}-char-count`);
+    const diff = maxSize - input.value.length;
+    elem.innerHTML = `${diff < 0 ? `<span class="text-danger">${diff}</span>` : diff} of ${maxSize} chars left`;
+  };
+  const initCharCounter = (name, maxSize) => {
+    const input = metaInputs.querySelector(`.${name}`);
+    input.onblur = input.onkeyup = input.onchange = input.onload = () => updateCharCount(name, maxSize);
+    updateCharCount(name, maxSize);
+  };
+  const populateForm = (elem, obj) => FIELDS.forEach(field => populateByColumn(elem, field, obj, true));
+  const extractHostname = url => {
+    //find & remove protocol (http, ftp, etc.) and get hostname
+    let hostname = url.split('/')[url.indexOf("//") > -1 ? 2 : 0];
+    //find & remove port number
+    hostname = hostname.split(':')[0];
+    //find & remove "?"
+    return hostname.split('?')[0];
+  };
+  const genTwitterPost = () => {
+    data = getFormData(metaInputs);
+    saveData();
+    const {emoji, title, description, url, hashtags} = data;
+    output.innerHTML = 
+`${emoji} ${title}
+${description}
+🏷️ ${hashtags}
+${url}
+`;
+    window.location = "#outputSection";
+  };
+  const genFacebookPost = () => {
+    data = getFormData(metaInputs);
+    saveData();
+    const {emoji, title, description, url, twitter, hashtags} = data;
+    output.innerHTML = 
+`${emoji} ${title}
+${description}
+🏷️ ${hashtags}
+👍 Follow me @${twitter}
+${url}
+`;
+    window.location = "#outputSection";
+  };
+  const genMetaTags = () => {
+    data = getFormData(metaInputs);
+    saveData();
+    const {emoji, title, description, keywords, author, url, siteName, imageUrl, twitter, fbAppId} = data;
+    output.innerHTML = 
+`<meta charset="utf-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>${title}</title>
+${!author ? "" : `<meta name="author" content="${author}">`}
+${!description ? "" : `<meta name="description" content="${description}">`}
+${!keywords ? "" : `<meta name="keywords" content="${keywords}">`}
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="${emoji} ${title}">
+<meta name="twitter:description" content="${description}">
+<meta name="twitter:site" content="@${twitter}">
+<meta name="twitter:creator" content="@${twitter}">
+<meta name="twitter:image" content="${imageUrl}">
+
+<!-- Open Graph general (Facebook, Pinterest)-->
+<meta property="og:title" content="${emoji} ${title}">
+<meta property="og:description" content="${description}">
+<meta property="og:url" content="${url}">
+<meta property="og:site_name" content="${siteName}">
+<meta property="og:type" content="website">
+<meta property="og:image" content="${imageUrl}">
+
+${!fbAppId ? "" : `<meta property="fb:app_id" content="${fbAppId}">\n`}
+<!-- https://realfavicongenerator.net -->
+
+<!-- CSS -->
+`;
+    window.location = "#outputSection";
+  };
+  const getFormData = elem => {
+    const obj = {};
+    getDataByColumn(elem, "emoji", obj);
+    getDataByColumn(elem, "title", obj);
+    getDataByColumn(elem, "description", obj);
+    getDataByColumn(elem, "keywords", obj);
+    getDataByColumn(elem, "author", obj);
+    getDataByColumn(elem, "url", obj);
+    getDataByColumn(elem, "imageUrl", obj);
+    getDataByColumn(elem, "twitter", obj);
+    getDataByColumn(elem, "fbAppId", obj);
+    if (obj.url) obj.siteName = extractHostname(obj.url);
+    if (obj.keywords) obj.hashtags = obj.keywords.trim().split(',').map(a => '#' + a.replace(/[^\d\w_]/g, '')).join(" ");
+    return obj;
+  }
+  const loadData = callback => {
+    const localData = window.localStorage.getItem(APP_DATA_KEY);
+    if (localData) {
+      const parsedData = JSON.parse(localData);
+      if (parsedData) {
+        data = parsedData;
+        if (callback) callback();
+      }
+    }
+  };
+  const saveData = () => {
+    window.localStorage.setItem(APP_DATA_KEY, JSON.stringify(data));
+  };
+})();
