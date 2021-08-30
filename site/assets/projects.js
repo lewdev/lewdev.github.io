@@ -17,6 +17,11 @@ const projects = [
   category: "Apps",
 },
 {
+  title: "Tiny Code Editor", url: "https://lewdev.github.io/apps/tiny-code-editor", emoji: '⌨',
+  description: "A tiny live code editor forked from xem's Mini Code Editor.",
+  category: "Apps",
+},
+{
   title: "Regex Find & Format Tool", url: "https://lewdev.github.io/apps/regex-find-and-format", emoji: '🔍',
   description: "Perform regular expression search & replace operations on text.",
   category: "Apps",
