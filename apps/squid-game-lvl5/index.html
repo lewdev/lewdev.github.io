@@ -1,6 +1,36 @@
-<head></head><style>html,body{margin:0;overflow:hidden}</style>
+<!doctype html>
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  
+  <title>Squid Game Level 5</title>
+  <meta name="author" content="Lewis Nakao">
+  <meta name="description" content="A JavaScript canvas simulation of Squid Game level 5 using emojis.">
+  <meta name="keywords" content="Squid Game, Emoji, JavaScript, Canvas">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="🦑 Squid Game Level 5">
+  <meta name="twitter:description" content="A JavaScript canvas simulation of Squid Game level 5 using emojis.">
+  <meta name="twitter:site" content="@lewdev">
+  <meta name="twitter:creator" content="@lewdev">
+  <meta name="twitter:image" content="https://lewdev.github.io/apps/squid-game-lvl5/img/banner-1200x630.png">
+  
+  <!-- Open Graph general (Facebook, Pinterest)-->
+  <meta property="og:title" content="🦑 Squid Game Level 5">
+  <meta property="og:description" content="A JavaScript canvas simulation of Squid Game level 5 using emojis.">
+  <meta property="og:url" content="https://lewdev.github.io/apps/squid-game-lvl5/">
+  <meta property="og:site_name" content="lewdev.github.io">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://lewdev.github.io/apps/squid-game-lvl5/img/banner-1200x630.png">
+  
+  <!-- Emoji SVG favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦑</text></svg>">
+</head>
+<body>
+<style>html,body{margin:0;overflow:hidden}</style>
 <canvas id=a></canvas>
-<canvas id=b></canvas>
 <script>
 //global
 x = a.getContext('2d');
@@ -269,3 +299,16 @@ rand0or1 = () => rand() < .5 ? 0 : 1;
 randSeed = (max, seed) => Math.sin(seed)**2 * 1e9 % max
 randRangeSeed = (min, max, seed) => randSeed(max, seed) + min;
 </script>
+
+<div style="position:absolute;right:0;top:0;font-size:24px;">
+  <a href="https://github.com/lewdev/squid-game-lvl5" title="Source Code available on Github!">👨‍💻</a>
+  <a href="https://lewdev.github.io" title="Find more stuff by me">
+    <img src="https://lewdev.github.io/site/favicon/favicon-32x32.png"/>
+  </a>
+</div>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-2833478-13"></script>
+<script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());gtag('config', 'UA-2833478-13');</script>
+</body>
