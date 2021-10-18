@@ -6,6 +6,7 @@ const main = (() => {
   const projectsDiv = document.getElementById("projects");
   const navbar = document.getElementById("navbar");
   const navbarToggleBtn = document.getElementById("navbarToggleBtn");
+  const sitemap = document.getElementById("sitemap");
 
   let data = {};
 
@@ -47,7 +48,7 @@ const main = (() => {
   const displayDataInTable = data => {
     const arr = ['<div class="card card-body p-0"><table class="table no-top-border mb-0"><tbody>'];
     data.forEach(p => {
-      let url = p.url ? p.url : p.name ? `${APPS_URL}/${p.name}` : false;
+      let url = p.url ? p.url : p.name ? `${APPS_URL}/${p.name}/` : false;
       let srcUrl = p.name ? `${SRC_URL}/${p.name}` : false;
       arr.push(`
       <tr>
@@ -72,6 +73,23 @@ const main = (() => {
   };
   const saveData = () => window.localStorage.setItem(APP_DATA_KEY, JSON.stringify(data));
   const clearData = () => window.localStorage.setItem(APP_DATA_KEY, JSON.stringify(data));
+  return {
+    showSitemap: () => {
+      sitemap.style.display = "block";
+      sitemap.innerHTML = `<textarea>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url><loc>https://lewdev.github.io/</loc></url>
+${projects.map(p => {
+  let url = p.url ? p.url : p.name ? `${APPS_URL}/${p.name}/` : false;
+  return url ? `<url><loc>${url}</loc></url>` : '';
+}).join("\n")}
+</urlset></textarea>
+<button class="btn btn-primary" onclick="this.parentNode.parentNode.style.display='none'">close</button>`;
+      return false;
+    },
+  }
 })();
 
 function notifyMe() {

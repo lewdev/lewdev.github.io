@@ -1,6 +1,7 @@
 const categories = [
   { name: "Apps", emoji: "📲" },
   { name: "Games", emoji: "👾" },
+  { name: "Simulations", emoji: "⏯" },
   { name: "Tenrikyo", emoji: "🙏" },
 ];
 
@@ -14,11 +15,6 @@ const projects = [
 {
   title: "Meta Tag Generator", name: "meta-tag-gen", emoji: '🤖',
   description: "Quickly generate your standard meta tags for social media and SEO.",
-  category: "Apps",
-},
-{
-  title: "Tiny Code Editor", name: "tiny-code-editor", url: "https://lewdev.github.io/apps/tiny-code-editor", emoji: '⌨',
-  description: "A tiny live code editor forked from xem's Mini Code Editor.",
   category: "Apps",
 },
 {
@@ -70,12 +66,24 @@ const projects = [
   description: "Shows the location of the Kanrodai, a sacred location, relative to your location on a map.",
   category: "Tenrikyo",
 },
+
+//Simulations
+{
+  title: "Rock Paper Scissors Battle", name: "rock-paper-scissors-battle", emoji: '✂️',
+  description: "Watch a simulation of emoji Rock, Paper, Scissors and other variations battle it out.",
+  category: "Simulations",
+},
+{
+  title: "Squid Game Level 5", name: "squid-game-lvl5", emoji: '🦑',
+  description: "A JavaScript canvas simulation of Squid Game level 5 using emojis.",
+  category: "Simulations",
+},
 ];
 
 const meLinks = [
-{ title: "My resume", url: "https://docs.google.com/document/d/e/2PACX-1vSE8xfQwOKlVGXZPtW9wMp8-vwlNVz_z6LnrFje_E25GfbQjWWMgyNzQ1e4CjSfDWrsVtUGMhKuE9pU/pub"},
-{ title: "Github Profile", url: "https://github.com/lewdev",},
-{ title: "LinkedIn Profile", url: "https://www.linkedin.com/in/lewisnakao" },
-{ title: "StackOverflow", url: "http://stackoverflow.com/cv/lewis.nakao" },
-{ title: "Sponsor Me", url: "" },
+  { title: "My resume", url: "https://docs.google.com/document/d/e/2PACX-1vSE8xfQwOKlVGXZPtW9wMp8-vwlNVz_z6LnrFje_E25GfbQjWWMgyNzQ1e4CjSfDWrsVtUGMhKuE9pU/pub"},
+  { title: "Github Profile", url: "https://github.com/lewdev",},
+  { title: "LinkedIn Profile", url: "https://www.linkedin.com/in/lewisnakao" },
+  { title: "StackOverflow", url: "http://stackoverflow.com/cv/lewis.nakao" },
+  { title: "Sponsor Me", url: "https://github.com/sponsors/lewdev" },
 ];
