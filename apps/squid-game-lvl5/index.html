@@ -1,0 +1,314 @@
+<!doctype html>
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  
+  <title>Squid Game Level 5</title>
+  <meta name="author" content="Lewis Nakao">
+  <meta name="description" content="A JavaScript canvas simulation of Squid Game level 5 using emojis.">
+  <meta name="keywords" content="Squid Game, Emoji, JavaScript, Canvas">
+  
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="🦑 Squid Game Level 5">
+  <meta name="twitter:description" content="A JavaScript canvas simulation of Squid Game level 5 using emojis.">
+  <meta name="twitter:site" content="@lewdev">
+  <meta name="twitter:creator" content="@lewdev">
+  <meta name="twitter:image" content="https://lewdev.github.io/apps/squid-game-lvl5/img/banner-1200x630.png">
+  
+  <!-- Open Graph general (Facebook, Pinterest)-->
+  <meta property="og:title" content="🦑 Squid Game Level 5">
+  <meta property="og:description" content="A JavaScript canvas simulation of Squid Game level 5 using emojis.">
+  <meta property="og:url" content="https://lewdev.github.io/apps/squid-game-lvl5/">
+  <meta property="og:site_name" content="lewdev.github.io">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://lewdev.github.io/apps/squid-game-lvl5/img/banner-1200x630.png">
+  
+  <!-- Emoji SVG favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦑</text></svg>">
+</head>
+<body>
+<style>html,body{margin:0;overflow:hidden}</style>
+<canvas id=a></canvas>
+<script>
+//global
+x = a.getContext('2d');
+all = [];//array of all objects
+startTime = Date.now();
+t = 0;
+lastStep = 0;
+zoom = 1;
+
+//game paramters
+PLAYERS = 16;
+COLUMNS = 18;
+X_START = 200;
+Y_START = 200;
+PLAT_GAP = 10;
+PLAT_W = 40;
+PLAT_H = 30;
+players = [];
+platforms = [];
+scale = 1;
+camera = {x: 0, y: 0, target: {}};
+progress = 0;
+BASE_PLATFORM = {
+  w: PLAT_W * 3,
+  h: PLAT_H * 4,
+};
+
+startGame = () => {
+  t = 0;
+  startTime = Date.now();
+  platforms = [];
+  players = [];
+  lastStep = 0;
+  playersLeft = PLAYERS;
+  repeat(COLUMNS, i => {
+    //isRight: 0 = left is solid, 1 = right is solid
+    //condition: 0 = broken, 1 = solid
+    platforms.push({
+      i: i + 1,
+      isRight: rand() > 0.5 ? 1 : 0,
+      condition: 1
+    });
+  });
+  progress = 0;
+};
+
+render = () => {
+  //draw bars holding glass
+  let yPos = Y_START - (PLAT_H / 2);
+  for (let i = 0; i < 4; i++) {
+    drawLine(
+      {x: X_START - ((PLAT_W / 2) + PLAT_GAP), y: yPos},
+      {x: X_START + (COLUMNS * 50) - (PLAT_W / 2), y: yPos},
+      "gray",
+      2
+    );
+    yPos += (i % 2 ? PLAT_GAP : PLAT_H);
+  }
+  platforms.map(p => {
+    //draw platforms
+    const xPos = X_START + ((p.i - 1) * (PLAT_W + PLAT_GAP));
+    for (let i = 0; i < 2; i++) {
+      if (p.condition === 1
+        || (i === 0 && p.isRight === 0)
+        || (i === 1 && p.isRight === 1)
+      ) {
+        draw({
+          x: xPos,
+          y: Y_START + (i * (PLAT_H + 10)),
+          w: PLAT_W, h: PLAT_H,
+          opacity: .7,
+          color: 'blue',
+        });
+      }
+      else {
+        // draw dead player
+        drawCircle({
+          x: xPos,
+          y: Y_START + (p.isRight * (PLAT_H + 10)) + 200,
+          w: PLAT_W / 2, h: PLAT_H / 2,
+          opacity: .7,
+          color: 'red',
+        })
+        draw({
+          text: "🏃‍♂️", centered: true, fontSize: 30, horiz: true,
+          x: xPos,
+          y: Y_START + (p.isRight * (PLAT_H + 10)) + 200,
+        });
+      }
+    }
+    //draw players
+    if (p.i <= progress && p.i > progress - playersLeft) {
+      draw({
+        text: "🏃‍♂️", centered: true, fontSize: 30, horiz: true,
+        x: xPos,
+        y: Y_START + (p.isRight * (PLAT_H + 10)),
+        w: PLAT_W, h: PLAT_H,
+      });
+    }
+  });
+
+  //draw progress
+  draw({
+    text: "⬆",
+    centered: 1,
+    fontSize: 30,
+    x: X_START + (progress * (PLAT_W + PLAT_GAP)),
+    y: Y_START + 120,
+  });
+
+  //draw start/end platforms
+  const startX = X_START - ((BASE_PLATFORM.w / 2) + (PLAT_W / 2) + PLAT_GAP) ;
+  const endX = X_START + (COLUMNS * (PLAT_W + PLAT_GAP)) - (PLAT_W / 2) + (BASE_PLATFORM.w / 2);
+  const basePlatformY = Y_START + ((PLAT_H + PLAT_GAP) / 2);
+  for (let i = 0; i < 2; i++) {
+    draw(Object.assign({
+      x: i ? startX : endX,
+      y: basePlatformY,
+      color: "purple"
+    }, BASE_PLATFORM));
+  }
+
+  //draw players on start platform
+  const playersOnStart = playersLeft - progress;
+  if (playersOnStart > 0) {
+    for (let i = 0; i < playersOnStart; i++) {
+      draw({
+        text: "🏃‍♂️",
+        centered: true, fontSize: 30,
+        x: startX + randRangeSeed(-30, 50, i),
+        y: basePlatformY + randRangeSeed(-30, 50, i + 1)
+      });
+    }
+  }
+};
+
+calc = () => {
+  //check if game is over
+  if (progress > COLUMNS - 1) {
+    draw({
+      text: `🏃‍♂️ ${playersLeft} players survived!`,
+      centered: true, fontSize: 30,
+      x: innerWidth / 2,
+      y: Y_START / 2,
+    });
+  }
+  else if (playersLeft <= 0) {
+    alert("Game Over");
+    startGame();
+  }
+  else {
+    draw({
+      text: "🦑🎮 lvl 5",
+      centered: true, fontSize: 30,
+      x: innerWidth / 2,
+      y: Y_START / 4,
+    });
+    draw({
+      text: `🏃‍♂️ ${playersLeft} players alive`,
+      centered: true, fontSize: 30,
+      x: innerWidth / 2,
+      y: Y_START / 2,
+    });
+  }
+
+  if (t - lastStep < 1000) return;
+  lastStep = t;
+
+  if (progress < COLUMNS) {
+    const playerChoiceIsRight = rand0or1();
+    const platform = platforms[progress];
+    if (playerChoiceIsRight !== platform.isRight) {
+      platform.condition = 0;
+      playersLeft--;
+    }
+    progress++;
+  }
+};
+
+init = () => {
+  resize();
+  startGame();
+};
+
+//---------------------
+// Loop
+//---------------------
+window.onload = () => {
+  // document.addEventListener("resize", resize);
+  window.onresize = () => resize();
+  document.addEventListener("click", () => startGame());
+  window.addEventListener("wheel", event => {
+    const delta = Math.sign(event.deltaY);
+    scale += -delta * .2;
+  });
+  init();
+  setInterval(() => {
+    t = Date.now() - startTime;
+    a.width|=0;
+    calc();
+    render();
+  }, 20);//50fps
+};
+
+//---------------------
+// Utility Methods 
+//---------------------
+resize = () => {
+  a.width = innerWidth; a.height = innerHeight;
+  X_START = (a.width / 2) - (((COLUMNS * (PLAT_W + PLAT_GAP)) - (PLAT_W / 2) - (BASE_PLATFORM.w / 2)) / 2);
+  console.log(X_START);
+};
+repeat = (n, f) => {
+  for (let i = 0; i < n; i++) f(i);
+};
+collided = (a, b) => (
+  !a.remove && !b.remove //centered on middle
+  && b.x + (b.w / 2) < a.x + (a.w / 2)
+  && b.x - (b.w / 2) > a.x - (a.w / 2)
+  && b.y - (b.h / 2) < a.y + (a.h / 2)
+  && b.y + (b.h / 2) > a.y - (a.h / 2)
+);
+draw = o => {
+  if (!(o.y * scale < innerHeight && o.y * scale > 0 && o.x * scale > 0 && o.x * scale < innerWidth)) return; 
+  if (o.text) {
+    write(o); return;
+  }
+  else if (o.type === "circle") {
+    drawCircle(o); return;
+  }
+  drawRect(o); return;
+};
+drawCircle = o => {
+  x.fillStyle = o.color || 'gray';
+  x.globalAlpha = o.opacity || 1;
+  x.beginPath();
+  x.ellipse(o.x * scale, o.y * scale, o.w * scale, o.h * scale, 0, 0, 2 * Math.PI);
+  x.fill();
+  x.fillStyle = null;
+  x.globalAlpha = 1;
+};
+write = o => {
+  x.font = ((o.fontSize || 12) * scale) + 'px serif';
+  x.fillStyle = o.color || 'black';
+  if (o.centered) o.x -= ((x.measureText(o.text).width / 2));
+  //if (o.horiz) x.scale(-1, 1);
+  x.fillText(o.text, o.x * scale, o.y * scale);
+};
+drawRect = o => {
+  x.fillStyle = o.color || 'gray';
+  x.globalAlpha = o.opacity || 1;
+  x.fillRect((o.x - (o.w / 2)) * scale, (o.y - (o.h / 2)) * scale, (o.w || 30) * scale, (o.h || 30) * scale);
+  x.globalAlpha = 1;
+};
+drawLine = (p1, p2, color, width) => {
+  x.beginPath();
+  x.strokeStyle = color || "red";
+  x.lineWidth = width || 3;
+  x.moveTo(p1.x * scale, p1.y * scale);
+  x.lineTo(p2.x * scale, p2.y * scale);
+  x.stroke();
+};
+rand = Math.random;
+rand0or1 = () => rand() < .5 ? 0 : 1;
+//@KilledByAPixel https://twitter.com/KilledByAPixel/status/1414276611051032577?s=20
+randSeed = (max, seed) => Math.sin(seed)**2 * 1e9 % max
+randRangeSeed = (min, max, seed) => randSeed(max, seed) + min;
+</script>
+
+<div style="position:absolute;right:0;top:0;font-size:24px;">
+  <a href="https://github.com/lewdev/squid-game-lvl5" title="Source Code available on Github!">👨‍💻</a>
+  <a href="https://lewdev.github.io" title="Find more stuff by me">
+    <img src="https://lewdev.github.io/site/favicon/favicon-32x32.png"/>
+  </a>
+</div>
+
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-2833478-13"></script>
+<script>window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());gtag('config', 'UA-2833478-13');</script>
+</body>
