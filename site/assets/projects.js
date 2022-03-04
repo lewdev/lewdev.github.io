@@ -18,13 +18,13 @@ const projects = [
   category: "Apps",
 },
 {
-  title: "Regex Find & Format Tool", url: "https://lewdev.github.io/apps/regex-find-and-format", emoji: '🔍',
-  description: "Perform regular expression search & replace operations on text.",
+  title: "Pixmoji", name: "pixmoji", url: "https://lewdev.github.io/apps/pixmoji", emoji: '🎨',
+  description: "Draw pixel art with emoji squares.",
   category: "Apps",
 },
 {
-  title: "Google Translate Link Generator", name: "trans", emoji: '⛓️',
-  description: "A Google Translate link generator with link history.",
+  title: "Regex Find & Format Tool", url: "https://lewdev.github.io/apps/regex-find-and-format", emoji: '🔍',
+  description: "Perform regular expression search & replace operations on text.",
   category: "Apps",
 },
 // Games
@@ -38,7 +38,8 @@ const projects = [
   description: "Quickly build the ordered burgers before the time runs out.",
   category: "Games",
 },
-{ title: "Number Guessing Game", name: "number-guess", emoji: '🤔',
+{
+  title: "Number Guessing Game", name: "number-guess", emoji: '🤔',
   description: "Guess your number while it tracks your guesses and time. Has multiple difficulties.",
   category: "Games",
 },
