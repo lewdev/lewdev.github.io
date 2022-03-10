@@ -18,7 +18,12 @@ const projects = [
   category: "Apps",
 },
 {
-  title: "Pixmoji", name: "pixmoji", url: "https://lewdev.github.io/apps/pixmoji", emoji: '🎨',
+  title: "ExText", name: "extext", emoji: '👨‍💻',
+  description: "Minimal, fast web development in browser. Press Ctrl+Enter to run.",
+  category: "Apps",
+},
+{
+  title: "Pixmoji", name: "pixmoji", emoji: '🎨',
   description: "Draw pixel art with emoji squares.",
   category: "Apps",
 },
@@ -43,8 +48,10 @@ const projects = [
   description: "Guess your number while it tracks your guesses and time. Has multiple difficulties.",
   category: "Games",
 },
-// { title: "Tick-Tack-Toe", name: "ticktacktoe",  emoji: '⭕',
-//   url: "https://lewdev.github.io/apps/ticktacktoe/v1/" },
+{
+  title: "Tick-Tack-Toe", name: "ticktacktoe",  emoji: '⭕', category: "Games",
+  url: "https://lewdev.github.io/apps/ticktacktoe/v1/", hidden: true
+},
 
 // Tenrikyo
 {
