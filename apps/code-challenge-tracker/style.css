@@ -1,0 +1,1 @@
+.notify{position:fixed;top:-5rem;left:10%;width:80%;font-size:1.5rem;display:block;white-space:normal;animation:2s 2 alternate slidein}@keyframes slidein{from{top:-5rem}50%{top:5%}to{top:5%}}.fade-out{visibility:hidden;opacity:0;transition:visibility 0s 1s,opacity 1s linear}
