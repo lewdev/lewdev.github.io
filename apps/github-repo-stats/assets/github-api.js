@@ -1,11 +1,5 @@
 //https://stackoverflow.com/a/66938952/1675237
 const GithubApi = (() => {
-  let username = null;
-  const tokenStr = "434c547b4755651c161c5456535c50611d4b45694e137c486c6b577563104b1d4f651410434e524c";
-  const salt = "f2q23";
-  const TOKEN = decrypt(salt, tokenStr);
-  const API_URL = "https://api.github.com";
-
   // const crypt = (salt, text) => {
   //   const textToChars = (text) => text.split("").map((c) => c.charCodeAt(0));
   //   const byteHex = (n) => ("0" + Number(n).toString(16)).substr(-2);
@@ -28,6 +22,13 @@ const GithubApi = (() => {
       .map((charCode) => String.fromCharCode(charCode))
       .join("");
   };
+
+  let username = null;
+  const tokenStr = "434c547b4755651c161c5456535c50611d4b45694e137c486c6b577563104b1d4f651410434e524c";
+  const salt = "f2q23";
+  const TOKEN = decrypt(salt, tokenStr);
+  const API_URL = "https://api.github.com";
+
   
   const get = path => fetch(
       `${API_URL}${path}`,
