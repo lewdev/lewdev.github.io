@@ -7,6 +7,7 @@
 const app = (() => {
   const APP_ID = "my-github-stats-data"
   const d = document;
+  const loading = d.getElementById("loading");
   const left = d.getElementById("left");
   const right = d.getElementById("right");
   let user = {};
@@ -17,11 +18,17 @@ const app = (() => {
 
   const createStatsTable = (attr, repo) => {
     const arr = repo[attr];
-    const header = `<h5>${cap(attr)}</h5>`;
+    //{views: {views: 0, uniques: 0}, clones: {clones: 0, uniques: 0}};
+    const overall = arr.reduce((prev, curr) => {
+      prev.count += curr.count;
+      prev.uniques += curr.uniques;
+      return prev;
+    }, {count: 0, uniques: 0});
+    const header = `<h5>${cap(attr)} (${["count", "uniques"].map(name => `${overall[name]} ${name}`).join(", ")})</h5>`;
     if (!arr || arr.length === 0) return "";
     const cols = Object.keys(arr[0]);
-		return `${header}<div class="card mb-3"><table class="table mb-0"><thead><tr>${cols.map(c => `<th>${cap(c)}</th>`).join("")}</thead>
-      <tbody>${arr.map(o => `<tr>${cols.map(a => `<td>${o[a]}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+		return `${header}<details><div class="card mb-3"><table class="table mb-0"><thead><tr>${cols.map(c => `<th>${cap(c)}</th>`).join("")}</thead>
+      <tbody>${arr.map(o => `<tr>${cols.map(a => `<td>${o[a]}</td>`).join("")}</tr>`).join("")}</tbody></table></div></details>`;
   };
   const isEmpty = arr => !arr || arr.length === 0;
 
@@ -51,17 +58,16 @@ const app = (() => {
         alert("You need to login to Github first!");
         return;
       }
+      loading.innerHTML = "🔃 Loading...";
       user = userData;
       localStorage.setItem(`${APP_ID}-user`, JSON.stringify(user));
 
       GithubApi.getRepos(reposData => {
         const promises = [];
-        for (const repo of reposData) {
+        for (const repo of reposData.filter(r => !r.private)) {
           const { name } = repo;
-          if (!repo.private) {
-            let repoStats = stats.find(s => s.name === name) || { name };
-            promises.push(new Promise(res => GithubApi.getAllRepoStats(repoStats, statsData => res(statsData))));
-          }
+          let repoStats = stats.find(s => s.name === name) || { name };
+          promises.push(new Promise(res => GithubApi.getAllRepoStats(repoStats, statsData => res(statsData))));
         }
         Promise.all(promises).then(data => {
           for (const statData of data) {
@@ -74,6 +80,7 @@ const app = (() => {
           localStorage.setItem(`${APP_ID}-repos`, JSON.stringify(reposData));
           localStorage.setItem(`${APP_ID}-stats`, JSON.stringify(stats));
           t.value = JSON.stringify(stats);
+          loading.innerHTML = '';
           render();
         });
       })

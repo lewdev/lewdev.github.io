@@ -29,11 +29,7 @@ const GithubApi = (() => {
   const TOKEN = decrypt(salt, tokenStr);
   const API_URL = "https://api.github.com";
 
-  
-  const get = path => fetch(
-      `${API_URL}${path}`,
-      {headers: {Authorization: `token ${TOKEN}`}
-    })
+  const get = path => fetch(`${API_URL}${path}`,{headers: {Authorization: `token ${TOKEN}`}})
     .then(r => r.json())
     .then(r => {if (r.message) alert(r.message); return r;})
     .catch(error => err.innerHTML = error)
@@ -80,28 +76,32 @@ const GithubApi = (() => {
       const { getTraffic, applyStats, getClones, getReferrers } = GithubApi;
       getTraffic(name, data => {
         if (!data) return;
-        applyStats(repo, "views", data);
+        applyStats(repo, "views", data, "timestamp");
         getClones(name, data => {
-          applyStats(repo, "clones", data);
+          applyStats(repo, "clones", data, "timestamp");
           getReferrers(name, data => {
-            // if (!repo) return;
-            if (!repo.referrers) repo.referrers = data;
-            // else {
-            //   for (const referrer of data) {
-            //     repo.referrer = repo.referrer.map(v => v.referrer === referrer.referrer ? referrer : v);
-            //   }
-            // }
+            applyStats(repo, "referrers", data, "referrer");
+            handleCb(data, cb);
           });
-          if (cb) cb(repo);
         });
       });
     },
-    applyStats: (repo, attr, data) => {
-      if (!repo[attr]) repo[attr] = data[attr];
+    applyStats: (repo, attr, data, baseAttr) => {
+      const isReferrers = attr === "referrers";
+      const arr = isReferrers ? data : data[attr];
+      if (!repo[attr]) repo[attr] = arr;
       else {
-        //merge data
-        for (const day of data[attr]) {
-          repo[attr] = repo[attr].map(v => v.timestamp === day.timestamp ? day : v);
+        //merge: find and replace or add
+        for (const row of arr) {
+          const found = repo[attr].find(v => v[baseAttr] === row[baseAttr]);
+          if (found) {
+            if (!isReferrers) {
+              row.count += found.count;
+              row.uniques += found.uniques;
+            }
+            repo[attr] = repo[attr].map(v => v[baseAttr] === row[baseAttr] ? row : v);
+          }
+          else repo[attr].push(row);
         }
       }
     }
