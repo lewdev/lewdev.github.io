@@ -1,30 +1,82 @@
-var $jscomp=$jscomp||{};$jscomp.scope={};$jscomp.createTemplateTagFirstArg=function(c){return c.raw=c};$jscomp.createTemplateTagFirstArgWithRaw=function(c,e){c.raw=e;return c};$jscomp.arrayIteratorImpl=function(c){var e=0;return function(){return e<c.length?{done:!1,value:c[e++]}:{done:!0}}};$jscomp.arrayIterator=function(c){return{next:$jscomp.arrayIteratorImpl(c)}};$jscomp.makeIterator=function(c){var e="undefined"!=typeof Symbol&&Symbol.iterator&&c[Symbol.iterator];return e?e.call(c):$jscomp.arrayIterator(c)};
-$jscomp.ASSUME_ES5=!1;$jscomp.ASSUME_NO_NATIVE_MAP=!1;$jscomp.ASSUME_NO_NATIVE_SET=!1;$jscomp.SIMPLE_FROUND_POLYFILL=!1;$jscomp.ISOLATE_POLYFILLS=!1;$jscomp.FORCE_POLYFILL_PROMISE=!1;$jscomp.FORCE_POLYFILL_PROMISE_WHEN_NO_UNHANDLED_REJECTION=!1;$jscomp.defineProperty=$jscomp.ASSUME_ES5||"function"==typeof Object.defineProperties?Object.defineProperty:function(c,e,g){if(c==Array.prototype||c==Object.prototype)return c;c[e]=g.value;return c};
-$jscomp.getGlobal=function(c){c=["object"==typeof globalThis&&globalThis,c,"object"==typeof window&&window,"object"==typeof self&&self,"object"==typeof global&&global];for(var e=0;e<c.length;++e){var g=c[e];if(g&&g.Math==Math)return g}throw Error("Cannot find global object");};$jscomp.global=$jscomp.getGlobal(this);$jscomp.IS_SYMBOL_NATIVE="function"===typeof Symbol&&"symbol"===typeof Symbol("x");$jscomp.TRUST_ES6_POLYFILLS=!$jscomp.ISOLATE_POLYFILLS||$jscomp.IS_SYMBOL_NATIVE;$jscomp.polyfills={};
-$jscomp.propertyToPolyfillSymbol={};$jscomp.POLYFILL_PREFIX="$jscp$";var $jscomp$lookupPolyfilledValue=function(c,e){var g=$jscomp.propertyToPolyfillSymbol[e];if(null==g)return c[e];g=c[g];return void 0!==g?g:c[e]};$jscomp.polyfill=function(c,e,g,h){e&&($jscomp.ISOLATE_POLYFILLS?$jscomp.polyfillIsolated(c,e,g,h):$jscomp.polyfillUnisolated(c,e,g,h))};
-$jscomp.polyfillUnisolated=function(c,e,g,h){g=$jscomp.global;c=c.split(".");for(h=0;h<c.length-1;h++){var b=c[h];if(!(b in g))return;g=g[b]}c=c[c.length-1];h=g[c];e=e(h);e!=h&&null!=e&&$jscomp.defineProperty(g,c,{configurable:!0,writable:!0,value:e})};
-$jscomp.polyfillIsolated=function(c,e,g,h){var b=c.split(".");c=1===b.length;h=b[0];h=!c&&h in $jscomp.polyfills?$jscomp.polyfills:$jscomp.global;for(var d=0;d<b.length-1;d++){var a=b[d];if(!(a in h))return;h=h[a]}b=b[b.length-1];g=$jscomp.IS_SYMBOL_NATIVE&&"es6"===g?h[b]:null;e=e(g);null!=e&&(c?$jscomp.defineProperty($jscomp.polyfills,b,{configurable:!0,writable:!0,value:e}):e!==g&&(void 0===$jscomp.propertyToPolyfillSymbol[b]&&(g=1E9*Math.random()>>>0,$jscomp.propertyToPolyfillSymbol[b]=$jscomp.IS_SYMBOL_NATIVE?
-$jscomp.global.Symbol(b):$jscomp.POLYFILL_PREFIX+g+"$"+b),$jscomp.defineProperty(h,$jscomp.propertyToPolyfillSymbol[b],{configurable:!0,writable:!0,value:e})))};$jscomp.initSymbol=function(){};
-$jscomp.polyfill("Symbol",function(c){if(c)return c;var e=function(d,a){this.$jscomp$symbol$id_=d;$jscomp.defineProperty(this,"description",{configurable:!0,writable:!0,value:a})};e.prototype.toString=function(){return this.$jscomp$symbol$id_};var g="jscomp_symbol_"+(1E9*Math.random()>>>0)+"_",h=0,b=function(d){if(this instanceof b)throw new TypeError("Symbol is not a constructor");return new e(g+(d||"")+"_"+h++,d)};return b},"es6","es3");
-$jscomp.polyfill("Symbol.iterator",function(c){if(c)return c;c=Symbol("Symbol.iterator");for(var e="Array Int8Array Uint8Array Uint8ClampedArray Int16Array Uint16Array Int32Array Uint32Array Float32Array Float64Array".split(" "),g=0;g<e.length;g++){var h=$jscomp.global[e[g]];"function"===typeof h&&"function"!=typeof h.prototype[c]&&$jscomp.defineProperty(h.prototype,c,{configurable:!0,writable:!0,value:function(){return $jscomp.iteratorPrototype($jscomp.arrayIteratorImpl(this))}})}return c},"es6",
-"es3");$jscomp.iteratorPrototype=function(c){c={next:c};c[Symbol.iterator]=function(){return this};return c};$jscomp.iteratorFromArray=function(c,e){c instanceof String&&(c+="");var g=0,h=!1,b={next:function(){if(!h&&g<c.length){var d=g++;return{value:e(d,c[d]),done:!1}}h=!0;return{done:!0,value:void 0}}};b[Symbol.iterator]=function(){return b};return b};$jscomp.polyfill("Array.prototype.keys",function(c){return c?c:function(){return $jscomp.iteratorFromArray(this,function(e){return e})}},"es6","es3");
-$jscomp.findInternal=function(c,e,g){c instanceof String&&(c=String(c));for(var h=c.length,b=0;b<h;b++){var d=c[b];if(e.call(g,d,b,c))return{i:b,v:d}}return{i:-1,v:void 0}};$jscomp.polyfill("Array.prototype.find",function(c){return c?c:function(e,g){return $jscomp.findInternal(this,e,g).v}},"es6","es3");
-$jscomp.polyfill("Promise",function(c){function e(){this.batch_=null}function g(a){return a instanceof b?a:new b(function(f,k){f(a)})}if(c&&(!($jscomp.FORCE_POLYFILL_PROMISE||$jscomp.FORCE_POLYFILL_PROMISE_WHEN_NO_UNHANDLED_REJECTION&&"undefined"===typeof $jscomp.global.PromiseRejectionEvent)||!$jscomp.global.Promise||-1===$jscomp.global.Promise.toString().indexOf("[native code]")))return c;e.prototype.asyncExecute=function(a){if(null==this.batch_){this.batch_=[];var f=this;this.asyncExecuteFunction(function(){f.executeBatch_()})}this.batch_.push(a)};
-var h=$jscomp.global.setTimeout;e.prototype.asyncExecuteFunction=function(a){h(a,0)};e.prototype.executeBatch_=function(){for(;this.batch_&&this.batch_.length;){var a=this.batch_;this.batch_=[];for(var f=0;f<a.length;++f){var k=a[f];a[f]=null;try{k()}catch(m){this.asyncThrow_(m)}}}this.batch_=null};e.prototype.asyncThrow_=function(a){this.asyncExecuteFunction(function(){throw a;})};var b=function(a){this.state_=0;this.result_=void 0;this.onSettledCallbacks_=[];this.isRejectionHandled_=!1;var f=this.createResolveAndReject_();
-try{a(f.resolve,f.reject)}catch(k){f.reject(k)}};b.prototype.createResolveAndReject_=function(){function a(m){return function(l){k||(k=!0,m.call(f,l))}}var f=this,k=!1;return{resolve:a(this.resolveTo_),reject:a(this.reject_)}};b.prototype.resolveTo_=function(a){if(a===this)this.reject_(new TypeError("A Promise cannot resolve to itself"));else if(a instanceof b)this.settleSameAsPromise_(a);else{a:switch(typeof a){case "object":var f=null!=a;break a;case "function":f=!0;break a;default:f=!1}f?this.resolveToNonPromiseObj_(a):
-this.fulfill_(a)}};b.prototype.resolveToNonPromiseObj_=function(a){var f=void 0;try{f=a.then}catch(k){this.reject_(k);return}"function"==typeof f?this.settleSameAsThenable_(f,a):this.fulfill_(a)};b.prototype.reject_=function(a){this.settle_(2,a)};b.prototype.fulfill_=function(a){this.settle_(1,a)};b.prototype.settle_=function(a,f){if(0!=this.state_)throw Error("Cannot settle("+a+", "+f+"): Promise already settled in state"+this.state_);this.state_=a;this.result_=f;2===this.state_&&this.scheduleUnhandledRejectionCheck_();
-this.executeOnSettledCallbacks_()};b.prototype.scheduleUnhandledRejectionCheck_=function(){var a=this;h(function(){if(a.notifyUnhandledRejection_()){var f=$jscomp.global.console;"undefined"!==typeof f&&f.error(a.result_)}},1)};b.prototype.notifyUnhandledRejection_=function(){if(this.isRejectionHandled_)return!1;var a=$jscomp.global.CustomEvent,f=$jscomp.global.Event,k=$jscomp.global.dispatchEvent;if("undefined"===typeof k)return!0;"function"===typeof a?a=new a("unhandledrejection",{cancelable:!0}):
-"function"===typeof f?a=new f("unhandledrejection",{cancelable:!0}):(a=$jscomp.global.document.createEvent("CustomEvent"),a.initCustomEvent("unhandledrejection",!1,!0,a));a.promise=this;a.reason=this.result_;return k(a)};b.prototype.executeOnSettledCallbacks_=function(){if(null!=this.onSettledCallbacks_){for(var a=0;a<this.onSettledCallbacks_.length;++a)d.asyncExecute(this.onSettledCallbacks_[a]);this.onSettledCallbacks_=null}};var d=new e;b.prototype.settleSameAsPromise_=function(a){var f=this.createResolveAndReject_();
-a.callWhenSettled_(f.resolve,f.reject)};b.prototype.settleSameAsThenable_=function(a,f){var k=this.createResolveAndReject_();try{a.call(f,k.resolve,k.reject)}catch(m){k.reject(m)}};b.prototype.then=function(a,f){function k(n,p){return"function"==typeof n?function(r){try{m(n(r))}catch(u){l(u)}}:p}var m,l,q=new b(function(n,p){m=n;l=p});this.callWhenSettled_(k(a,m),k(f,l));return q};b.prototype.catch=function(a){return this.then(void 0,a)};b.prototype.callWhenSettled_=function(a,f){function k(){switch(m.state_){case 1:a(m.result_);
-break;case 2:f(m.result_);break;default:throw Error("Unexpected state: "+m.state_);}}var m=this;null==this.onSettledCallbacks_?d.asyncExecute(k):this.onSettledCallbacks_.push(k);this.isRejectionHandled_=!0};b.resolve=g;b.reject=function(a){return new b(function(f,k){k(a)})};b.race=function(a){return new b(function(f,k){for(var m=$jscomp.makeIterator(a),l=m.next();!l.done;l=m.next())g(l.value).callWhenSettled_(f,k)})};b.all=function(a){var f=$jscomp.makeIterator(a),k=f.next();return k.done?g([]):new b(function(m,
-l){function q(r){return function(u){n[r]=u;p--;0==p&&m(n)}}var n=[],p=0;do n.push(void 0),p++,g(k.value).callWhenSettled_(q(n.length-1),l),k=f.next();while(!k.done)})};return b},"es6","es3");
-var crypt=function(c,e){var g=function(h){return h.split("").map(function(b){return b.charCodeAt(0)})};return e.split("").map(g).map(function(h){return g(c).reduce(function(b,d){return b^d},h)}).map(function(h){return("0"+Number(h).toString(16)).substr(-2)}).join("")},decrypt=function(c,e){var g=function(h){return h.split("").map(function(b){return b.charCodeAt(0)})};return e.match(/.{1,2}/g).map(function(h){return parseInt(h,16)}).map(function(h){return g(c).reduce(function(b,d){return b^d},h)}).map(function(h){return String.fromCharCode(h)}).join("")},
-GithubApi=function(){var c=null,e=decrypt("f2q23","434c547b4755651c161c5456535c50611d4b45694e137c486c6b577563104b1d4f651410434e524c"),g=function(b){return fetch("https://api.github.com"+b,{headers:{Authorization:"token "+e}}).then(function(d){return d.json()}).then(function(d){d.message&&alert(d.message);return d}).catch(function(d){return err.innerHTML=d})},h=function(b,d){d&&d(b);return b};return{getUser:function(b){return g("/user").then(function(d){c=d.login;return h(d,b)})},getGists:function(b){return g("/users/"+
-c+"/gists").then(function(d){return d.map(function(a){var f=a.files;return{url:a.url,description:a.description,files:Object.keys(f).map(function(k){k=f[k];return{filename:k.filename,raw_url:k.raw_url,public:a.public}})}})}).then(function(d){return h(d,b)})},getRepos:function(b){return g("/user/repos").then(function(d){return d.map(function(a){return{id:a.id,name:a.name,description:a.description,html_url:a.html_url,private:a.private,created_at:a.created_at,updated_at:a.updated_at,stargazers_count:a.stargazers_count,
-watchers:a.watchers,forks:a.forks}})}).then(function(d){return h(d,b)})},getTraffic:function(b,d){return g("/repos/"+c+"/"+b+"/traffic/views").then(function(a){return h(a,d)})},getClones:function(b,d){return g("/repos/"+c+"/"+b+"/traffic/clones").then(function(a){return h(a,d)})},getReferrers:function(b,d){return g("/repos/"+c+"/"+b+"/traffic/popular/referrers").then(function(a){return h(a,d)})},getAllRepoStats:function(b,d){if(b){var a=b.name,f=GithubApi,k=f.getTraffic,m=f.applyStats,l=f.getClones,
-q=f.getReferrers;k(a,function(n){n&&(m(b,"views",n),l(a,function(p){m(b,"clones",p);q(a,function(r){b.referrers||(b.referrers=r)});d&&d(b)}))})}},applyStats:function(b,d,a){if(b[d]){var f={};a=$jscomp.makeIterator(a[d]);for(var k=a.next();!k.done;f={$jscomp$loop$prop$day$4:f.$jscomp$loop$prop$day$4},k=a.next())f.$jscomp$loop$prop$day$4=k.value,b[d]=b[d].map(function(m){return function(l){return l.timestamp===m.$jscomp$loop$prop$day$4.timestamp?m.$jscomp$loop$prop$day$4:l}}(f))}else b[d]=a[d]}}}();var app=function(){var c=document,e=c.getElementById("left"),g=c.getElementById("right"),h={},b=[],d=[],a=function(l){return l.charAt(0).toUpperCase()+l.substr(1)},f=function(l,q){q=q[l];l="<h5>"+a(l)+"</h5>";if(!q||0===q.length)return"";var n=Object.keys(q[0]);return l+'<div class="card mb-3"><table class="table mb-0"><thead><tr>'+n.map(function(p){return"<th>"+a(p)+"</th>"}).join("")+"</thead>\n      <tbody>"+q.map(function(p){return"<tr>"+n.map(function(r){return"<td>"+p[r]+"</td>"}).join("")+
-"</tr>"}).join("")+"</tbody></table></div>"},k=function(l){return!l||0===l.length},m=function(){var l=b.filter(function(q){return!q.private});e.innerHTML='<h3 class="mt-4 mb-1 pb-1 border-secondary border-bottom">List</h3><ul>'+l.map(function(q){return"<li>"+q.name+"</li>"}).join("")+"</ul>";g.innerHTML="<div>"+l.map(function(q){var n=d.find(function(p){return p.name===q.name});return!n||k(n.views)&&k(n.clones)&&k(n.referrers)?"":'<h3 class="mt-4 mb-1 pb-1 border-secondary border-bottom">'+n.name+
-"</h3>"+["views","clones","referrers"].map(function(p){return f(p,n)}).join("")}).join("")+"</div>"};window.onload=function(){var l=localStorage.getItem("my-github-stats-data-user"),q=localStorage.getItem("my-github-stats-data-stats"),n=localStorage.getItem("my-github-stats-data-repos");l&&(h=JSON.parse(l));q&&(d=JSON.parse(q));n&&(b=JSON.parse(n));m()};return{reload:function(){return GithubApi.getUser(function(l){l?(h=l,localStorage.setItem("my-github-stats-data-user",JSON.stringify(h)),GithubApi.getRepos(function(q){for(var n=
-[],p={},r=$jscomp.makeIterator(q),u=r.next();!u.done;p={$jscomp$loop$prop$name$6:p.$jscomp$loop$prop$name$6,$jscomp$loop$prop$repoStats$7:p.$jscomp$loop$prop$repoStats$7},u=r.next())u=u.value,p.$jscomp$loop$prop$name$6=u.name,u.private||(p.$jscomp$loop$prop$repoStats$7=d.find(function(w){return function(v){return v.name===w.$jscomp$loop$prop$name$6}}(p))||{name:p.$jscomp$loop$prop$name$6},n.push(new Promise(function(w){return function(v){return GithubApi.getAllRepoStats(w.$jscomp$loop$prop$repoStats$7,
-function(y){return v(y)})}}(p))));Promise.all(n).then(function(w){var v={};w=$jscomp.makeIterator(w);for(var y=w.next();!y.done;v={$jscomp$loop$prop$statData$10:v.$jscomp$loop$prop$statData$10},y=w.next())v.$jscomp$loop$prop$statData$10=y.value,d.find(function(x){return function(z){return z.name===x.$jscomp$loop$prop$statData$10.name}}(v))?d=d.map(function(x){return function(z){return z.name===x.$jscomp$loop$prop$statData$10.name?x.$jscomp$loop$prop$statData$10:z}}(v)):d.push(v.$jscomp$loop$prop$statData$10);
-b=q.filter(function(x){return!x.private});localStorage.setItem("my-github-stats-data-repos",JSON.stringify(q));localStorage.setItem("my-github-stats-data-stats",JSON.stringify(d));t.value=JSON.stringify(d);m()})})):alert("You need to login to Github first!")})}}}();
+/*
+/user/repos
+/repos/:owner/:repo/traffic/clones
+/repos/:owner/:repo/traffic/views
+/repos/:owner/:repo/traffic/popular/referrers
+*/
+const app = (() => {
+  const APP_ID = "my-github-stats-data"
+  const d = document;
+  const left = d.getElementById("left");
+  const right = d.getElementById("right");
+  let user = {};
+  let repos = [];
+  let stats = [];
+
+  const cap = s => s.charAt(0).toUpperCase() + s.substr(1);
+
+  const createStatsTable = (attr, repo) => {
+    const arr = repo[attr];
+    const header = `<h5>${cap(attr)}</h5>`;
+    if (!arr || arr.length === 0) return "";
+    const cols = Object.keys(arr[0]);
+		return `${header}<div class="card mb-3"><table class="table mb-0"><thead><tr>${cols.map(c => `<th>${cap(c)}</th>`).join("")}</thead>
+      <tbody>${arr.map(o => `<tr>${cols.map(a => `<td>${o[a]}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`;
+  };
+  const isEmpty = arr => !arr || arr.length === 0;
+
+  const render = () => {
+    const repoList = repos.filter(r => !r.private);
+    left.innerHTML = `<h3 class="mt-4 mb-1 pb-1 border-secondary border-bottom">List</h3><ul>${repoList.map(r => `<li>${r.name}</li>`).join("")}</ul>`;
+    right.innerHTML = `<div>${repoList.map(repo => {
+      const r = stats.find(s => s.name === repo.name);
+      if (!r || (isEmpty(r.views) && isEmpty(r.clones) && isEmpty(r.referrers))) return '';
+      return `<h3 class="mt-4 mb-1 pb-1 border-secondary border-bottom">${r.name}</h3>${["views", "clones", "referrers"].map(a => createStatsTable(a, r)).join("")}`;
+    }).join("")}</div>`;
+  };
+
+	window.onload = () => {
+    const userStr = localStorage.getItem(`${APP_ID}-user`);
+    const statsStr = localStorage.getItem(`${APP_ID}-stats`);
+    const reposStr = localStorage.getItem(`${APP_ID}-repos`);
+    if (userStr) user = JSON.parse(userStr);
+    if (statsStr) stats = JSON.parse(statsStr);
+    if (reposStr) repos = JSON.parse(reposStr);
+    render();
+  };
+  
+  return {
+    "reload": () => GithubApi.getUser(userData => {
+      if (!userData) {
+        alert("You need to login to Github first!");
+        return;
+      }
+      user = userData;
+      localStorage.setItem(`${APP_ID}-user`, JSON.stringify(user));
+
+      GithubApi.getRepos(reposData => {
+        const promises = [];
+        for (const repo of reposData) {
+          const { name } = repo;
+          if (!repo.private) {
+            let repoStats = stats.find(s => s.name === name) || { name };
+            promises.push(new Promise(res => GithubApi.getAllRepoStats(repoStats, statsData => res(statsData))));
+          }
+        }
+        Promise.all(promises).then(data => {
+          for (const statData of data) {
+            if (stats.find(s => s.name === statData.name)) {
+              stats = stats.map(s => s.name === statData.name ? statData : s);
+            }
+            else stats.push(statData);
+          }
+          repos = reposData.filter(r => !r.private);
+          localStorage.setItem(`${APP_ID}-repos`, JSON.stringify(reposData));
+          localStorage.setItem(`${APP_ID}-stats`, JSON.stringify(stats));
+          t.value = JSON.stringify(stats);
+          render();
+        });
+      })
+    })
+  };
+})();
