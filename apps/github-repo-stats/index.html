@@ -1,1 +1,67 @@
-<!doctypehtml><html> <head> <meta http-equiv="Content-Type"content="text/html; charset=utf-8"> <meta http-equiv="X-UA-Compatible"content="IE=edge"> <meta name="viewport"content="width=device-width,initial-scale=1"> <title>Github Repo Stats | Track Views, Clones, and Referrers of your Github repositories.</title> <meta name="author"content="Lewis Nakao"> <meta name="description"content="Track Views, Clones, and Referrers of your Github repositories."> <meta name="twitter:card"content="summary_large_image"> <meta name="twitter:title"content="📊 Github Repo Stats | Track Views, Clones, and Referrers of your Github repositories."> <meta name="twitter:description"content="Track Views, Clones, and Referrers of your Github repositories."> <meta name="twitter:site"content="@lewdev"> <meta name="twitter:creator"content="@lewdev"> <meta name="twitter:image"content="https://lewdev.github.io/apps/github-repo-stats/img/banner-1200x630.png"> <meta property="og:title"content="📊 Github Repo Stats | Track Views, Clones, and Referrers of your Github repositories."> <meta property="og:description"content="Track Views, Clones, and Referrers of your Github repositories."> <meta property="og:url"content="https://lewdev.github.io/apps/github-repo-stats/"> <meta property="og:site_name"content="lewdev.github.io"> <meta property="og:type"content="website"> <meta property="og:image"content="https://lewdev.github.io/apps/github-repo-stats/img/banner-1200x630.png"> <link rel="icon"href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>"> <meta name="mobile-web-app-capable"content="yes"> <meta name="apple-mobile-web-app-capable"content="yes"> <meta name="apple-mobile-web-app-status-bar-style"content="black-translucent"> <meta name="apple-mobile-web-app-title"content="Github Repo Stats"> <meta name="application-name"content="Github Repo Stats"> <meta name="theme-color"content="#ffffff"> <meta name="msapplication-navbutton-color"content="#ffffff"> <meta name="msapplication-starturl"content="./index.html"> <link rel="stylesheet"href="assets/bootstrap.min.css"> <link rel="stylesheet"href="style.css"> </head> <body> <div class="container"> <h1 class="mt-3">📊 Github Repo Stats <span id="loading"></span></h1> <div> <canvas id="myChart"></canvas> </div> <div class="d-flex justify-content-between"> <div class="p-2"style="width:240px;vertical-align:top"> <div> <textarea id="t"></textarea> <button onclick="app.reload()">Reload</button> Pulls data up to 7 days old from Github API and stores it in localStorage. </div> <div id="left"></div> </div> <div id="right"class="p-2"style="width:calc(100% - 250px);vertical-align:top"></div> </div> </div> <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ=="crossorigin="anonymous"referrerpolicy="no-referrer"></script><script src="script.js"></script> </body></html> 
+<!DOCTYPE html><html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <title>Github Repo Stats | Track Views, Clones, and Referrers of your Github repositories.</title>
+  <meta name="author" content="Lewis Nakao">
+  <meta name="description" content="Track Views, Clones, and Referrers of your Github repositories.">
+  <!-- <meta name="keywords" content="Code Generation, Vanilla JavaScript, Open Source"> -->
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="📊 Github Repo Stats | Track Views, Clones, and Referrers of your Github repositories.">
+  <meta name="twitter:description" content="Track Views, Clones, and Referrers of your Github repositories.">
+  <meta name="twitter:site" content="@lewdev">
+  <meta name="twitter:creator" content="@lewdev">
+  <meta name="twitter:image" content="https://lewdev.github.io/apps/github-repo-stats/img/banner-1200x630.png">
+
+  <!-- Open Graph general (Facebook, Pinterest)-->
+  <meta property="og:title" content="📊 Github Repo Stats | Track Views, Clones, and Referrers of your Github repositories.">
+  <meta property="og:description" content="Track Views, Clones, and Referrers of your Github repositories.">
+  <meta property="og:url" content="https://lewdev.github.io/apps/github-repo-stats/">
+  <meta property="og:site_name" content="lewdev.github.io">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://lewdev.github.io/apps/github-repo-stats/img/banner-1200x630.png">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📊</text></svg>">
+
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Github Repo Stats">
+  <meta name="application-name" content="Github Repo Stats">
+  <meta name="theme-color" content="#ffffff">
+  <meta name="msapplication-navbutton-color" content="#ffffff">
+  <meta name="msapplication-starturl" content="./index.html">
+
+  <link rel="stylesheet" href="assets/bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h1 class="mt-3">📊 Github Repo Stats <span id="loading"></span></h1>
+
+    <div>
+      <canvas id="myChart"></canvas>
+    </div>
+
+    <div class="d-flex justify-content-between">
+      <div class="p-2" style="width: 240px; vertical-align: top;">
+        <div>
+          <textarea id=t></textarea>
+          <button onclick="app.reload()">Reload</button>
+          Pulls data up to 7 days old from Github API and stores it in localStorage.
+        </div>
+        <div id="left"></div>
+      </div>
+      <div id="right" class="p-2" style="width: calc(100% - 250px); vertical-align: top;"></div>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js" integrity="sha512-QSkVNOCYLtj73J4hbmVoOV6KVZuMluZlioC+trLpewV8qMjsWqlIQvkn1KGX2StWvPMdWGBqim1xlC8krl1EKQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="assets/github-api.js"></script>
+  <script src="assets/ReposCommon.js"></script>
+  <script src="assets/ReposSummary.js"></script>
+  <script src="script.js"></script>
+</body></html>
