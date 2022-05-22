@@ -1,89 +1,24 @@
-/*
-/user/repos
-/repos/:owner/:repo/traffic/clones
-/repos/:owner/:repo/traffic/views
-/repos/:owner/:repo/traffic/popular/referrers
-*/
-const app = (() => {
-  const APP_ID = "my-github-stats-data"
-  const d = document;
-  const loading = d.getElementById("loading");
-  const left = d.getElementById("left");
-  const right = d.getElementById("right");
-  let user = {};
-  let repos = [];
-  let stats = [];
-
-  const cap = s => s.charAt(0).toUpperCase() + s.substr(1);
-
-  const createStatsTable = (attr, repo) => {
-    const arr = repo[attr];
-    //{views: {views: 0, uniques: 0}, clones: {clones: 0, uniques: 0}};
-    const overall = arr.reduce((prev, curr) => {
-      prev.count += curr.count;
-      prev.uniques += curr.uniques;
-      return prev;
-    }, {count: 0, uniques: 0});
-    const header = `<h5>${cap(attr)} (${["count", "uniques"].map(name => `${overall[name]} ${name}`).join(", ")})</h5>`;
-    if (!arr || arr.length === 0) return "";
-    const cols = Object.keys(arr[0]);
-		return `${header}<details><div class="card mb-3"><table class="table mb-0"><thead><tr>${cols.map(c => `<th>${cap(c)}</th>`).join("")}</thead>
-      <tbody>${arr.map(o => `<tr>${cols.map(a => `<td>${o[a]}</td>`).join("")}</tr>`).join("")}</tbody></table></div></details>`;
-  };
-  const isEmpty = arr => !arr || arr.length === 0;
-
-  const render = () => {
-    const repoList = repos.filter(r => !r.private);
-    left.innerHTML = `<h3 class="mt-4 mb-1 pb-1 border-secondary border-bottom">List</h3><ul>${repoList.map(r => `<li>${r.name}</li>`).join("")}</ul>`;
-    right.innerHTML = `<div>${repoList.map(repo => {
-      const r = stats.find(s => s.name === repo.name);
-      if (!r || (isEmpty(r.views) && isEmpty(r.clones) && isEmpty(r.referrers))) return '';
-      return `<h3 class="mt-4 mb-1 pb-1 border-secondary border-bottom">${r.name}</h3>${["views", "clones", "referrers"].map(a => createStatsTable(a, r)).join("")}`;
-    }).join("")}</div>`;
-  };
-
-	window.onload = () => {
-    const userStr = localStorage.getItem(`${APP_ID}-user`);
-    const statsStr = localStorage.getItem(`${APP_ID}-stats`);
-    const reposStr = localStorage.getItem(`${APP_ID}-repos`);
-    if (userStr) user = JSON.parse(userStr);
-    if (statsStr) stats = JSON.parse(statsStr);
-    if (reposStr) repos = JSON.parse(reposStr);
-    render();
-  };
-  
-  return {
-    "reload": () => GithubApi.getUser(userData => {
-      if (!userData) {
-        alert("You need to login to Github first!");
-        return;
-      }
-      loading.innerHTML = "🔃 Loading...";
-      user = userData;
-      localStorage.setItem(`${APP_ID}-user`, JSON.stringify(user));
-
-      GithubApi.getRepos(reposData => {
-        const promises = [];
-        for (const repo of reposData.filter(r => !r.private)) {
-          const { name } = repo;
-          let repoStats = stats.find(s => s.name === name) || { name };
-          promises.push(new Promise(res => GithubApi.getAllRepoStats(repoStats, statsData => res(statsData))));
-        }
-        Promise.all(promises).then(data => {
-          for (const statData of data) {
-            if (stats.find(s => s.name === statData.name)) {
-              stats = stats.map(s => s.name === statData.name ? statData : s);
-            }
-            else stats.push(statData);
-          }
-          repos = reposData.filter(r => !r.private);
-          localStorage.setItem(`${APP_ID}-repos`, JSON.stringify(reposData));
-          localStorage.setItem(`${APP_ID}-stats`, JSON.stringify(stats));
-          t.value = JSON.stringify(stats);
-          loading.innerHTML = '';
-          render();
-        });
-      })
-    })
-  };
-})();
+var getRepoLink=function(repo,user){var repoName=user.login+"/"+repo.name;return'<a href="https://github.com/'+repoName+'/graphs/traffic" target="_blank">'+repoName+"</a>"};var getRepoAnchor=function(repo){return'<a href="#'+repo.name+'">'+repo.name+"</a>"};
+var handleTopBtn=function(){var topBtn=document.getElementById("topBtn");if(!topBtn){topBtn=document.createElement("div");topBtn.id="topBtn";topBtn.style.position="fixed";topBtn.style.top="20px";topBtn.style.right="20px";topBtn.innerHTML='<a href="#">⬆️ Back to top</a>';document.body.appendChild(topBtn)}topBtn.style.display=window.pageYOffset>200?"block":"none"};handleTopBtn();window.addEventListener("scroll",handleTopBtn,false);window["ReposSummary"]=function(){var chart;var daysAgo=7;var daysAgoOptions=[7,14,30,356];var showDropdown=function(){return'<label class="d-flex justify-content-between" style="width: 10rem">\n      <strong>Days Ago:</strong>\n      <div>\n        <select id="daysAgo" class="form-control" value="'+daysAgo+'" onchange="ReposSummary.set(this.value)">\n        '+daysAgoOptions.map(function(option){return"<option"+(daysAgo===option?" selected":"")+">"+option+"</option>"})+"\n        </select>\n      </div>\n    </label>"};
+var getCountAfterDate=function(d,stats,attr){return(stats[attr]||[]).filter(function(item){return new Date(item.timestamp)>d}).reduce(function(total,item){return total+=item.count},0)};var showTable=function(){var repoStats=window["app"]["getStats"]();var d=new Date;d.setDate(d.getDate()-daysAgo);return'<table class="table">\n        <thead><tr>'+["Repo","Views","Clones"].map(function(a){return"<th>"+a+"</th>"}).join("")+"</tr></thead>\n        <tbody>\n          "+repoStats.map(function(stats){var viewCount=
+getCountAfterDate(d,stats,"views");var cloneCount=getCountAfterDate(d,stats,"clones");if(viewCount===0&&cloneCount===0)return"";return"<tr>"+[getRepoAnchor(stats),viewCount,cloneCount].map(function(a){return"<td>"+a+"</td>"}).join("")+"</tr>"}).join("")+"\n        </tbody>\n      </table>"};var getDaysByDaysAgo=function(){var d=new Date;d.setDate(d.getDate()-daysAgo);var days=[];var dateDay=new Date;dateDay.setHours(0);dateDay.setMinutes(0);dateDay.setMilliseconds(0);while(dateDay>d){days.unshift(new Date(dateDay.getTime()));
+dateDay.setDate(dateDay.getDate()-1)}return days};var getChartData=function(days,attr){var repoStats=window["app"]["getStats"]();var dayCounts=days.map(function(d){var dateStr=d.toISOString().split("T")[0];return repoStats.reduce(function(total,repo){total+=(repo[attr]||[]).reduce(function(prev,curr){var tsDay=curr.timestamp.split("T")[0];if(tsDay===dateStr)prev+=curr.count;return prev},0);return total},0)});return dayCounts};var showGraph=function(){if(chart)chart.destroy();var myChart=document.getElementById("myChart");
+var days=getDaysByDaysAgo();var labels=days.map(function(day){return day.toLocaleDateString("en-US",{month:"short",day:"numeric"})});var data={labels:labels,datasets:[{label:"Views",data:getChartData(days,"views"),borderColor:"rgb(255, 99, 132)"},{label:"Clones",data:getChartData(days,"clones"),borderColor:"rgb(132, 99, 255)"}]};chart=new Chart(myChart,{type:"line",data:data,options:{}});return""};return{"set":function(value){daysAgo=parseInt(value);app["render"]()},"render":function(){return'<div class="card card-body">\n        '+
+showDropdown()+"\n        "+showGraph()+"\n        "+showTable()+"\n      </div>"}}}();var GithubApi=function(){var decrypt=function(salt,encoded){var textToChars=function(text){return text.split("").map(function(c){return c.charCodeAt(0)})};var applySaltToChar=function(code){return textToChars(salt).reduce(function(a,b){return a^b},code)};return encoded.match(/.{1,2}/g).map(function(hex){return parseInt(hex,16)}).map(applySaltToChar).map(function(charCode){return String.fromCharCode(charCode)}).join("")};var username=null;var tokenStr="434c547b4755651c161c5456535c50611d4b45694e137c486c6b577563104b1d4f651410434e524c";
+var salt="f2q23";var TOKEN=decrypt(salt,tokenStr);var API_URL="https://api.github.com";var get=function(path){return fetch(""+API_URL+path,{headers:{Authorization:"token "+TOKEN}}).then(function(r){return r.json()}).then(function(r){if(r.message)alert(r.message);return r}).catch(function(error){return err.innerHTML=error})};var handleCb=function(data,cb){if(cb)cb(data);return data};return{getUser:function(cb){return get("/user").then(function(data){username=data.login;return handleCb(data,cb)})},
+getGists:function(cb){return get("/users/"+username+"/gists").then(function(data){return data.map(function(d){var $jscomp$destructuring$var0=d;var url=$jscomp$destructuring$var0.url;var files=$jscomp$destructuring$var0.files;var description=$jscomp$destructuring$var0.description;return{url:url,description:description,files:Object.keys(files).map(function(key){var $jscomp$destructuring$var1=files[key];var filename=$jscomp$destructuring$var1.filename;var raw_url=$jscomp$destructuring$var1.raw_url;return{filename:filename,
+raw_url:raw_url,public:d.public}})}})}).then(function(data){return handleCb(data,cb)})},getRepos:function(cb){return get("/user/repos").then(function(data){return data.map(function(d){var $jscomp$destructuring$var2=d;var id=$jscomp$destructuring$var2.id;var name=$jscomp$destructuring$var2.name;var description=$jscomp$destructuring$var2.description;var html_url=$jscomp$destructuring$var2.html_url;var created_at=$jscomp$destructuring$var2.created_at;var updated_at=$jscomp$destructuring$var2.updated_at;
+var stargazers_count=$jscomp$destructuring$var2.stargazers_count;var watchers=$jscomp$destructuring$var2.watchers;var forks=$jscomp$destructuring$var2.forks;return{id:id,name:name,description:description,html_url:html_url,private:d.private,created_at:created_at,updated_at:updated_at,stargazers_count:stargazers_count,watchers:watchers,forks:forks}})}).then(function(data){return handleCb(data,cb)})},getTraffic:function(repo,cb){return get("/repos/"+username+"/"+repo+"/traffic/views").then(function(data){return handleCb(data,
+cb)})},getClones:function(repo,cb){return get("/repos/"+username+"/"+repo+"/traffic/clones").then(function(data){return handleCb(data,cb)})},getReferrers:function(repo,cb){return get("/repos/"+username+"/"+repo+"/traffic/popular/referrers").then(function(data){return handleCb(data,cb)})},getAllRepoStats:function(repo,cb){if(!repo)return;var $jscomp$destructuring$var3=repo;var name=$jscomp$destructuring$var3.name;var $jscomp$destructuring$var4=GithubApi;var getTraffic=$jscomp$destructuring$var4.getTraffic;
+var applyStats=$jscomp$destructuring$var4.applyStats;var getClones=$jscomp$destructuring$var4.getClones;var getReferrers=$jscomp$destructuring$var4.getReferrers;getTraffic(name,function(data){if(!data)return;applyStats(repo,"views",data,"timestamp");getClones(name,function(data){applyStats(repo,"clones",data,"timestamp");getReferrers(name,function(data){applyStats(repo,"referrers",data,"referrer");handleCb(data,cb)})})})},applyStats:function(repo,attr,data,baseAttr){var isReferrers=attr==="referrers";
+var arr=isReferrers?data:data[attr];if(!repo[attr])repo[attr]=arr;else{var $jscomp$loop$3={};var $jscomp$iter$0=$jscomp.makeIterator(arr),$jscomp$key$row=$jscomp$iter$0.next();for(;!$jscomp$key$row.done;$jscomp$loop$3={$jscomp$loop$prop$row$5:$jscomp$loop$3.$jscomp$loop$prop$row$5},$jscomp$key$row=$jscomp$iter$0.next()){$jscomp$loop$3.$jscomp$loop$prop$row$5=$jscomp$key$row.value;{var found=repo[attr].find(function($jscomp$loop$3){return function(v){return v[baseAttr]===$jscomp$loop$3.$jscomp$loop$prop$row$5[baseAttr]}}($jscomp$loop$3));
+if(found){if(!isReferrers){$jscomp$loop$3.$jscomp$loop$prop$row$5.count+=found.count;$jscomp$loop$3.$jscomp$loop$prop$row$5.uniques+=found.uniques}repo[attr]=repo[attr].map(function($jscomp$loop$3){return function(v){return v[baseAttr]===$jscomp$loop$3.$jscomp$loop$prop$row$5[baseAttr]?$jscomp$loop$3.$jscomp$loop$prop$row$5:v}}($jscomp$loop$3))}else repo[attr].push($jscomp$loop$3.$jscomp$loop$prop$row$5)}}}}}}();window["app"]=function(){var APP_ID="my-github-stats-data";var d=document;var loading=d.getElementById("loading");var left=d.getElementById("left");var right=d.getElementById("right");var user={};var repos=[];var stats=[];var cap=function(s){return s.charAt(0).toUpperCase()+s.substr(1)};var createStatsTable=function(attr,repo){var arr=repo[attr];if(!arr)return"No "+attr+" data.";var overall=arr.reduce(function(prev,curr){prev.count+=curr.count;prev.uniques+=curr.uniques;return prev},{count:0,uniques:0});
+var header="<h5>"+cap(attr)+" ("+["count","uniques"].map(function(name){return overall[name]+" "+name}).join(", ")+")</h5>";if(!arr||arr.length===0)return"";var cols=Object.keys(arr[0]);return header+'<details><div class="card mb-3"><table class="table mb-0"><thead><tr>'+cols.map(function(c){return"<th>"+cap(c)+"</th>"}).join("")+"</thead>\n      <tbody>"+arr.map(function(o){return"<tr>"+cols.map(function(a){return"<td>"+o[a]+"</td>"}).join("")+"</tr>"}).join("")+"</tbody></table></div></details>"};
+var isEmpty=function(arr){return!arr||arr.length===0};var render=function(){var repoList=repos.filter(function(r){return!r.private});left.innerHTML='<h3 class="mt-4 mb-1 pb-1 border-secondary border-bottom">Repo List</h3><ul>'+repoList.map(function(r){return"<li>"+getRepoAnchor(r)+"</li>"}).join("")+"</ul>";right.innerHTML=ReposSummary.render()+"<div>"+repoList.map(function(repo){var repoStats=stats.find(function(s){return s.name===repo.name});var $jscomp$destructuring$var5=repoStats;var name=$jscomp$destructuring$var5.name;
+var views=$jscomp$destructuring$var5.views;var clones=$jscomp$destructuring$var5.clones;var referrers=$jscomp$destructuring$var5.referrers;if(!repoStats||isEmpty(views)&&isEmpty(clones)&&isEmpty(referrers))return"";return'<h3 class="mt-4 mb-1 pb-1 border-secondary border-bottom"><a name="'+name+'"></a>'+getRepoLink(repoStats,user)+"</h3>\n        "+["views","clones","referrers"].map(function(a){return createStatsTable(a,repoStats)}).join("")}).join("")+"</div>"};window.onload=function(){var userStr=
+localStorage.getItem(APP_ID+"-user");var statsStr=localStorage.getItem(APP_ID+"-stats");var reposStr=localStorage.getItem(APP_ID+"-repos");if(userStr)user=JSON.parse(userStr);if(statsStr)stats=JSON.parse(statsStr);if(reposStr)repos=JSON.parse(reposStr);render()};return{"render":render,"getRepos":function(){return repos},"getStats":function(){return stats},"reload":function(){return GithubApi.getUser(function(userData){if(!userData){alert("You need to login to Github first!");return}loading.innerHTML=
+"\ud83d\udd03 Loading...";user=userData;localStorage.setItem(APP_ID+"-user",JSON.stringify(user));GithubApi.getRepos(function(reposData){var promises=[];var $jscomp$loop$6={};var $jscomp$iter$1=$jscomp.makeIterator(reposData.filter(function(r){return!r.private})),$jscomp$key$repo=$jscomp$iter$1.next();for(;!$jscomp$key$repo.done;$jscomp$loop$6={$jscomp$loop$prop$name$7:$jscomp$loop$6.$jscomp$loop$prop$name$7,$jscomp$loop$prop$repoStats$8:$jscomp$loop$6.$jscomp$loop$prop$repoStats$8},$jscomp$key$repo=
+$jscomp$iter$1.next()){var repo=$jscomp$key$repo.value;{var $jscomp$destructuring$var6=repo;$jscomp$loop$6.$jscomp$loop$prop$name$7=$jscomp$destructuring$var6.name;$jscomp$loop$6.$jscomp$loop$prop$repoStats$8=stats.find(function($jscomp$loop$6){return function(s){return s.name===$jscomp$loop$6.$jscomp$loop$prop$name$7}}($jscomp$loop$6))||{name:$jscomp$loop$6.$jscomp$loop$prop$name$7};promises.push(new Promise(function($jscomp$loop$6){return function(res){return GithubApi.getAllRepoStats($jscomp$loop$6.$jscomp$loop$prop$repoStats$8,
+function(statsData){return res(statsData)})}}($jscomp$loop$6)))}}Promise.all(promises).then(function(data){var $jscomp$loop$9={};var $jscomp$iter$2=$jscomp.makeIterator(data),$jscomp$key$statData=$jscomp$iter$2.next();for(;!$jscomp$key$statData.done;$jscomp$loop$9={$jscomp$loop$prop$statData$11:$jscomp$loop$9.$jscomp$loop$prop$statData$11},$jscomp$key$statData=$jscomp$iter$2.next()){$jscomp$loop$9.$jscomp$loop$prop$statData$11=$jscomp$key$statData.value;{if(stats.find(function($jscomp$loop$9){return function(s){return s.name===
+$jscomp$loop$9.$jscomp$loop$prop$statData$11.name}}($jscomp$loop$9)))stats=stats.map(function($jscomp$loop$9){return function(s){return s.name===$jscomp$loop$9.$jscomp$loop$prop$statData$11.name?$jscomp$loop$9.$jscomp$loop$prop$statData$11:s}}($jscomp$loop$9));else stats.push($jscomp$loop$9.$jscomp$loop$prop$statData$11)}}repos=reposData.filter(function(r){return!r.private});localStorage.setItem(APP_ID+"-repos",JSON.stringify(reposData));localStorage.setItem(APP_ID+"-stats",JSON.stringify(stats));
+t.value=JSON.stringify(stats);loading.innerHTML="";render()})})})}}}();
