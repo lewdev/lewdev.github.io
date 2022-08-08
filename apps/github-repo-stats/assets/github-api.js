@@ -11,7 +11,7 @@ const GithubApi = (() => {
   //     .map(byteHex)
   //     .join("");
   // };
-
+  //
   const decrypt = (salt, encoded) => {
     const textToChars = (text) => text.split("").map((c) => c.charCodeAt(0));
     const applySaltToChar = (code) => textToChars(salt).reduce((a, b) => a ^ b, code);
@@ -24,7 +24,7 @@ const GithubApi = (() => {
   };
 
   let username = null;
-  const tokenStr = "434c547b4755651c161c5456535c50611d4b45694e137c486c6b577563104b1d4f651410434e524c";
+  const tokenStr = "434c547b48764210731c566b60567e7e426b5d5c4a655c68465267686a71136c74671749161d7670";
   const salt = "f2q23";
   const TOKEN = decrypt(salt, tokenStr);
   const API_URL = "https://api.github.com";
