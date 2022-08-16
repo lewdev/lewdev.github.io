@@ -1,0 +1,27 @@
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<body class="container mt-3 mb-3">
+<div id="decryptData">
+  <div class="d-grid gap-2" style="margin-top: 30vh">
+    <input id="pass" type="text" class="form-control" placeholder="Password" onkeypress="if(event.keyCode === 13)enter(pass.value);">
+    <button class="btn btn-primary d-block mt-1" onclick="enter(pass.value)">Enter</button>
+    <p id="err" class="text-danger"></p>
+  </div>
+</div>
+
+<div id="view" style="display:none">
+  <p id=o></p>
+  <details>
+    <textarea id="data" class="form-control" rows=9></textarea>
+    <input id="nameInput" type="text" placeHolder="Name">
+    <input id="bdayInput" type="date">
+    <button class="btn btn-primary" onclick="add()">Add</button>
+    <button class="btn btn-warning" onclick="cryptData()">Encrypt</button>
+    <br/><br/>
+    <button class="btn btn-danger" onclick="logout()">Logout</button>
+  </details>
+</div>
+
+<script>
+eval(Function("[M='vAvYrtAjb{w_OCu_S~DUQ^`ZfLaVFa}Wi`]Uc[Tar|{^HE|QW@PDAHQmQs^[uunkgsXPBJpfEAkRJR~hWaaTUsaRgHSJ_YUDr}^BaEuR{RxSB]NjRAzhyok[yMFvNjQKIvHCsJnRZFVyj}KajmUOia~f?tAQkr_IdJhcmwaM]U]ZyYTE`PDmQUJAJTq`PsUZ`LtEozVbeEGfcI`VfPz[_T_|IJyLrUeYH~tgk}Lg]aLBBkLGDtEgno_BZKakD?GTu}~wPp_RHO]EDhZhP{C}q|czhw~NKI{zoIDrd}{KSCcksJsXgDdcMpg}e[qk}bWqG]m}oUzdw@kHimhhhH`pSV@WyztSQP|FrcwMf{gUc@AokIwhbCkGIbTeRMxaK`g^C[utUb^IxvDm[bujBVJNv}R?qOKdn[J`p@jT`mSIdUJ|jzjdhTSFrxp^{OUSchj^|bi[v`[{xZheAHDSaAIgP`GvVqyYHifkOzyaOoYcaJdpgYxyewQtavnxJ|nnjQe{nbkBRxNHbjKQ[}JrQHKYDql|cDrSGvrHn?NjvEbjAFvEmKwvtfMPMJDSe?DGrGwmS{ieSDPiqswOWm?LUBzzwbVUXbjTdvSX[WlgGp~O]k}glx`l|y{gKvvVfUmFraNYtDJD_rRD^GITuOJXpFamLiAVh[{{CTgB?wX[eqWzqHtF_bSEl}N^tKOm{IchPFu^iHDH{FFONlMShsdGxyAdoT?`g[Ctr?bHT~Giz|kyVymTF^fq~hoDqOMCBrdd]JePAjAXLtmsIpDxI@aevp}P~VG^XnGrVvIIOPD}@g]vLD?TTaGCy?EGaUAvFlpyZAs[w|Gy]VGIdRKrnU`|kM`wIjLiDoMjSKMAn{VQKoDqkG]~ioEWDiFxxT_kdpJDBjHi^M[oBLhm_bdT[Gyg`spHdQefiBKtgP`NRXBeXhwy{SHSMYvNZvkwWcDEE`uznIugOVR`^ez[Du[NY{llJKiH^YBvSxSpbKemEfR{tt{lVxaA_?LPmG[XrAY{uEXuThqCl{zcAwQW?]IFkyZOiqFyR_~gjSHYNsDRdAI@JwWjR|^b`nVAxdVTmDfs^a[Gq|uOko~jtV[|VhlzSDOzEnC_@o[PMTOUoPeKPkoQoMK`ni~bC~{?lKNIWDBpCNc[b@lGXXZ[byw@FcXhSzl]DV`jZrCqImo~bIJ|ErQ?XcmBlrAhoOkvzk]dQ]M^]VDYFwKOgLUowWA~HD`l[PryVIkdI_N_`mw@vLGuL`RkgxqeuucEEjjhnd|j^XhGOvl{}CFnf[kqGricRCZEXS_`LMGg]La]RDZTisMUBiFXP@L?EwmGp]lVE?xXvxWDw~z}~^yauBZj}imuodZpKYQW`wWqtAhY_[sFigPXqZL[ZzcOxHMbxxOiu~KmUe]|pi~xIYURDGaG`flFTr^TkDGRajJvE?dMpQLt~?S]X^Q|mK?mKVt?VuC[l^P@iNQP]?lLfksFrlqkywXCAgMlontSIKgncXhr@B?XWb^M`AOHvVnup^|_]~ic^ouH[D|MB|t{BGDB[xbSlsCvthl@jzB{aVoAgk|PnkXRrDOh`ZiC^Y`kv{Vzska@LQPsXPZzPnuhrmbsyIDeJJDDhCaUb?TYY?D}vWIl?t@luEw^HI`lD][S~mDbg`Pk@XIoxEXKUBLMb~vzInk{Jqsa]zSI[cdWExuAan{]oaUj@?do@tg~VsSDXIGoYZ[iCiIFRSSTuJcTzEOWz@TcY~'",...']charCodeAtUinyxpf',"for(;e<2810;c[e++]=p-=128,A=A?p-A&&A:(p==34|p==39|p==96)&&p)for(p=1;p<128;y=f.map((n,x)=>(U=r[n]*2+1,U=Math.log(U/(h-U)),t-=a[x]*U,U/500)),t=~-h/(1+Math.exp(t))|1,i=o%h<t,o=o%h+(i?t:h-t)*(o>>17)-!i*t,f.map((n,x)=>(U=r[n]+=(i*h/2-r[n]<<13)/((C[n]+=C[n]<5)+1/20)>>13,a[x]+=y[x]*(i-t/h))),p=p*2+i)for(f='010202103203210431053105410642065206541'.split(t=0).map((n,x)=>(U=0,[...n].map((n,x)=>(U=U*997+(c[e-n]|0)|0)),h*32-1&U*997+p+!!A*129)*12+x);o<h*32;o=o*64|M.charCodeAt(d++)&63);for(C=String.fromCharCode(...c);r=/[\0-	-#%@GKQWXZqz]/.exec(C);)with(C.split(r))C=join(shift());return C")([],[],1<<17,[0,0,0,0,0,0,0,0,0,0,0,0],new Uint16Array(51e6).fill(1<<15),new Uint8Array(51e6),0,0,0,0))
+</script>
+</body>
