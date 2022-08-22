@@ -18,12 +18,17 @@ const projects = [
   category: "Apps",
 },
 {
-  title: "Pixmoji", name: "pixmoji", url: "https://lewdev.github.io/apps/pixmoji", emoji: '🎨',
+  title: "ExText", name: "extext", emoji: '👨‍💻',
+  description: "Minimal, fast web development in browser. Press Ctrl+Enter to run.",
+  category: "Apps",
+},
+{
+  title: "Pixmoji", name: "pixmoji", emoji: '🎨',
   description: "Draw pixel art with emoji squares.",
   category: "Apps",
 },
 {
-  title: "Regex Find & Format Tool", url: "https://lewdev.github.io/apps/regex-find-and-format", emoji: '🔍',
+  title: "Regex Find & Format Tool", name: "regex-text-finder", url: "https://lewdev.github.io/apps/regex-find-and-format", emoji: '🔍',
   description: "Perform regular expression search & replace operations on text.",
   category: "Apps",
 },
@@ -43,17 +48,19 @@ const projects = [
   description: "Guess your number while it tracks your guesses and time. Has multiple difficulties.",
   category: "Games",
 },
-// { title: "Tick-Tack-Toe", name: "ticktacktoe",  emoji: '⭕',
-//   url: "https://lewdev.github.io/apps/ticktacktoe/v1/" },
+{
+  title: "Tick-Tack-Toe", name: "ticktacktoe",  emoji: '⭕', category: "Games",
+  url: "https://lewdev.github.io/apps/ticktacktoe/v1/", hidden: true
+},
 
 // Tenrikyo
 {
-  title: "Anecdotes Browser", url: "https://lewdev.github.io/apps/anecdotes-browser/", emoji: '📖',
+  title: "Anecdotes Browser", name: "anecdotes-browser", emoji: '📖',
   description: "Browse the Anecdotes of Oyasama in English and Japanese.",
-  category: "Tenrikyo",
+  category: "Tenrikyo"
 },
 {
-  title: "Ofudesaki Browser", url: "https://lewdev.github.io/ofudesaki-browser/", emoji: '📕',
+  title: "Ofudesaki Browser", name: "ofudesaki-browser", url: "https://lewdev.github.io/ofudesaki-browser/", emoji: '📕',
   description: "Browse and search a Tenrikyo scripture, the Ofudesaki.",
   category: "Tenrikyo",
 },
