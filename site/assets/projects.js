@@ -55,6 +55,11 @@ const projects = [
 
 // Tenrikyo
 {
+  title: "Tenrikyo Service Times", name: "service-times", emoji: '⏲️',
+  description: "Look up the Tenrikyo Church Headquarters service times.",
+  category: "Tenrikyo"
+},
+{
   title: "Anecdotes Browser", name: "anecdotes-browser", emoji: '📖',
   description: "Browse the Anecdotes of Oyasama in English and Japanese.",
   category: "Tenrikyo"
