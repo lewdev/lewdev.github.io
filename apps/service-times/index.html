@@ -1,134 +1,99 @@
-<!doctype html>
-<head>
-  <meta charset="utf-8"/>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!doctypehtml><html><head><meta http-equiv="Content-Type"content="text/html; charset=utf-8"><meta http-equiv="X-UA-Compatible"content="IE=edge"><meta name="viewport"content="width=device-width,initial-scale=1"><title>Tenrikyo Service Times | Look up the Church Headquarters service times.</title><meta name="author"content="Lewis Nakao"><meta name="description"content="Look up the Church Headquarters service times."><meta name="keywords"content="Tenrikyo, Service, Otsutome, 天理教, おつとめ, 天理教本部"><meta name="twitter:card"content="summary_large_image"><meta name="twitter:title"content="⏲ Tenrikyo Service Times | Look up the Church Headquarters service times."><meta name="twitter:description"content="Look up the Tenrikyo Church Headquarters service times."><meta name="twitter:site"content="@lewdev"><meta name="twitter:creator"content="@lewdev"><meta name="twitter:image"content="https://lewdev.github.io/apps/service-times/img/banner-1200x630.png"><meta property="og:title"content="⏲ Tenrikyo Service Times | Look up the Church Headquarters service times."><meta property="og:description"content="Look up the Tenrikyo Church Headquarters service times."><meta property="og:url"content="https://lewdev.github.io/apps/service-times/"><meta property="og:site_name"content="lewdev.github.io"><meta property="og:type"content="website"><meta property="og:image"content="https://lewdev.github.io/apps/service-times/img/banner-1200x630.png"><link rel="icon"href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏲️</text></svg>"><link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0-beta1/css/bootstrap.min.css"integrity="sha512-o/MhoRPVLExxZjCFVBsm17Pkztkzmh7Dp8k7/3JrtNCHh0AQ489kwpfA3dPSHzKDe8YCuEhxXq3Y71eb/o6amg=="crossorigin="anonymous"referrerpolicy="no-referrer"><style>.highlight{background-color:#ffe69c!important}.my-table-row>table{width:300px!important}</style></head><body><div class="container mt-3"><div class="justify-content-between d-flex"><h1 id="title">⏲ Tenrikyo Service Times</h1><div class="btn-group"><button class="btn btn-secondary"onclick="changeLang('en')">🇺🇸</button><button class="btn btn-secondary"onclick="changeLang('ja')">🇯🇵</button></div></div><div id="currentTime"></div><div class="row my-table-row"><div id="leftTable"></div><div id="rightTable"></div></div></div><script> const serviceTimes = [{"asa1":"7:00","yuz1":"17:00","asa2":"7:00","yuz2":"17:15"},{"asa1":"7:00","yuz1":"17:30","asa2":"6:45","yuz2":"17:45"},{"asa1":"6:30","yuz1":"18:00","asa2":"6:15","yuz2":"18:30"},{"asa1":"6:00","yuz1":"18:30","asa2":"5:45","yuz2":"18:45"},{"asa1":"5:30","yuz1":"19:00","asa2":"5:15","yuz2":"19:15"},{"asa1":"5:00","yuz1":"19:30","asa2":"5:00","yuz2":"19:30"},{"asa1":"5:00","yuz1":"19:30","asa2":"5:15","yuz2":"19:30"},{"asa1":"5:30","yuz1":"19:15","asa2":"5:30","yuz2":"19:00"},{"asa1":"5:45","yuz1":"18:45","asa2":"6:00","yuz2":"18:30"},{"asa1":"6:00","yuz1":"18:00","asa2":"6:15","yuz2":"17:45"},{"asa1":"6:30","yuz1":"17:30","asa2":"6:45","yuz2":"17:15"},{"asa1":"7:00","yuz1":"17:00","asa2":"7:00","yuz2":"17:00"}];
 
-  <title>Tenrikyo Service Times</title>
-  <meta name="author" content="@lewdev">
-  <meta name="description" content="Look up the Tenrikyo Church Headquarters service times.">
-  <meta name="keywords" content="Tenrikyo, Service, Otsutome, 天理教, おつとめ, 天理教本部">
-  
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⏲️</text></svg>">
+const transIndex = {
+  "ja": {
+    "Tenrikyo Service Times": "天理教おつとめ時刻表",
+    "Morning": "朝",
+    "Evening": "夜",
+    "Service": "勤め",
+    "Month": "月",
+    "Current": "現在",
+    "Next": "次",
+    "Japan Time": "日本の時間",
+  },
+};
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0-beta1/css/bootstrap.min.css" integrity="sha512-o/MhoRPVLExxZjCFVBsm17Pkztkzmh7Dp8k7/3JrtNCHh0AQ489kwpfA3dPSHzKDe8YCuEhxXq3Y71eb/o6amg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <style>
-  .highlight { background-color: #ffe69c !important; }
-  .my-table-row > table { width: 300px !important; }
-  </style>
-</head>
-<body>
-  <div class="container mt-3">
-    <div class="justify-content-between d-flex">
-      <h1 id="title">⏲ Tenrikyo Service Times</h1>
-      <div class="btn-group">
-        <button class="btn btn-secondary" onclick="changeLang('en')">🇺🇸</button>
-        <button class="btn btn-secondary" onclick="changeLang('ja')">🇯🇵</button>
-      </div>
-    </div>
+const trans = s => (transIndex[lang] && transIndex[lang][s]) || s;
 
-    <div id="currentTime"></div>
+const getDateInOffset = offset => {
+  const d = new Date();
+  const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+  return new Date(utc + (3600000 * offset));
+};
 
-    <div class="row my-table-row">
-      <div id="leftTable"></div>
-      <div id="rightTable"></div>
-    </div>
+const formatTime = time => new Date("1/1/2020 " + time).toLocaleTimeString([lang], {timeStyle: "short"});
+
+const changeLang = l => { lang = l; render(); };
+
+const cellClass = highlight => `class="border text-center align-middle${highlight ? " highlight" : ""}"`;
+
+const JAPAN_OFFSET = +9;
+const d = getDateInOffset(JAPAN_OFFSET); //Japan Time
+const half = d.getDate() <= 15 ? 1 : 2;
+const month = d.getMonth();
+const time = serviceTimes[month];
+
+const { languages, language } = navigator;
+let lang = ((languages && languages[0]) || language).split("-")[0];
+
+const renderTimeTable = id => {
+  const table = document.getElementById(id);
+  table.className = "col";
+  table.innerHTML = `<table class="table"><thead>
+    <tr>
+      ${["Month", "Morning", "Evening"].map(s =>(
+        `<th class="text-center">${trans(s)}</th>`
+      )).join("")}
+    </tr>
+  </thead>
+  <tbody></tbody></table>`;
+  const tbody = table.getElementsByTagName("tbody")[0];
+  tbody.innerHTML = getHalfYear(id === "leftTable");
+};
+
+const getHalfYear = showFirstHalf => serviceTimes.map((time, i) => {
+  if ((!showFirstHalf && i < 6) || (showFirstHalf && i >= 6)) return;
+  const { asa1, yuz1, asa2, yuz2 } = time;
+  const asaIsSame = asa1 === asa2;
+  const yuzIsSame = yuz1 === yuz2;
+  const bothIsSame = asaIsSame && yuzIsSame;
+  const isMonth = month === i;
+  const isFirstHalf = isMonth && half === 1;
+  const isSecondHalf = isMonth && half === 2;
+  return (`
+    <tr>
+      <td rowspan="${bothIsSame ? 1 : 2}" ${cellClass(isMonth)}>${i + 1}</td>
+      <td rowspan="${!bothIsSame && asaIsSame ? 2 : 1}" ${cellClass(isFirstHalf)}>${formatTime(asa1)}</td>
+      <td rowspan="${!bothIsSame && yuzIsSame ? 2 : 1}" ${cellClass(isSecondHalf)}>${formatTime(yuz1)}</td>
+    </tr>
+    ${bothIsSame ? '' : `<tr>
+      ${asaIsSame ? '' : `<td ${cellClass(isFirstHalf)}>${formatTime(asa2)}</td>`}
+      ${yuzIsSame ? '' : `<td ${cellClass(isSecondHalf)}>${formatTime(yuz2)}</td>`}
+    </tr>
+  `}`);
+}).join("");
+
+const renderTimes = (label, time, half) => (`<div class="col" style="width: 300px">
+  <strong class="text-primary">${trans(label)} </strong>
+  <div class="text-nowrap"><strong>${trans("Morning")} ${trans("Service")}:</strong> ${formatTime(time["asa" + half])}</div>
+  <div class="text-nowrap"><strong>${trans("Evening")} ${trans("Service")}:</strong> ${formatTime(time["yuz" + half])}</div>
+</div>`);
+
+const render = () => {
+  title.innerHTML = `⏲ ${trans("Tenrikyo Service Times")}`;
+  document.title = trans("Tenrikyo Service Times");
+  currentTime.innerHTML = `
+  <div class="row">
+    ${renderTimes("Current", time, half)}
+    ${renderTimes("Next", half === 2 ? serviceTimes[month + 1 % 12] : time, half === 2 ? 1 : 2)}
   </div>
-  <script>
-  const serviceTimes = [{"asa1":"7:00","yuz1":"17:00","asa2":"7:00","yuz2":"17:15"},{"asa1":"7:00","yuz1":"17:30","asa2":"6:45","yuz2":"17:45"},{"asa1":"6:30","yuz1":"18:00","asa2":"6:15","yuz2":"18:30"},{"asa1":"6:00","yuz1":"18:30","asa2":"5:45","yuz2":"18:45"},{"asa1":"5:30","yuz1":"19:00","asa2":"5:15","yuz2":"19:15"},{"asa1":"5:00","yuz1":"19:30","asa2":"5:00","yuz2":"19:30"},{"asa1":"5:00","yuz1":"19:30","asa2":"5:15","yuz2":"19:30"},{"asa1":"5:30","yuz1":"19:15","asa2":"5:30","yuz2":"19:00"},{"asa1":"5:45","yuz1":"18:45","asa2":"6:00","yuz2":"18:30"},{"asa1":"6:00","yuz1":"18:00","asa2":"6:15","yuz2":"17:45"},{"asa1":"6:30","yuz1":"17:30","asa2":"6:45","yuz2":"17:15"},{"asa1":"7:00","yuz1":"17:00","asa2":"7:00","yuz2":"17:00"}];
+  <div><strong>${trans("Japan Time")}:</strong> <span id="japanClock">${d.toLocaleString(lang)}</span></div>`;
 
-  const transIndex = {
-    "ja": {
-      "Tenrikyo Service Times": "天理教おつとめ時刻表",
-      "Morning": "朝",
-      "Evening": "夜",
-      "Service": "勤め",
-      "Month": "月",
-      "Current": "現在",
-      "Next": "次",
-      "Japan Time": "日本の時間",
-    },
-  };
-
-  const trans = s => (transIndex[lang] && transIndex[lang][s]) || s;
-
-  const getDateInOffset = offset => {
-    const d = new Date();
-    const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
-    return new Date(utc + (3600000 * offset));
-  };
-
-	const formatTime = time => new Date("1/1/2020 " + time).toLocaleTimeString([lang], {timeStyle: "short"});
-
-  const changeLang = l => { lang = l; render(); };
-
-  const cellClass = highlight => `class="border text-center align-middle${highlight ? " highlight" : ""}"`;
-
-  const JAPAN_OFFSET = +9;
-  const d = getDateInOffset(JAPAN_OFFSET); //Japan Time
-  const half = d.getDate() <= 15 ? 1 : 2;
-  const month = d.getMonth();
-  const time = serviceTimes[month];
-
-	const { languages, language } = navigator;
-  let lang = ((languages && languages[0]) || language).split("-")[0];
-
-  const renderTimeTable = id => {
-    const table = document.getElementById(id);
-    table.className = "col";
-    table.innerHTML = `<table class="table"><thead>
-      <tr>
-        ${["Month", "Morning", "Evening"].map(s =>(
-        	`<th class="text-center">${trans(s)}</th>`
-        )).join("")}
-      </tr>
-    </thead>
-    <tbody></tbody></table>`;
-    const tbody = table.getElementsByTagName("tbody")[0];
-    tbody.innerHTML = getHalfYear(id === "leftTable");
-  };
-
-	const getHalfYear = showFirstHalf => serviceTimes.map((time, i) => {
-    if ((!showFirstHalf && i < 6) || (showFirstHalf && i >= 6)) return;
-    const { asa1, yuz1, asa2, yuz2 } = time;
-    const asaIsSame = asa1 === asa2;
-    const yuzIsSame = yuz1 === yuz2;
-    const bothIsSame = asaIsSame && yuzIsSame;
-    const isMonth = month === i;
-    const isFirstHalf = isMonth && half === 1;
-    const isSecondHalf = isMonth && half === 2;
-    return (`
-      <tr>
-        <td rowspan="${bothIsSame ? 1 : 2}" ${cellClass(isMonth)}>${i + 1}</td>
-        <td rowspan="${!bothIsSame && asaIsSame ? 2 : 1}" ${cellClass(isFirstHalf)}>${formatTime(asa1)}</td>
-        <td rowspan="${!bothIsSame && yuzIsSame ? 2 : 1}" ${cellClass(isSecondHalf)}>${formatTime(yuz1)}</td>
-      </tr>
-      ${bothIsSame ? '' : `<tr>
-        ${asaIsSame ? '' : `<td ${cellClass(isFirstHalf)}>${formatTime(asa2)}</td>`}
-        ${yuzIsSame ? '' : `<td ${cellClass(isSecondHalf)}>${formatTime(yuz2)}</td>`}
-      </tr>
-    `}`);
-  }).join("");
-
-  const renderTimes = (label, time, half) => (`<div class="col" style="width: 300px">
-    <strong class="text-primary">${trans(label)} </strong>
-    <div class="text-nowrap"><strong>${trans("Morning")} ${trans("Service")}:</strong> ${formatTime(time["asa" + half])}</div>
-    <div class="text-nowrap"><strong>${trans("Evening")} ${trans("Service")}:</strong> ${formatTime(time["yuz" + half])}</div>
-	</div>`);
-
-  const render = () => {
-    title.innerHTML = `⏲ ${trans("Tenrikyo Service Times")}`;
-    document.title = trans("Tenrikyo Service Times");
-    currentTime.innerHTML = `
-    <div class="row">
-    	${renderTimes("Current", time, half)}
-    	${renderTimes("Next", half === 2 ? serviceTimes[month + 1 % 12] : time, half === 2 ? 1 : 2)}
-  	</div>
-    <div><strong>${trans("Japan Time")}:</strong> <span id="japanClock">${d.toLocaleString(lang)}</span></div>`;
-
-    renderTimeTable("leftTable")
-    renderTimeTable("rightTable")
-  };
-  render();
-  </script>
-</body>
+  renderTimeTable("leftTable")
+  renderTimeTable("rightTable")
+};
+render(); </script><script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+ga('create', 'UA-2833478-13', 'auto');ga('send', 'pageview');</script></body></html> 
