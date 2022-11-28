@@ -1,0 +1,199 @@
+const getDateInOffset = offset => {
+  const d = new Date();
+  const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+  return new Date(utc + (3600000 * offset));
+};
+
+const DAY_MS = 60000 * 60 * 24;
+const JAPAN_OFFSET = +9;
+let d = getDateInOffset(JAPAN_OFFSET); //Japan Time
+const half = d.getDate() <= 15 ? 1 : 2;
+const month = d.getMonth();
+const year = d.getFullYear();
+const time = serviceTimes[month];
+
+const langMap = {
+  en: "🇺🇸",
+  ja: "🇯🇵",
+};
+
+const { languages, language } = navigator;
+let lang = ((languages && languages[0]) || language).split("-")[0];
+
+const trans = (s, num) => ((transIndex[lang] && transIndex[lang][s]) || s) + (lang !== "ja" ? num && num !== 1 ? "s" : "" : "");
+
+const getDaysUntil = date => {
+  const diffMs = date - d;
+  return ~~(diffMs / DAY_MS);
+};
+
+const initEvents = () => {
+  for (let i = 2; i <= 12; i++) {
+    if (i !== 10) annualEvents.push(
+      { date: i + "/26", event: "Monthly Service", time: "9:00"}
+    );
+  }
+  annualEvents = annualEvents.map(event => {
+    const { date, time } = event;
+    let dateObj = new Date(`${date}/${year} ${time}`);
+    if (dateObj < new Date()) {
+      dateObj = new Date(`${date}/${year + 1}`);
+    }
+    return {...event, dateObj, daysUntil: getDaysUntil(dateObj) };
+  });
+  annualEvents.sort((a, b) => a.dateObj - b.dateObj);
+};
+
+
+const formatTime = time => new Date(`1/1/${year} ${time}`).toLocaleTimeString([lang], {timeStyle: "short"});
+
+const formatDate = dateStr => (
+  new Date(`${dateStr}/${year}`).toLocaleDateString([lang], {month: "short", day: "numeric"})
+);
+
+const changeLang = l => { lang = l; render(); };
+
+const cellClass = highlight => `class="border text-center align-middle${highlight ? " highlight" : ""}"`;
+
+const renderLangSelect = () => (
+  langSelect.innerHTML = Object.keys(langMap).map(lg => (
+    `<button class="btn btn-${lang === lg ? "primary" : "secondary"}" onclick="changeLang('${lg}')">${langMap[lg]}</button>`
+  )).join("")
+);
+
+const renderEventsTable = () => {
+  renderEventsTableSide(true);
+  renderEventsTableSide();
+};
+
+const days = days => `${days} ${trans("day", days)}`
+
+const renderEventsTableSide = isLeft => {
+  const className = isLeft ? "left" : "right";
+  const parentDiv = document.getElementById("events");
+  const div = parentDiv.getElementsByClassName(className)[0];
+  div.innerHTML = `<table class="table"><thead>
+    <tr>${["Date", "Time", "Event", "Until"].map(s =>`<th class="text-center">${trans(s)}</th>`).join("")}</tr>
+  </thead>
+  <tbody></tbody></table>`;
+  const tbody = div.getElementsByTagName("tbody")[0];
+  const half = Math.ceil(annualEvents.length / 2) - 1
+  tbody.innerHTML = annualEvents.map((event, i) => (
+    ((isLeft && i <= half) || (!isLeft && i > half)) ? `<tr>
+    <td class="border text-center align-middle text-nowrap">${formatDate(event.date)}</td>
+    <td class="border text-center align-middle text-nowrap">${formatTime(event.time)}</td>
+    <td class="border align-middle text-nowrap">${trans(event.event)}</td>
+    <td class="border align-middle text-nowrap">${days(event.daysUntil)}</td>
+    </tr>` : "")).join("");
+};
+
+const renderTimeTable = () => {
+  renderTimeTableSide(true);
+  renderTimeTableSide(false);
+};
+
+const renderTimeTableSide = isLeft => {
+  const className = isLeft ? "left" : "right";
+  const parentDiv = document.getElementById("serviceTimes");
+  const div = parentDiv.getElementsByClassName(className)[0];
+  div.innerHTML = `<table class="table"><thead>
+    <tr>
+      ${["Month", "Morning", "Evening"].map(s =>(
+        `<th class="text-center">${trans(s)}</th>`
+      )).join("")}
+    </tr>
+  </thead>
+  <tbody></tbody></table>`;
+  const tbody = div.getElementsByTagName("tbody")[0];
+  tbody.innerHTML = getHalfYear(isLeft);
+};
+
+const getHalfYear = showFirstHalf => serviceTimes.map((time, i) => {
+  if ((!showFirstHalf && i < 6) || (showFirstHalf && i >= 6)) return;
+  const { asa1, yuz1, asa2, yuz2 } = time;
+  const asaIsSame = asa1 === asa2;
+  const yuzIsSame = yuz1 === yuz2;
+  const bothIsSame = asaIsSame && yuzIsSame;
+  const isMonth = month === i;
+  const isFirstHalf = isMonth && half === 1;
+  const isSecondHalf = isMonth && half === 2;
+  return (`
+    <tr>
+      <td rowspan="${bothIsSame ? 1 : 2}" ${cellClass(isMonth)}>${i + 1}</td>
+      <td rowspan="${!bothIsSame && asaIsSame ? 2 : 1}" ${cellClass(isFirstHalf)}>${formatTime(asa1)}</td>
+      <td rowspan="${!bothIsSame && yuzIsSame ? 2 : 1}" ${cellClass(isFirstHalf)}>${formatTime(yuz1)}</td>
+    </tr>
+    ${bothIsSame ? '' : `<tr>
+      ${asaIsSame ? '' : `<td ${cellClass(isSecondHalf)}>${formatTime(asa2)}</td>`}
+      ${yuzIsSame ? '' : `<td ${cellClass(isSecondHalf)}>${formatTime(yuz2)}</td>`}
+    </tr>
+  `}`);
+}).join("");
+
+const getLastDayOfMonth = displayMonth => {
+  displayMonth = displayMonth === 12 ? 1 : displayMonth + 1;
+  const date = new Date(`${displayMonth}/1/${year}`);
+  date.setDate(0);
+  return date.getDate();
+};
+
+const renderTimes = (label, time, half) => {
+  const displayMonth = month + (label === "Next" && half === 1 ? 2 : 1);
+  const lastDayOfMonth = getLastDayOfMonth(displayMonth);
+  return (
+  `<div class="col" style="width: 300px">
+    <strong class="text-primary">${trans(label)} </strong>
+    (${formatDate(`${displayMonth}/${half === 1 ? 1 : 16}`)} - 
+    ${formatDate(`${displayMonth}/${half === 1 ? 15 : lastDayOfMonth}`)})
+    <div class="text-nowrap"><strong>${trans("Morning")} ${trans("Service")}:</strong> ${formatTime(time["asa" + half])}</div>
+    <div class="text-nowrap"><strong>${trans("Evening")} ${trans("Service")}:</strong> ${formatTime(time["yuz" + half])}</div>
+  </div>`
+)};
+
+const renderServiceTimes = () => currentTime.innerHTML = (
+  `<div class="row">
+    ${renderTimes("Current", time, half)}
+    ${renderTimes("Next", half === 2 ? serviceTimes[month + 1 % 12] : time, half === 2 ? 1 : 2)}
+  </div>
+  <div><strong>${trans("Japan Time")}:</strong> <span id="japanClock"></span></div>`
+);
+
+setInterval(() => {
+  d = getDateInOffset(JAPAN_OFFSET);
+  const japanClock = document.getElementById("japanClock");
+  if (japanClock) japanClock.innerHTML = d.toLocaleString(lang);
+}, 1000);
+
+const renderUpcomingEvent = () => {
+  const nextEvent = annualEvents[0];
+  const { event, date, time, daysUntil } = nextEvent || {};
+  upcomingEvent.innerHTML = (
+    `<b class="d-block">${trans("Next")} ${trans("Event")}:</b> ${trans(event)}<br/>${formatDate(date)} ${formatTime(time)} in ${daysUntil} days`
+  );
+};
+
+const findUpcomingEvent = () => {
+  const month = d.getMonth();
+  const day = d.getDate();
+  const size = annualEvents.length;
+  let lastEvent = false;
+  for (let i = 0; i < size; i++) {
+    if (lastEvent) continue;
+    const [lastMonth, lastDay] = annualEvents[i].date.split("/");
+    if (parseInt(lastMonth) > month && parseInt(lastDay) > day) lastEvent = annualEvents[i];
+  }
+  return lastEvent;
+};
+
+const render = () => {
+  title.innerHTML = `⏲ ${trans("Tenrikyo Service Times")}`;
+  document.title = trans("Tenrikyo Service Times");
+  renderServiceTimes();
+  renderUpcomingEvent();
+  renderTimeTable();
+  renderEventsTable();
+  renderLangSelect();
+  Array.from(document.getElementsByClassName("trans")).map(elem => elem.innerHTML = trans(elem.title));
+};
+initEvents();
+render();
