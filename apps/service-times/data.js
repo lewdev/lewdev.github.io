@@ -15,8 +15,10 @@ const serviceTimes = [
 
 const transIndex = {
   "ja": {
-    "Tenrikyo Service Times": "天理教おつとめ時刻表",
+    "Tenrikyo Service Times": "天理教本部のおつとめ時刻表",
+    "(Today)": "日",
     "Date": "日",
+    "day": "日",
     "Event": "祭典",
     "Morning": "朝",
     "Evening": "夜",

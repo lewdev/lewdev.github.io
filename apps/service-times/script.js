@@ -1,48 +1,58 @@
-const trans = s => (transIndex[lang] && transIndex[lang][s]) || s;
-
 const getDateInOffset = offset => {
   const d = new Date();
   const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
   return new Date(utc + (3600000 * offset));
 };
 
-const initEvents = () => {
-  for (let i = 2; i <= 12; i++) {
-    if (i !== 10) annualEvents.push(
-      { date: i + "/26", event: "Monthly Service", time: "9:00"}
-    )
-  }
-  annualEvents.sort((a, b) => {
-    const [monthA, dayA] = a.date.split("/");
-    const [monthB, dayB] = b.date.split("/");
-    if (monthA === monthB) return dayA - dayB;
-    return monthA - monthB;
-  });
-};
-
-const formatTime = time => new Date(`1/1/1970 ${time}`).toLocaleTimeString([lang], {timeStyle: "short"});
-
-const formatDate = (dateStr) => {
-  return new Date(`${dateStr}/1970`).toLocaleDateString([lang], {month: "short", day: "numeric"});
-};
-
-const changeLang = l => { lang = l; render(); };
-
-const cellClass = highlight => `class="border text-center align-middle${highlight ? " highlight" : ""}"`;
-
+const DAY_MS = 60000 * 60 * 24;
 const JAPAN_OFFSET = +9;
-const d = getDateInOffset(JAPAN_OFFSET); //Japan Time
+let d = getDateInOffset(JAPAN_OFFSET); //Japan Time
 const half = d.getDate() <= 15 ? 1 : 2;
 const month = d.getMonth();
+const year = d.getFullYear();
 const time = serviceTimes[month];
-
-const { languages, language } = navigator;
-let lang = ((languages && languages[0]) || language).split("-")[0];
 
 const langMap = {
   en: "🇺🇸",
   ja: "🇯🇵",
-}
+};
+
+const { languages, language } = navigator;
+let lang = ((languages && languages[0]) || language).split("-")[0];
+
+const trans = (s, num) => ((transIndex[lang] && transIndex[lang][s]) || s) + (lang !== "ja" ? typeof num === 'number' && num !== 1 ? "s" : "" : "");
+
+const getDaysUntil = date => {
+  const diffMs = date - d;
+  return ~~(diffMs / DAY_MS);
+};
+
+const initEvents = () => {
+  for (let i = 2; i <= 12; i++) {
+    if (i !== 10) annualEvents.push(
+      { date: i + "/26", event: "Monthly Service", time: "9:00"}
+    );
+  }
+  annualEvents = annualEvents.map(event => {
+    const { date } = event;
+    let dateObj = new Date(`${date}/${year} 23:59:999`);
+    if (dateObj < new Date()) {
+      dateObj = new Date(`${date}/${year + 1}`);
+    }
+    return {...event, dateObj, daysUntil: getDaysUntil(dateObj) };
+  });
+  annualEvents.sort((a, b) => a.dateObj - b.dateObj);
+};
+
+const formatTime = time => new Date(`1/1/${year} ${time}`).toLocaleTimeString([lang], {timeStyle: "short"});
+
+const formatDate = dateStr => (
+  new Date(`${dateStr}/${year}`).toLocaleDateString([lang], {month: "short", day: "numeric"})
+);
+
+const changeLang = l => { lang = l; render(); };
+
+const cellClass = highlight => `class="border text-center align-middle${highlight ? " highlight" : ""}"`;
 
 const renderLangSelect = () => (
   langSelect.innerHTML = Object.keys(langMap).map(lg => (
@@ -55,22 +65,32 @@ const renderEventsTable = () => {
   renderEventsTableSide();
 };
 
+const inDays = days => days ? `in ${days} ${trans("day", days)}` : `<span class="text-info d-inline">${trans("(Today)")}</span>`;
+
 const renderEventsTableSide = isLeft => {
   const className = isLeft ? "left" : "right";
   const parentDiv = document.getElementById("events");
   const div = parentDiv.getElementsByClassName(className)[0];
-  div.innerHTML = `<table class="table"><thead>
-    <tr>${["Date", "Time", "Event"].map(s =>`<th class="text-center">${trans(s)}</th>`).join("")}</tr>
-  </thead>
-  <tbody></tbody></table>`;
+  div.innerHTML = (
+    `<table class="table mx-auto"><thead>
+      <tr>${["Date", "Time", "Event", "Until"].map(s =>`<th class="text-center">${trans(s)}</th>`).join("")}</tr>
+    </thead>
+    <tbody></tbody></table>`
+  );
   const tbody = div.getElementsByTagName("tbody")[0];
   const half = Math.ceil(annualEvents.length / 2) - 1
   tbody.innerHTML = annualEvents.map((event, i) => (
-    ((isLeft && i <= half) || (!isLeft && i > half)) ? `<tr>
-    <td class="border text-center align-middle text-nowrap">${formatDate(event.date)}</td>
-    <td class="border text-center align-middle text-nowrap">${formatTime(event.time)}</td>
-    <td class="border align-middle">${trans(event.event)}</td>
-    </tr>` : "")).join("");
+    ((isLeft && i <= half) || (!isLeft && i > half)) ? (
+      `<tr>
+        <td class="border text-center align-middle text-nowrap">${formatDate(event.date)}</td>
+        <td class="border text-center align-middle text-nowrap">${formatTime(event.time)}</td>
+        <td class="border align-middle text-nowrap">${trans(event.event)}</td>
+        <td class="border align-middle text-nowrap">
+          ${inDays(event.daysUntil)}
+        </td>
+      </tr>`
+    ) : ""
+  )).join("");
 };
 
 const renderTimeTable = () => {
@@ -82,7 +102,7 @@ const renderTimeTableSide = isLeft => {
   const className = isLeft ? "left" : "right";
   const parentDiv = document.getElementById("serviceTimes");
   const div = parentDiv.getElementsByClassName(className)[0];
-  div.innerHTML = `<table class="table"><thead>
+  div.innerHTML = `<table class="table mx-auto"><thead>
     <tr>
       ${["Month", "Morning", "Evening"].map(s =>(
         `<th class="text-center">${trans(s)}</th>`
@@ -107,34 +127,58 @@ const getHalfYear = showFirstHalf => serviceTimes.map((time, i) => {
     <tr>
       <td rowspan="${bothIsSame ? 1 : 2}" ${cellClass(isMonth)}>${i + 1}</td>
       <td rowspan="${!bothIsSame && asaIsSame ? 2 : 1}" ${cellClass(isFirstHalf)}>${formatTime(asa1)}</td>
-      <td rowspan="${!bothIsSame && yuzIsSame ? 2 : 1}" ${cellClass(isSecondHalf)}>${formatTime(yuz1)}</td>
+      <td rowspan="${!bothIsSame && yuzIsSame ? 2 : 1}" ${cellClass(isFirstHalf)}>${formatTime(yuz1)}</td>
     </tr>
     ${bothIsSame ? '' : `<tr>
-      ${asaIsSame ? '' : `<td ${cellClass(isFirstHalf)}>${formatTime(asa2)}</td>`}
+      ${asaIsSame ? '' : `<td ${cellClass(isSecondHalf)}>${formatTime(asa2)}</td>`}
       ${yuzIsSame ? '' : `<td ${cellClass(isSecondHalf)}>${formatTime(yuz2)}</td>`}
     </tr>
   `}`);
 }).join("");
 
-const renderTimes = (label, time, half) => (`<div class="col" style="width: 300px">
-  <strong class="text-primary">${trans(label)} </strong>
-  <div class="text-nowrap"><strong>${trans("Morning")} ${trans("Service")}:</strong> ${formatTime(time["asa" + half])}</div>
-  <div class="text-nowrap"><strong>${trans("Evening")} ${trans("Service")}:</strong> ${formatTime(time["yuz" + half])}</div>
-</div>`);
+const getLastDayOfMonth = displayMonth => {
+  displayMonth = displayMonth === 12 ? 1 : displayMonth + 1;
+  const date = new Date(`${displayMonth}/1/${year}`);
+  date.setDate(0);
+  return date.getDate();
+};
+
+const renderTimes = (label, time, half) => {
+  const displayMonth = ((month + (label === "Next" && half === 1 ? 1 : 0)) % 12) + 1;
+  const lastDayOfMonth = getLastDayOfMonth(displayMonth);
+  console.log(displayMonth);
+  return time && (
+  `<div class="col my-1">
+    <strong class="text-primary">${trans(label)} </strong>
+    (${formatDate(`${displayMonth}/${half === 1 ? 1 : 16}`)} - 
+    ${formatDate(`${displayMonth}/${half === 1 ? 15 : lastDayOfMonth}`)})
+    <div class="text-nowrap"><strong>${trans("Morning")} ${trans("Service")}:</strong> ${formatTime(time["asa" + half])}</div>
+    <div class="text-nowrap"><strong>${trans("Evening")} ${trans("Service")}:</strong> ${formatTime(time["yuz" + half])}</div>
+  </div>`
+)};
 
 const renderServiceTimes = () => currentTime.innerHTML = (
   `<div class="row">
     ${renderTimes("Current", time, half)}
-    ${renderTimes("Next", half === 2 ? serviceTimes[month + 1 % 12] : time, half === 2 ? 1 : 2)}
-  </div>
-  <div><strong>${trans("Japan Time")}:</strong> <span id="japanClock">${d.toLocaleString(lang)}</span></div>`
+    ${renderTimes("Next", half === 2 ? serviceTimes[(month + 1) % 12] : time, half === 2 ? 1 : 2)}
+  </div>`
 );
+
+setInterval(() => {
+  d = getDateInOffset(JAPAN_OFFSET);
+  const japanClock = document.getElementById("japanClock");
+  if (japanClock) japanClock.innerHTML = d.toLocaleString(lang);
+}, 1000);
+
 const renderUpcomingEvent = () => {
-  const nextEvent = findUpcomingEvent();
-  const { event, date, time } = nextEvent;
-  upcomingEvent.innerHTML = nextEvent ? (
-    `<b class="d-block">${trans("Next")} ${trans("Event")}:</b> ${trans(event)}<br/>${formatDate(date)} ${formatTime(time)}`
-  ) : "No last event";
+  const nextEvent = annualEvents[0];
+  const { event, date, time, daysUntil } = nextEvent || {};
+  upcomingEvent.innerHTML = (
+    `<div>
+      <b>${trans("Next")} ${trans("Event")}:</b>
+      ${trans(event)}<br/>${formatDate(date)} ${formatTime(time)} ${inDays(daysUntil)}
+    </div>`
+  );
 };
 
 const findUpcomingEvent = () => {

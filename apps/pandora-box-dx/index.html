@@ -1,0 +1,108 @@
+<!doctype html>
+<head>
+  <title>Pandora Box DX - Game List</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0-beta1/css/bootstrap.min.css" integrity="sha512-o/MhoRPVLExxZjCFVBsm17Pkztkzmh7Dp8k7/3JrtNCHh0AQ489kwpfA3dPSHzKDe8YCuEhxXq3Y71eb/o6amg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕹️</text></svg>">
+</head>
+<body>
+  <div class="container mt-3">
+    <div class="justify-content-between d-flex">
+      <h1>🕹️ Pandora Box DX - Game List</h1>
+      <button class="btn btn-info btn-sm" onclick="showCsv()" title="Export list data to CSV">↗️ CSV</button>
+    </div>
+    <div class="text-center p-2">
+      <a class="text-decoration-none" href="https://lewdev.github.io" title="View more apps like this">📱 More Apps by lewdev</a>
+      <a class="text-decoration-none" href="https://github.com/lewdev/pandora-dx-games" title="View Source code for this page">🧑‍💻 Source code</a>
+    </div>
+    <p id=controls></p>
+    <div class="justify-content-between d-flex">
+      <input id="searchInput" type="text" onkeyup="render()" class="form-control" placeholder="Search Title...">
+      <label class="text-nowrap mx-2"><input id="is3dInput" type="checkbox" onchange="render()"> 3D</label>
+    </div>
+    <p id=o></p>
+  </div>
+  <div id="myModal" class="modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+      </div>
+    </div>
+  </div>
+<script src="pandora-box-dx-games.js"></script>
+<script>
+const cap = s => s.charAt(0).toUpperCase() + s.substring(1);
+
+const controls = document.getElementById("controls");
+const o = document.getElementById("o");
+
+const FILTERS = "category, players, system".split(", ");
+const COLUMNS = "id, title, category, players, system, is3D, 🔎".split(", ");
+
+// const myModal = document.getElementById("myModal");
+const showCsv = () => {
+  document.body.innerHTML += `
+  <div id="myModal" class="bg-light rounded border border-secondary" style="position:absolute; top: 1rem; margin-left: 20%; width: 60%;">
+    <div class="modal-body m-3 p-3">
+      <textarea class="form-control" rows="20">${list.map(a => COLUMNS.map(attr => a[attr] ? `"${a[attr]}"` : "").join`,`).join`\n`}</textarea>
+      <button class="btn btn-secondary mt-2" onclick="this.parentNode.parentNode.remove(this.parentNode)">Close</button>
+    </div>
+  </div>`;
+  const myModal = document.getElementById("myModal");
+};
+
+const renderBtnGroup = (arr, attr) => `<div class="btn-group m-1" role="group">
+  ${arr.map(a => {
+    const selected = filterMap[attr] === a;
+    const classVal = `class="btn btn-${selected ? "primary" : "secondary"}"`;
+    return `<button ${classVal} onclick="selectFilter('${attr}', '${a}')">${a}</button>`;
+  }).join``}
+</div>`;
+
+let searchStr = "";
+const filterMap = {};
+let filteredList = list;
+
+const render = () => {
+  const search = searchInput.value;
+  const is3d = is3dInput.checked;
+  filteredList = list.filter(row => {
+    const filterMapCount = Object.keys(filterMap).length;
+    return (
+      (!search || (row.title + "").toLowerCase().includes(search.toLowerCase()))
+      && (filterMapCount === 0 || FILTERS.filter(a => filterMap[a] && row[a] === filterMap[a]).length === filterMapCount)
+      && (is3d ? row.is3D : true)
+    );
+  });
+  const filterListMap = FILTERS.reduce((map, attr) => {
+    map[attr] = Array.from(new Set(filteredList.map(a => a[attr]))).filter(a => a);
+    return map;
+  }, {});
+  // render filters
+  controls.innerHTML = Object.keys(filterListMap).map(attr => renderBtnGroup(filterListMap[attr], attr)).join``;
+  o.innerHTML = `<div>Count: ${filteredList.length}</div><table class="table">
+<thead><tr>${COLUMNS.map(a => `<th${a !== "title" ? " class='text-center'" : ''}>${cap(a)}</th>`).join``}</tr></thead>
+<tbody>
+  ${filteredList.map(row => {
+    return `<tr>${COLUMNS.map(a => `<td${a !== "title" ? " align='center'" : ''}>
+      ${a === '🔎' ? showSearchLink(row) : row[a] || "-"}
+    </td>`).join``}</tr>`;
+  }).join``}
+</tbody></table>`;
+};
+
+const showSearchLink = row => {
+  return `<a class="text-decoration-none" href="https://www.google.com/search?q=${row.title.replaceAll(" ", "+")}"
+  title="Google Search this game" target="_blank">🔎</a>`;
+};
+
+const selectFilter = (attr, val) => {
+  filterMap[attr] = filterMap[attr] === val ? "" : val;
+  if (!filterMap[attr]) delete filterMap[attr];
+  render();
+};
+
+
+onload = () => {
+  render();
+};
+</script>
+</body>
