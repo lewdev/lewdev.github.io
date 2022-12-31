@@ -4,7 +4,7 @@
 
 const getRepoLink = (repo, user) => {
   const repoName = `${user.login}/${repo.name}`;
-  return `<a href="https://github.com/${repoName}/graphs/traffic" target="_blank">📦 ${repoName}</a>`;
+  return `<a href="https://github.com/${repoName}/graphs/traffic" target="_blank">📦 ${repo.name}</a>`;
 };
 
 const getRepoAnchor = repo => {
@@ -53,7 +53,7 @@ const getEmoji = attr => {
 
 const createStatsTable = (attr, repo) => {
   const arr = repo[attr];
-  if (!arr) return `No ${attr} data.`;
+  if (!arr) return `<div>No ${attr} data.</div>`;
   //{views: {views: 0, uniques: 0}, clones: {clones: 0, uniques: 0}};
   const overall = arr.reduce((prev, curr) => {
     prev.count += curr.count;

@@ -15,14 +15,14 @@ window["app"] = (() => {
   let stats = [];
 
   const render = () => {
-    const repoList = repos.filter(r => !r.private);
-    left.innerHTML = `<h3 class="mt-4 mb-1 pb-1 border-secondary border-bottom">Repo List</h3><ul>${repoList.map(r => `<li>${getRepoAnchor(r)} </li>`).join("")}</ul>`;
-    right.innerHTML = `${ReposSummary.render()}<div>${repoList.map(repo => {
-      const repoStats = stats.find(s => s.name === repo.name) || {};
-      const { name, views, clones, referrers } = repoStats;
-      if (isEmpty(views) && isEmpty(clones) && isEmpty(referrers)) return '';
+    left.innerHTML = `<h3 class="mt-4 mb-1 pb-1 border-secondary border-bottom">Repo List</h3><ul>${repos.map(r => `<li>${getRepoAnchor(r)} </li>`).join("")}</ul>`;
+    right.innerHTML = ReposSummary.render()
+     + `<div>${repos.map(repo => {
+      const repoStats = stats.find(s => s.name === repo.name) || repo || {};
+      const { name } = repoStats;
       return (
         `<h3 class="mt-4 mb-1 pb-1 border-secondary border-bottom"><a name="${name}"></a>${getRepoLink(repoStats, user)}</h3>
+        <div>${"stargazers_count,watchers,forks".split`,`.map((a, i) => `<span title="${a}">${repo[a] + ["⭐","👀","🍴"][i]}</span>`).join`, `}</div>
         ${["views", "clones", "referrers"].map(a => createStatsTable(a, repoStats)).join("")}`
       );
     }).join("")}</div>`;
