@@ -3,7 +3,7 @@ window["ReposSummary"] = (() => {
 
   let daysAgo = 7;
 
-  const daysAgoOptions = [7, 14, 30, 356];
+  const daysAgoOptions = [7, 14, 21, 30, 60, 90, 120, 150, 180, 356];
 
   const showDropdown = () => {
     return `<label class="d-flex justify-content-between" style="width: 10rem">
@@ -20,23 +20,21 @@ window["ReposSummary"] = (() => {
     (stats[attr] || []).filter(item => new Date(item.timestamp) > d).reduce((total, item) => total += item.count, 0)
   );
 
-  const showTable = () => {
+  const showSummaryTable = () => {
     const repoStats = window["app"]["getStats"]();
+
     const d = new Date();
     d.setDate(d.getDate() - daysAgo);
-    return (
-      `<table class="table">
-        <thead><tr>${["Repo", "Views", "Clones"].map(a => `<th>${a}</th>`).join("")}</tr></thead>
-        <tbody>
-          ${repoStats.map(stats => {
-            const viewCount = getCountAfterDate(d, stats, "views");
-            const cloneCount = getCountAfterDate(d, stats, "clones");
-            if (viewCount === 0 && cloneCount === 0) return "";
-            return `<tr>${[getRepoAnchor(stats), viewCount, cloneCount].map(a => `<td>${a}</td>`).join("")}</tr>`;
-          }).join("")}
-        </tbody>
-      </table>`
-    );
+
+    const arr = repoStats.map(stats => {
+      const row = {
+        repo: getRepoAnchor(stats),
+        views: getCountAfterDate(d, stats, "views"),
+        clones: getCountAfterDate(d, stats, "clones"),
+      };
+      return (!row.views && !row.clones) ? null : row;
+    }).filter(a => a);
+    return createTable(arr);
   };
 
   const getDaysByDaysAgo = () => {
@@ -53,6 +51,7 @@ window["ReposSummary"] = (() => {
     }
     return days;
   };
+
   const getChartData = (days, attr) => {
     const repoStats = window["app"]["getStats"]();
     const dayCounts = days.map(d => {
@@ -67,7 +66,8 @@ window["ReposSummary"] = (() => {
       }, 0);
     })
     return dayCounts;
-  }
+  };
+
   const showGraph = () => {
     //this is needed to recreate the chart
     if (chart) chart.destroy();
@@ -85,13 +85,14 @@ window["ReposSummary"] = (() => {
     chart = new Chart(myChart, { type: 'line', data: data, options: { } });
     return "";
   };
+
   return {
     "set": value => { daysAgo = parseInt(value); app["render"](); },
     "render": () => (
       `<div class="card card-body">
         ${showDropdown()}
         ${showGraph()}
-        ${showTable()}
+        ${showSummaryTable()}
       </div>`
     ),
   }

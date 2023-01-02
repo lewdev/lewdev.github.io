@@ -57,7 +57,7 @@ const GithubApi = (() => {
       ))
       .then(data => handleCb(data, cb))
     ,
-    getRepos: cb => get(`/user/repos`)
+    getRepos: cb => get(`/user/repos?per_page=100&type=public`)
       .then(data => (
         data.map(d => {
           const { id, name, description, html_url, created_at, updated_at, stargazers_count, watchers, forks } = d;
@@ -74,7 +74,7 @@ const GithubApi = (() => {
       if (!repo) return;
       const { name } = repo;
       const { getTraffic, applyStats, getClones, getReferrers } = GithubApi;
-      getTraffic(name, data => {
+      return getTraffic(name, data => {
         if (!data) return;
         applyStats(repo, "views", data, "timestamp");
         getClones(name, data => {
@@ -89,6 +89,7 @@ const GithubApi = (() => {
     applyStats: (repo, attr, data, baseAttr) => {
       const isReferrers = attr === "referrers";
       const arr = isReferrers ? data : data[attr];
+
       if (!repo[attr]) repo[attr] = arr;
       else {
         //merge: find and replace or add
@@ -104,6 +105,7 @@ const GithubApi = (() => {
           else repo[attr].push(row);
         }
       }
+      return repo;
     }
   };
 })();

@@ -44,8 +44,7 @@ const transIndex = {
 };
 
 //Every 26th is Monthly Service from 9am
-let annualEvents = [
-  {"date":"12/1","event":"Test","time":"10:00"},
+const annualEvents = [
   {"date":"1/1","event":"New Year's Service","time":"5:00"},
   {"date":"1/26","event":"Spring Grand Service","time":"11:30"},
   {"date":"3/27","event":"Spring Memorial Service","time":"9:00"},//
