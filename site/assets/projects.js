@@ -3,6 +3,7 @@ const categories = [
   { name: "Games", emoji: "👾" },
   { name: "Simulations", emoji: "⏯" },
   { name: "Tenrikyo", emoji: "🙏" },
+  { name: "Lists", emoji: "📃" },
 ];
 
 const projects = [
@@ -20,6 +21,11 @@ const projects = [
 {
   title: "ExText", name: "extext", emoji: '👨‍💻',
   description: "Minimal, fast web development in browser. Press Ctrl+Enter to run.",
+  category: "Apps",
+},
+{
+  title: "Github Repo Stats", name: "github-repo-stats", emoji: '📊',
+  description: "Track Views, Clones, and Referrers of your Github repositories.",
   category: "Apps",
 },
 {
@@ -55,11 +61,6 @@ const projects = [
 
 // Tenrikyo
 {
-  title: "Tenrikyo Service Times", name: "service-times", emoji: '⏲️',
-  description: "Look up the Tenrikyo Church Headquarters service times.",
-  category: "Tenrikyo"
-},
-{
   title: "Anecdotes Browser", name: "anecdotes-browser", emoji: '📖',
   description: "Browse the Anecdotes of Oyasama in English and Japanese.",
   category: "Tenrikyo"
@@ -90,6 +91,18 @@ const projects = [
   title: "Squid Game Level 5", name: "squid-game-lvl5", emoji: '🦑',
   description: "A JavaScript canvas simulation of Squid Game level 5 using emojis.",
   category: "Simulations",
+},
+
+//Lists
+{
+  title: "Ukraine Bundle List", name: "ukraine-bundle-list", emoji: '🕹️',
+  description: "Browse, search, tag, and discover the massive list of games part of the Ukraine Bundle on itch.io",
+  category: "Lists",
+},
+{
+  title: "Pandora Box DX - Game List", name: "pandora-dx-games", emoji: '🕹️',
+  description: "Browse, search, and discover the massive library of 3k games on the device.",
+  category: "Lists",
 },
 ];
 
