@@ -100,7 +100,7 @@ const projects = [
   category: "Lists",
 },
 {
-  title: "Pandora Box DX - Game List", name: "pandora-dx-games", emoji: '🕹️',
+  title: "Pandora Box DX - Game List", name: "pandora-box-dx", emoji: '🕹️',
   description: "Browse, search, and discover the massive library of 3k games on the device.",
   category: "Lists",
 },
