@@ -19,6 +19,11 @@ const projects = [
   category: "Apps",
 },
 {
+  title: "Gist Browser", name: "gist-browser", emoji: '📂',
+  description: "Browse & search your Github Gists in a simple UI",
+  category: "Apps",
+},
+{
   title: "ExText", name: "extext", emoji: '👨‍💻',
   description: "Minimal, fast web development in browser. Press Ctrl+Enter to run.",
   category: "Apps",
