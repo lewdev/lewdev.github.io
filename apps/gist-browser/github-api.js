@@ -61,7 +61,7 @@ const GithubApi = (() => {
       Accept: 'application/vnd.github+json',
       'Content-Type': 'application/x-www-form-urlencoded'
     },
-    body,
+    body: JSON.stringify(body),
   }));
 
   const showTokenPrompt = (show = true) => {
@@ -105,7 +105,12 @@ const GithubApi = (() => {
         }))
       ))
     ,
-    saveGist: (url, body, cb) => patch(url, body, cb),
+    saveGist: (gistId, body) => patch(`${API_URL}/gists/${gistId}`, body),
+    saveFile: (gistId, filename, content) => {
+      const files = {};
+      files[filename] = { content };
+      return GithubApi.saveGist(gistId, {files});
+    },
     // getRepos: cb => get(`/user/repos?per_page=100&type=public`)
     //   .then(data => data.map(d => (
     //     "id, name, description, html_url, created_at, updated_at, stargazers_count, watchers, forks, private".split`, `

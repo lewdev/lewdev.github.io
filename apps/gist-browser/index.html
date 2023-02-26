@@ -114,6 +114,7 @@
   <button class="btn btn-primary mt-2" onclick="navigator.clipboard.writeText(dataStr.value)">📋 Copy</button>
   <button class="btn btn-primary mt-2" onclick="runCode()">🏃‍♂️ Run</button>
   <button class="btn btn-primary mt-2" onclick="saveFile()" id="saveFileBtn">💾 Save File</button>
+  <a id="viewGist">👁 View Gist</a>
 </dialog>
 
 <div id="fullScreen" style="display:none">
@@ -124,7 +125,7 @@
 
 <script src="github-api.js"></script>
 <script>
-let gistList, gistUrl;
+let gistList, gistId;
 onload = _ => {
   o.innerHTML = `<div class="spinner-border text-center" role="status"><span class="visually-hidden">Loading...</span></div>`;
   GithubApi.init(_ => {
@@ -145,13 +146,15 @@ const renderFiles = files => `<ul>${files.map(f => `<li>📄 <button class="btn 
 
 const getRaw = url => {
   dataStr.value = "";
+  viewGist.disabled = true;
   const parts = url.split`/`;
-  const gistId = parts[parts.length - 4];
-  gistUrl = `https://api.github.com/gists/${gistId}`;
+  gistId = parts[parts.length - 4];
   fetch(url, {'cache-control': 'no-cache', cache: 'no-store'}).then(d => d.text()).then(r => {
     filename.innerHTML = url.split('/').pop().replace(/%20/g, " ");
     dataStr.value = r + "";
     d.show();
+    viewGist.disabled = false;
+    viewGist.href = `https://gists.github.com/${GithubApi.getUsername()}/${gistId}`;
   });
 };
 
@@ -161,13 +164,11 @@ const runCode = () => {
 };
 
 const saveFile = () => {
-  if (!gistUrl) return;
+  if (!gistId) return;
   saveFileBtn.disabled = true;
-  const name = filename.innerHTML;
-  const files = {};
-  files[name] = { content: dataStr.value };
-  GithubApi.saveGist(gistUrl, JSON.stringify({files}), () => {
-    notify("success", `💾 Saved '${name}'`);
+  const fname = filename.innerHTML;
+  GithubApi.saveFile(gistId, fname, dataStr.value).then(() => {
+    notify("success", `💾 Saved '${fname}'`);
     saveFileBtn.disabled = false;
   });
 };
