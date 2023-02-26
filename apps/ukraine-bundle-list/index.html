@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <title>Ukraine Bundle List | Browse, search, tag, and discover the massive list of games part of the Ukraine Bundle on itch.io</title>
+  <meta name="author" content="Lewis Nakao">
+  <meta name="description" content="Browse, search, tag, and discover the massive list of games part of the Ukraine Bundle on itch.io">
+  <!-- <meta name="keywords" content="Code Generation, Vanilla JavaScript, Open Source"> -->
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="🕹️ Ukraine Bundle List | Browse, search, tag, and discover the massive list of games part of the Ukraine Bundle on itch.io">
+  <meta name="twitter:description" content="Browse, search, tag, and discover the massive list of games part of the Ukraine Bundle on itch.io">
+  <meta name="twitter:site" content="@lewdev">
+  <meta name="twitter:creator" content="@lewdev">
+  <meta name="twitter:image" content="https://lewdev.github.io/apps/ukraine-bundle-list/img/banner-1200x630.png">
+
+  <!-- Open Graph general (Facebook, Pinterest)-->
+  <meta property="og:title" content="🕹️ Ukraine Bundle List | Browse, search, tag, and discover the massive list of games part of the Ukraine Bundle on itch.io">
+  <meta property="og:description" content="Browse, search, tag, and discover the massive list of games part of the Ukraine Bundle on itch.io">
+  <meta property="og:url" content="https://lewdev.github.io/apps/ukraine-bundle-list/">
+  <meta property="og:site_name" content="lewdev.github.io">
+  <meta property="og:type" content="website">
+  <!-- <meta property="og:image" content="https://lewdev.github.io/apps/ukraine-bundle-list/img/banner-1200x630.png"> -->
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0-beta1/css/bootstrap.min.css" integrity="sha512-o/MhoRPVLExxZjCFVBsm17Pkztkzmh7Dp8k7/3JrtNCHh0AQ489kwpfA3dPSHzKDe8YCuEhxXq3Y71eb/o6amg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<!--
+Data Source: 
+Bundle for Ukraine
+https://itch.io/bundle/1316/games.json
+
+<h1>Condensing the raw data</h1>
+<textarea id=o></textarea>
+<script>
+const picked = "id,url,cover,platforms,title,short_text,price".split`,`;
+onload = () => {
+  fetch("https://itch.io/bundle/1316/games.json").then(r => r.json()).then(d => {
+    o.value = JSON.stringify(d.games.map(a => Object.keys(a).reduce((prev, curr) => {
+      if (picked.includes(curr)) prev[curr] = a[curr];
+      return prev;
+    }, {})));
+  });
+};
+</script>
+-->
+<body>
+  <div class="container mt-3">
+    <div class="justify-content-between d-flex">
+      <h1>🎮 <a href="https://itch.io/b/1316/bundle-for-ukraine">Bundle for Ukraine</a> on itch.io</h1>
+      <button class="btn btn-primary" onclick="exportData()">📤 Export</button>
+    </div>
+    <input id="searchInput" type="text" onkeyup="render()" class="form-control" placeholder="Search...">
+    <div id="filterTagsElem"></div>
+    <ol id=o></ol>
+  </div>
+  
+  <dialog id=d>
+    <div id=c></div>
+    <button class="btn btn-secondary" onclick="this.parentNode.close()">❌ Close</button>
+  </dialog>
+  
+  <script src="ukraine-bundle-data.js"></script>
+  <script>
+  const APP_KEY = "ukraine-bundle"
+  let sortByField = "price";
+  let filterTags = [];
+  let games = [];
+  
+  render = () => {
+    const search = searchInput.value;
+    const filtered = games.filter(g => (
+      (!search || g.title.toLowerCase().includes(search.toLowerCase()))
+      && (filterTags.length === 0 || (filterTags.length > 0 && g.tags && filterTags.find(tag => g.tags.includes(tag))))
+    ));
+    filtered.sort(sortByPrice);
+    games = games.sort(sortByPrice);
+    o.innerHTML = filtered.length + " games<br>" + filtered.map(g => (
+      `<li><a href="${g.url}" onclick="return openGame(${g.id})">${g.title}</a> ${g.price || '-'} ${showTags(g, true)}</li>`
+    )).join``;
+    filterTagsElem.innerHTML = "Filter Tags: "
+     + filterTags.map(t => `<button class="btn badge bg-info" onclick="removeTag('${t}')" title="Remove">${t}</button>`);
+  };
+  
+  onload = () => {
+    const str = localStorage.getItem(APP_KEY);
+    games = str ? JSON.parse(str) : gamesOrig;
+    render();
+  };
+  
+  const convertPrice = val => val ? parseInt(val.replace(/[^\d\.]/, "")) : 0
+  
+  const sortByPrice = (a, b) => {
+    const priceA = convertPrice(a.price);
+    const priceB = convertPrice(b.price);
+    return priceB - priceA;
+  };
+  
+  const editTags = (id, tagsStr) => {
+    const g = games.find(a => a.id === id);
+    const tagsElem = document.getElementById("tagsElem");
+    if (tagsStr) {
+      //apply tags
+      g.tags = tagsStr.split(",").map(s => s.trim());
+      localStorage.setItem(APP_KEY, JSON.stringify(games));
+      tagsElem.innerHTML = showTags(g);
+      render();
+    }
+    else {
+      //show edit form
+      tagsElem.innerHTML = `<input type="text" class="form-control" value="${g.tags ? g.tags.join(", ") : ""}" onkeypress="if (event.keyCode === 13) editTags(${g.id}, this.value);"/>`;
+      tagsElem.getElementsByTagName("input")[0].focus();
+    }
+    return false;
+  };
+  
+  const filterByTag = tag => {
+    filterTags.push(tag);
+    filterTags = Array.from(new Set(filterTags));
+    render();
+  };
+  const removeTag = tag => {
+    filterTags = filterTags.filter(t => t !== tag);
+    render();
+  }
+  const showTags = (g, hideEditBtn) => ((!g.tags || g.tags.length === 0) ? "n/a" : (
+    g.tags.map(s => `<button onclick="filterByTag('${s}')" class="btn badge bg-secondary mx-1">${s}</button>`).join``
+  ))
+  + (hideEditBtn ? "" : `<a href="#" onclick="return editTags(${g.id})">✏️</a>`);
+  
+  const viewBtn = (g, isPrev) => (
+    g ? `<button class="m-2 btn btn-primary" onclick="return openGame(${g.id})">${isPrev ? "⬅" : "➡"}</button>` : ""
+  );
+  
+  const openGame = id => {
+    const g = games.find(a => a.id === id);
+    const index = games.findIndex(a => a.id === id);
+    const prev = index >= 0 ? games[index - 1] : null;
+    const next = index < games.length - 1 ? games[index + 1] : null;
+    c.innerHTML = `
+    <div class="justify-content-between d-flex">
+      <h3>${g.title}</h3>
+      <div><b>${g.price}</b></div>
+    </div>
+    <div class="text-secondary">${g.short_text}</div>
+    <div class="text-center"><img src="${g.cover}"/></div>
+    ${g.platforms?.map(p => `<span class="badge bg-info mr-1">${p}</span>`).join("") || ''}
+    <div class="my-2">
+      <b>Tags:</b> <span id="tagsElem">${showTags(g)}</span>
+    </div>
+    <div class="text-center">
+      ${viewBtn(prev, true)}
+      <a href="${g.url}" class="m-2 btn btn-primary">🔎 View Game</a>
+      ${viewBtn(next)}
+    </div>`;
+    d.showModal();
+    return false;
+  };
+  
+  const exportData = () => {
+    c.innerHTML = `<textarea id="exportData" style="height:75vh; width:20rem;">${JSON.stringify(games)}</textarea>`;
+    d.showModal();
+    return false;
+  };
+  </script></body>
