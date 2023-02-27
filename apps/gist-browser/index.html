@@ -10,12 +10,10 @@
   <!-- <meta name="keywords" content="Code Generation, Vanilla JavaScript, Open Source"> -->
 
   <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="📂 Gist Browser | Browse & search your Github Gists in a simple UI">
   <meta name="twitter:description" content="Browse & search your Github Gists in a simple UI">
   <meta name="twitter:site" content="@lewdev">
   <meta name="twitter:creator" content="@lewdev">
-  <meta name="twitter:image" content="https://lewdev.github.io/apps/gist-browser/img/banner-1200x630.png">
 
   <!-- Open Graph general (Facebook, Pinterest)-->
   <meta property="og:title" content="📂 Gist Browser | Browse & search your Github Gists in a simple UI">
@@ -23,7 +21,6 @@
   <meta property="og:url" content="https://lewdev.github.io/apps/gist-browser/">
   <meta property="og:site_name" content="lewdev.github.io">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://lewdev.github.io/apps/gist-browser/img/banner-1200x630.png">
 
   <meta name="msapplication-TileColor" content="#2b5797">
   <meta name="theme-color" content="#ffffff">
@@ -60,23 +57,7 @@
     top: 9px;
     right: 9px;
   }
-  /* notify */
-  .notify {
-    position: fixed;
-    top: -5rem;
-    left: 20%;
-    width: 60%;
-    font-size: 1.5rem;
-    display: block;
-    white-space: normal;
-    animation: 2s 2 alternate slidein ;
-  }
-
-  @keyframes slidein {
-    from { top: -5rem; }
-    50% { top: 5%; }
-    to   { top: 5%; }
-  }
+  .text-sm { font-size: .8rem }
   </style>
 </head>
 <body>
@@ -86,16 +67,19 @@
     <h4>📂 Github Gist Browser</h4>
     <div>
       👋 Hi, <span id="user">user</span>
-      <a href="https://github.com/lewdev/gist-browser" title="View Source Code">🧑‍💻</a>
+      <button class="btn btn-light btn-sm" onclick="GithubApi.showTokenPrompt()" title="Set Github Token">🎟</button>
+      <a href="https://github.com/lewdev/gist-browser" title="View Source Code">👨‍💻</a>
     </div>
   </div>
+
+  <div id="err" class="text-danger m-0"></div>
+
   <div class="justify-content-between d-flex">
     <input id="searchField" type="text" class="form-control w-100 mb-2" placeholder="Search..." oninput="render()"/>
     <button class="btn btn-light mb-2" onclick="searchField.value='';render()" title="Clear">&times;</button>
   </div>
-  <p id="err" class="text-danger"></p>
-  <p id="o">
-  </p>
+
+  <div id="o"></div>
 </div>
 
 <dialog id="gist" class="rounded w-75 bg-light">
@@ -108,9 +92,10 @@
   <button onclick="this.parentNode.close()" class="btn btn-light btn-sm rounded-circle" style="float:right">&times;</button>
   <h2 class="d-block">💽 <code id="filename"></code></h2>
   <textarea id="dataStr" spellcheck="false" rows="10" class="w-100 form-control"></textarea>
-  <button class="btn btn-primary mt-2" onclick="navigator.clipboard.writeText(dataStr.value)">📋 Copy</button>
+  <button class="btn btn-dark mt-2" onclick="navigator.clipboard.writeText(dataStr.value)">📋 Copy</button>
   <button class="btn btn-primary mt-2" onclick="runCode()">🏃‍♂️ Run</button>
   <button class="btn btn-primary mt-2" onclick="saveFile()" id="saveFileBtn">💾 Save File</button>
+  <a id="viewGist">👁 View Gist</a>
 </dialog>
 
 <div id="fullScreen" style="display:none">
@@ -119,111 +104,57 @@
     class="btn btn-secondary btn-sm rounded-circle">&times;</button>
 </div>
 
+<script src="util.js"></script>
+<script src="github-api.js"></script>
 <script>
-const GithubApi = (() => {
-  // const crypt = (salt, text) => {
-  //   const textToChars = (text) => text.split("").map((c) => c.charCodeAt(0));
-  //   const byteHex = (n) => ("0" + Number(n).toString(16)).substr(-2);
-  //   const applySaltToChar = (code) => textToChars(salt).reduce((a, b) => a ^ b, code);
-  //   return text
-  //     .split("")
-  //     .map(textToChars)
-  //     .map(applySaltToChar)
-  //     .map(byteHex)
-  //     .join("");
-  // };
-  const decrypt = (salt, encoded) => {
-    const textToChars = (text) => text.split("").map((c) => c.charCodeAt(0));
-    const applySaltToChar = (code) => textToChars(salt).reduce((a, b) => a ^ b, code);
-    return encoded
-      .match(/.{1,2}/g)
-      .map((hex) => parseInt(hex, 16))
-      .map(applySaltToChar)
-      .map((charCode) => String.fromCharCode(charCode))
-      .join("");
-  };
+let gistList, gistId, fileCache = {};
 
-  let username = null;
-  const tokenStr = "434c547b48764210731c566b60567e7e426b5d5c4a655c68465267686a71136c74671749161d7670";
-  const salt = "f2q23";
-  const TOKEN = decrypt(salt, tokenStr);
-  const API_URL = "https://api.github.com";
+const showLoading = _ => o.innerHTML = `<div class="spinner-border text-center" role="status"><span class="visually-hidden">Loading...</span></div>`;
 
-  const get = path => fetch(`${API_URL}${path}`,{headers: {Authorization: `token ${TOKEN}`}})
-    .then(r => r.json())
-    .then(r => {if (r.message) alert(r.message); return r;})
-    .catch(error => err.innerHTML = error)
-  ;
-  const handleCb = (data, cb) => { if (cb) cb(data); return data; };
-  return {
-    getUsername: () => username,
-    getUser: cb => get("/user").then(data => {
-      username = data.login;
-      return handleCb(data, cb);
-    }),
-    getGists: cb => get(`/users/${username}/gists?per_page=1000`)
-      .then(data => (
-        data.map(({ url, description, public, files }) => ({
-          url, description, public,
-          files: Object.keys(files).map(key => {
-            const { filename, raw_url } = files[key];
-            return { filename, raw_url };
-          })
-        }))
-      ))
-      .then(data => handleCb(data, cb))
-    ,
-    saveGist: (url, body, cb) => fetch(url, {
-        method: 'PATCH',
-        headers: {
-          Authorization: `token ${TOKEN}`,
-          Accept: 'application/vnd.github+json',
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body,
-      })
-      .then(r => {if (cb) cb(); return r.json(); })
-      .then(r => {if (r.message) alert(r.message); return r;})
-      .catch(error => err.innerHTML = error)
-    ,
-    getRepos: cb => get(`/user/repos?per_page=100&type=public`)
-      .then(data => data.map(d => (
-        "id, name, description, html_url, created_at, updated_at, stargazers_count, watchers, forks, private".split`, `
-        .reducer((obj, attr) => {obj[attr] = d[attr]; return obj;}, {})
-      )))
-      .then(data => handleCb(data, cb))
-    ,
-    getRepo: (repo, cb) => get(`/repos/${username}/${repo}`).then(data => handleCb(data, cb)),
-  };
-})();
+const handleError = e => { notify("danger", e); GithubApi.handleError(e); };
 
-let gistList, gistUrl;
-o.innerHTML = `
-<div class="spinner-border text-center" role="status">
-  <span class="visually-hidden">Loading...</span>
-</div>`;
-GithubApi.getUser(() => GithubApi.getGists(d => {gistList = d; render()}));
+onload = _ => GithubApi.init(_ => {
+  showLoading();
+  saveFileBtn.disabled = !GithubApi.getToken();
+  err.innerHTML = "";
+  GithubApi.getGists().then(d => {
+    gistList = d;
+    render();
+  })
+})
+.catch(e => {handleError(e); o.innerHTML = "";});
 
-const notify = (type, message) => {
-  const elem = document.createElement('div');
-  elem.className = `notify badge bg-${type}`;
-  elem.innerHTML = message;
-  document.body.appendChild(elem);
-  setTimeout(() => elem.parentNode.removeChild(elem), 5000);
+const renderFiles = files => (
+  `<ul>${files.map(f => `<li>📄 <button class="btn btn-light p-0 text-start"
+      onclick="getRaw('${f.raw_url}')">${f.filename}</button> ${formatNum(f.size)}</li>`).join``}</ul>`
+);
+
+const getGistIdFromUrl = url => { 
+  const parts = url.split`/`;
+  return parts[parts.length - 4];
 };
 
-const renderFiles = files => `<ul>${files.map(f => `<li>📄 <button class="btn btn-light p-0 text-start" onclick="getRaw('${f.raw_url}')">${f.filename}</button></li>`).join``}</ul>`;
+const getFilenameFromUrl = url => decodeURI(url).split('/').pop().replace(/%23/g, "#");
 
 const getRaw = url => {
   dataStr.value = "";
-  const parts = url.split`/`;
-  const gistId = parts[parts.length - 4];
-  gistUrl = `https://api.github.com/gists/${gistId}`;
-  fetch(url, {'cache-control': 'no-cache', cache: 'no-store'}).then(d => d.text()).then(r => {
-    filename.innerHTML = url.split('/').pop().replace(/%20/g, " ");
-    dataStr.value = r + "";
-    d.show();
-  });
+  viewGist.disabled = true;
+  gistId = getGistIdFromUrl(url);
+  const fname = getFilenameFromUrl(url);
+  const index = gistId + "/" + fname;
+  if (fileCache[index]) displayFile(url, fname, fileCache[index]);
+  else fetch(url).then(d => d.text()).then(r => displayFile(url, fname, r));
+};
+
+const displayFile = (url, fname, content) => {
+  gistId = getGistIdFromUrl(url);
+  const index = gistId + "/" + fname;
+  if (!fileCache[index]) fileCache[index] = content;
+  filename.innerHTML = fname;
+  dataStr.value = content + "";
+  d.show();
+  viewGist.disabled = false;
+  viewGist.href = `https://gists.github.com/${GithubApi.getUsername()}/${gistId}`;
 };
 
 const runCode = () => {
@@ -232,19 +163,28 @@ const runCode = () => {
 };
 
 const saveFile = () => {
-  if (!gistUrl) return;
+  if (!gistId) return;
+  if (!GithubApi.getToken()) {
+    GithubApi.showTokenPrompt();
+    notify("warning", "Need a valid Github Token with gist Read and Write permissions")
+    return;
+  }
   saveFileBtn.disabled = true;
-  const name = filename.innerHTML;
-  const files = {};
-  files[name] = { content: dataStr.value };
-  GithubApi.saveGist(gistUrl, JSON.stringify({files}), () => {
-    notify("success", `💾 Saved '${name}'`);
+  const fname = filename.innerHTML;
+  GithubApi.saveFile(gistId, fname, dataStr.value).then(data => {
+    notify("success", `💾 Saved '${fname}'`);
     saveFileBtn.disabled = false;
+    const index = gistId + "/" + fname;
+    if (data.files && data.files[fname]) fileCache[index] = data.files[fname].content;
+  })
+  .catch(error => {
+    saveFileBtn.disabled = false;
+    notify("danger", error);
   });
 };
 
 const getGist = url => {
-  fetch(url).then(d => d.json()).then(({id, url, description, files}) => {
+  fetch(url).then(d => d.json()).then(({id, url, description, created_at, updated_at, files}) => {
     const username = GithubApi.getUsername();
     const gistUrl = `https://gists.github.com/${username}/${id}`;
     gistTitle.innerHTML = description;
@@ -252,22 +192,26 @@ const getGist = url => {
   <div class="col-6"><a href="${gistUrl}">🔗 View Gist</a></div>
   <div class="col-6 text-right"><a href="${url}">💿 View Gist JSON</a></div>
   <div class="col-12">${renderFiles(Object.keys(files).map(k => files[k]))}</div>
+  <div class="col-6 text-secondary text-sm">Created ${dateDistance(created_at)}</div>
+  <div class="col-6 text-secondary text-sm">Updated ${dateDistance(updated_at)}</div>
 </div>`;
     gist.show();
   });
 };
 
 const render = () => {
+  if (!gistList) { o.innerHTML = ""; return; }
   const uname = GithubApi.getUsername();
-  user.innerHTML = `<a href="https://gist.github.com/${uname}" target="_blank" title="View your gists">${uname}</a>`;
+  user.innerHTML = uname ? `<a href="https://gist.github.com/${uname}" target="_blank" title="View your gists">${uname}</a>` : "user";
   o.innerHTML = `<table class="table table-striped table-hover table-bordered"><tbody>
     ${gistList.filter(({description, files}) => {
       const search = searchField.value;
       if (!search) return true;
       return description.includes(search) || files.some(f => f.filename.includes(search));
-    }).map(({ url, description, files, public }) => (`<tr><td>
+    }).map(({ url, description, files, public, updated_at }) => (`<tr><td>
 <button class="btn btn-light p-0 text-start" onclick="getGist('${url}')">📁 ${description}</button>
 <span title="${public ? "Public": "Private"}">${public ? "🌐": "🙈"}</span>
+<span class="text-secondary text-sm">Updated ${dateDistance(updated_at)}</span>
 <div>${renderFiles(files)}</div>
 </td></tr>`)).join``}
 </tbody></table>`;
