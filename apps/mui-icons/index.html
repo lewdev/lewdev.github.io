@@ -5,12 +5,12 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%221.045em%22 font-size=%2272%22>🔍</text></svg>">
 <style>
 * { font-family: Arial, Verdana; }
+a { text-decoration: none; }
 .icon-div > div {font-size: .8rem; margin: 0 auto; color: #777 }
 .icon-div {
   display: inline-block;
   width: 100px;
   height: 100px;
-  margin: 1px auto;
   text-align: center;
   overflow-x: hidden;
   border: 1px solid gray;
@@ -19,13 +19,15 @@
 #search {
   position: relative;
   display: inline-block;
-  width: calc(100% - 80px);
+  width: calc(100% - 110px);
+  font-size: 40px;
 }
 </style>
 </head>
 <body>
+  <a href="https://lewdev.github.io/apps/mui-icons/" title="Link to this App">🔍</a>
   <input id="search" oninput="find(this.value)" placeholder="Search..." list="keywordList"/>
-  <span id=count></span>
+  <span id="count" title="Count of results"></span>
   <a href="https://gists.github.com/lewdev/5850cb76f7512bcdd7719f4bb6d626f6" title="Source code">💻</a>
   <datalist id="keywordList"></datalist>
   <p id=o></p>
@@ -43,7 +45,7 @@ const find = s => {
   const found = iconArr.filter(({name, text}) => !s || match(name, s) || match(text, s));
   count.innerHTML = found.length;
   o.innerHTML = found.map(({name, text}) => (
-`<div class="icon-div" title="${text}">
+`<div class="icon-div" title="${name}: ${text}">
   <div><svg focusable="false" aria-hidden="true" viewBox="0 0 24 24" tabindex="-1">${svgMap[name]}</svg></div>
   <div>${name}</div>
 </div>`
