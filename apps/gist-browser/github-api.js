@@ -13,7 +13,7 @@ const MyCrypt = (() => {
   };
 })();
 
-const SET_TOKEN_BTN = label => (
+const showPromptBtn = label => (
   `<button class="btn btn-light btn-sm" onclick="GithubApi.showTokenPrompt()" title="Set Github Token">🎟${label ? " " + label : ""}</button>`
 );
 const HOW_TO_GEN_TOKEN =
@@ -55,7 +55,7 @@ const GithubApi = (() => {
   const postFetch = fetchPromise => fetchPromise.then(r => {
     if (r.ok) return r.json();
     const isUnauthorized = r.statusText === "Unauthorized";
-    return Promise.reject(`${r.status} ${r.statusText}${isUnauthorized ? ` (invalid token) ${SET_TOKEN_BTN("Set Token")}` : ""}`)
+    return Promise.reject(`${r.status} ${r.statusText}${isUnauthorized ? ` (invalid token) ${showPromptBtn("Set Token")}` : ""}`)
   }).catch(handleError);
 
   const getHeader = (header = {}) => ({Authorization: token ? `token ${token}` : "", ...header});
@@ -91,6 +91,7 @@ const GithubApi = (() => {
       res();
     }).then(_ => GithubApi.getUser().then(loadData ? loadData : 0)),
     handleError,
+    showPromptBtn,
     showTokenPrompt,
     hideTokenPrompt: () => showTokenPrompt(false),
     setToken: str => {
@@ -107,9 +108,9 @@ const GithubApi = (() => {
       username = data ? data.login : "";
       return data;
     }),
-    getGists: () => get(`/gists?per_page=1000`).then(formatGistData),
+    getGists: (page = 1) => get(`/gists?per_page=100&page=${page}`).then(formatGistData),
     getGistById: gistId => get(`/gists/${gistId}`).then(r => formatGistData([r])[0]),
-    getGistsByUser: user => get(`/users/${user}/gists?per_page=1000`).then(formatGistData),
+    getGistsByUser: user => get(`/users/${user}/gists?per_page=100`).then(formatGistData),
     saveGist: (gistId, body) => patch(`${API_URL}/gists/${gistId}`, body),
     saveFile: (gistId, filename, content) => {
       const files = {};
