@@ -110,7 +110,7 @@ const GithubApi = (() => {
     }),
     getGists: (page = 1) => get(`/gists?per_page=100&page=${page}`).then(formatGistData),
     getGistById: gistId => get(`/gists/${gistId}`).then(r => formatGistData([r])[0]),
-    getGistsByUser: user => get(`/users/${user}/gists?per_page=100`).then(formatGistData),
+    // getGistsByUser: user => get(`/users/${user}/gists?per_page=100`).then(formatGistData),
     saveGist: (gistId, body) => patch(`${API_URL}/gists/${gistId}`, body),
     saveFile: (gistId, filename, content) => {
       const files = {};

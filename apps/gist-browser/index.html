@@ -116,7 +116,7 @@
 <script src="util.js"></script>
 <script src="github-api.js"></script>
 <script>
-let gistList, gistMap, gistId, isLoading = false, fileCache = {};
+let gistList, gistId, fileCache = {};
 
 const showLoading = _ => o.innerHTML = `<div class="spinner-border text-center" role="status"><span class="visually-hidden">Loading...</span></div>`;
 
@@ -128,10 +128,6 @@ onload = _ => GithubApi.init(_ => {
   err.innerHTML = "";
   GithubApi.getGists().then(d => {
     gistList = d;
-    gistMap = d.reduce((prev, gist) => {
-      prev[gist.id] = gist;
-      return prev;
-    }, {});
     render();
   })
 })
@@ -141,7 +137,6 @@ const loadGistsPage = page => {
   GithubApi.getGists(page).then(d => {
     if (d.length === 0) { render(); return; }
     gistList = [...gistList, ...d];
-    for (const gist of d) gistMap[gist.id] = gist;
     if (d.length >= 100) loadGistsPage(page + 1);
     else render();
   });
@@ -212,6 +207,7 @@ const getGist = url => {
   fetch(url).then(d => d.json()).then(({id, url, description, created_at, updated_at, files}) => {
     const username = GithubApi.getUsername();
     const gistUrl = `https://gists.github.com/${username}/${id}`;
+    for (const filename of Object.keys(files)) fileCache[`${id}/${filename}`] = files[filename].content;
     gistTitle.innerHTML = description;
     gistInfo.innerHTML = `<div class="row">
   <div class="col-6"><a href="${gistUrl}">🔗 View Gist</a></div>
