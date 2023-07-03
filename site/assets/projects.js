@@ -76,6 +76,11 @@ const projects = [
   category: "Tenrikyo",
 },
 {
+  title: "HQ Service Times", name: "service-times", emoji: '🌄',
+  description: "Display the morning and evening service times that change every 15th or end of month.",
+  category: "Tenrikyo",
+},
+{
   title: "Narimono App (prototype)", name: "narimono", emoji: '🎶', url: "https://lewdev.github.io/apps/narimono-prototype/",
   description: "A sound-board app of the instruments used in the Tenrikyo service. An unfinished project that was going to be a rhythm game.",
   category: "Tenrikyo",
@@ -102,6 +107,11 @@ const projects = [
 {
   title: "Ukraine Bundle List", name: "ukraine-bundle-list", emoji: '🕹️',
   description: "Browse, search, tag, and discover the massive list of games part of the Ukraine Bundle on itch.io",
+  category: "Lists",
+},
+{
+  title: "LeetCode Challenge Tracker", name: "code-challenge-tracker", emoji: '👨‍💻',
+  description: "Browse, search, and track LeetCode challenges and links to solution videos",
   category: "Lists",
 },
 {
