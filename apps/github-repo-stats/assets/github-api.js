@@ -24,7 +24,7 @@ const GithubApi = (() => {
   };
 
   let username = null;
-  const tokenStr = "434c547b48764210731c566b60567e7e426b5d5c4a655c68465267686a71136c74671749161d7670";
+  const tokenStr = "434c547b414248156c63615645106e565e6c4c5c686556746553134e495110666d5716414c696112";
   const salt = "f2q23";
   const TOKEN = decrypt(salt, tokenStr);
   const API_URL = "https://api.github.com";
