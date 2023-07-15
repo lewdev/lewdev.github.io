@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <title>Tiny Best Set GO! List | Browse, search, tag, and discover the curated list of games</title>
+  <meta name="author" content="Lewis Nakao">
+  <meta name="description" content="Browse, search, tag, and discover the massive list of games in Tiny Best Set GO!">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕹️</text></svg>">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="🕹️ Tiny Best Set GO! List | Browse, search, tag, and discover the curated list of games">
+  <meta name="twitter:description" content="Browse, search, tag, and discover the massive list of games in Tiny Best Set GO!">
+  <meta name="twitter:site" content="@lewdev">
+  <meta name="twitter:creator" content="@lewdev">
+  <!-- <meta name="twitter:image" content="https://lewdev.github.io/apps/tiny-best-set-games/img/banner-1200x630.png"> -->
+
+  <!-- Open Graph general (Facebook, Pinterest)-->
+  <meta property="og:title" content="🕹️ Tiny Best Set GO! List | Browse, search, tag, and discover the curated list of games">
+  <meta property="og:description" content="Browse, search, tag, and discover the massive list of games in Tiny Best Set GO!">
+  <meta property="og:url" content="https://lewdev.github.io/apps/tiny-best-set-games/">
+  <meta property="og:site_name" content="lewdev.github.io">
+  <meta property="og:type" content="website">
+  <!-- <meta property="og:image" content="https://lewdev.github.io/apps/tiny-best-set-games/img/banner-1200x630.png"> -->
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0-beta1/css/bootstrap.min.css" integrity="sha512-o/MhoRPVLExxZjCFVBsm17Pkztkzmh7Dp8k7/3JrtNCHh0AQ489kwpfA3dPSHzKDe8YCuEhxXq3Y71eb/o6amg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+</head>
+<body>
+<div class="container mt-3">
+  <div class="justify-content-between d-flex">
+    <h1>🕹️ <a href="https://archive.org/details/tiny-best-set-go">Tiny Best Set GO!</a> on archive.org</h1>
+  </div>
+
+  <div class="mb-2 card card-body p-2">
+    <div id="filterPanel" class="justify-content-between d-flex"></div>
+    <div id="filterTagsElem"></div>
+  </div>
+
+
+  <div class="justify-content-between d-flex mb-2">
+    <input id="searchInput" type="text" onkeyup="render()" class="form-control" placeholder="Search...">
+    <div id="count" class="m-2 badge bg-secondary"></div>
+  </div>
+
+  <table class="table table-striped table-hover table-bordered">
+    <thead><tr id="header"></tr></thead>
+    <tbody id=o></tbody>
+  </table>
+</div>
+
+<dialog id=d>
+  <div id=c></div>
+  <button class="btn btn-secondary" onclick="this.parentNode.close()">❌ Close</button>
+</dialog>
+
+<script src="tiny-best-set-data.js"></script>
+<script src="script.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GNP8ER8985"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-GNP8ER8985');</script>
+</body>
