@@ -66,6 +66,11 @@ const projects = [
 
 // Tenrikyo
 {
+  title: "Mikagura-uta Browser", name: "mku-browser", emoji: '🎵',
+  description: "Browse the sacred songs of the service in 9 languages.",
+  category: "Tenrikyo"
+},
+{
   title: "Anecdotes Browser", name: "anecdotes-browser", emoji: '📖',
   description: "Browse the Anecdotes of Oyasama in English and Japanese.",
   category: "Tenrikyo"
@@ -117,6 +122,21 @@ const projects = [
 {
   title: "Pandora Box DX - Game List", name: "pandora-box-dx", emoji: '🕹️',
   description: "Browse, search, and discover the massive library of 3k games on the device.",
+  category: "Lists",
+},
+{
+  title: "Tiny Best Set GO! List", name: "tiny-best-set-list", emoji: '🕹️',
+  description: "Browse, search, and discover the curated list of games",
+  category: "Lists",
+},
+{
+  title: "Lost Planet 2 Quick Guide", name: "lost-planet-2-walkthru", emoji: '🌏',
+  description: "Helpful list to IGN guide, YouTube videos, Cheats, Abilities, and Weapons.",
+  category: "Lists",
+},
+{
+  title: "Material Icons Search", name: "mui-icons", emoji: '🔍',
+  description: "Browse & search Material UI Icons",
   category: "Lists",
 },
 ];
