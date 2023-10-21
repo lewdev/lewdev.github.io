@@ -198,7 +198,7 @@ const getGameImg = (g, width) => {
   const src = ` src="${BASE_URL}/${dir}/Imgs/${filename}.png"`;
   const displayWidth = width ? ` width="${width}"` : "";
   const title = ` title="${dir} / ${filename}"`;
-  return `<img class="d-block mx-auto"${src + displayWidth + title} onerror="this.src='${BASE_URL}/image-not-found.png'">`
+  return "";// `<img class="d-block mx-auto"${src + displayWidth + title} onerror="this.src='${BASE_URL}/image-not-found.png'">`
 };
 
 const fileFriendly = s => s.replace(/\s*:/g, " -").replace(/[\?°]/g, "");
