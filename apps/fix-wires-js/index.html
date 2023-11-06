@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <title>Fix Wiring Among Us game</title>
+  <meta name="author" content="Lewis Nakao">
+  <meta name="description" content="The Fixing Wiring mini game from Among Us written in JavaScript canvas">
+
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="🛰️ Fix Wiring Among Us game">
+  <meta name="twitter:description" content="The Fixing Wiring mini game from Among Us written in JavaScript canvas">
+  <meta name="twitter:site" content="@lewdev">
+  <meta name="twitter:creator" content="@lewdev">
+  <meta name="twitter:image" content="">
+
+  <!-- Open Graph general (Facebook, Pinterest)-->
+  <meta property="og:title" content="🛰️ Fix Wiring Among Us game">
+  <meta property="og:description" content="The Fixing Wiring mini game from Among Us written in JavaScript canvas">
+  <meta property="og:url" content="https://lewdev.github.io/apps/fix-wiring-js">
+  <meta property="og:site_name" content="lewdev.github.io">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="">
+
+  <!-- Emoji SVG favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛰️</text></svg>">
+
+  <style>
+  html,body{
+    background:#222;display:flex;justify-content:center;align-items:center;margin:0;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  }
+  #c{background:#FFF;max-height:100%;max-width:100%}
+  #sourceBtn {
+    position:fixed; top: 0; right: 0; width: 8rem; background-color: #CCC
+  }
+  </style>
+</head>
+<body>
+<div id="sourceBtn">
+  <a href="https://github.com/lewdev/fix-wiring-js" target="_blank" title="Source code">👨🏻‍💻 Source Code</a>
+</div>
+<canvas id=c width=1080 height=1080></canvas><script>x=c.getContext`2d`,lfr=1,S=Math.sin,C=Math.cos,T=Math.tan,R=(r,g,b,a=1)=>`rgba(${r|0},${g|0},${b|0},${a})`,t=f=nfm=0;
+
+//when scrolling and resizing the window, we need to keep this updated
+setBRect = () => r=c.getBoundingClientRect();
+addEventListener("resize", setBRect);
+addEventListener("scroll", setBRect);
+
+//shuffle array
+sy=r=>{for(i=r.length;--i>0;){j=~~(Math.random()*(i+1));t=r[i];r[i]=r[j];r[j]=t}return r}
+
+B="#000" // Black
+
+// draw a line with a black border
+L=(d,x1,y1,x2,y2,l=20)=>(
+l==20?L(B,x1,y1,x2,y2,25):0,
+x.strokeStyle=d,
+x.beginPath(),
+x.moveTo(x1,y1),
+x.lineTo(x2,y2),
+x.lineWidth=l,
+x.stroke()
+)
+
+// draw a rectangle with a black border
+R=(d,x1,y1,w,h)=>(d==B?0:R(B,x1-5,y1-5,w+10,h+10),x.fillStyle=d,x.fillRect(x1,y1,w,h))
+
+// initialize the rectangle colors
+E=F=[];D=["red","#0F0","#00F","#FF0","#F0F"]
+
+// clear completed lines and reshuffle opposite side
+init=_=>(E=[],F=sy([...D]))
+
+z=t=>{
+
+//draw background
+t?R("#888",0,0,T,T):(init(x.font='3in"'),Z=0,X=Y=setBRect(),H=216,I=-1,T=1080)
+
+//accurately set mouse/touch XY values based on canvas bounds
+M=(x1,y1)=>(X=(x1-r.left)*T/r.width,Y=(y1-r.top)*T/r.height)
+
+c.onmousemove=e=>M(e.x,e.y)
+
+//onmousedown / touchstart
+U=_=>Z?init():X<H&&!E[i=~~(Y/H)]?(I=i):console.log("start",X,Y)
+//onmouseup / touchend
+V=_=>(console.log("end",X,Y),X>T-H&&F[~~(Y/H)]==D[I]?(E[I]=1,I=-1):I=-1)
+
+//delay touch start and end calls; otherwise it gets called a bunch of times
+d1=d2=null
+//set XY coordinates on touch event `e`
+N=e=>M((Q=e.changedTouches[0]).clientX,Q.clientY)
+c.onmousedown=U
+c.onmouseup=V
+c.addEventListener("touchstart",e=>(d1?0:(N(e),U()),d1=setTimeout(_=>d1=null),300))
+c.addEventListener("touchend",e=>(d2?0:(N(e),V()),d2=setTimeout(_=>d2=null),300))
+c.addEventListener("touchmove",e=>N(e))
+
+//check end condition
+Z=E.filter(a=>a).length==D.length
+
+// draw left colored squares
+F.map((d,i)=>(R(F[i],T-H,i*H,H,H)))
+
+//draw right colored squares and completed lines
+D.map((d,i)=>(
+  R(d,0,i*H,H,H),
+  E[i]?L(D[i],H/2,i*H+110,T-H/2,F.indexOf(D[i])*H+110):0
+))
+
+// draw currently selected line for square
+I>-1?L(D[I],H/2,I*H+(H/2),X,Y):0
+
+//on end condition draw "Done"
+Z?(x.fillStyle=B,x.fillText("Done",200,500)):0
+
+};loop=fTime=>{requestAnimationFrame(loop);if(lfr&&fTime<nfm-2)return;nfm=Math.max(nfm+1e3/60,fTime);t=f/60;if(t*60|0!=f++)t+=1e-6;z(t)};
+loop()</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GNP8ER8985"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-GNP8ER8985');</script>
+</body>

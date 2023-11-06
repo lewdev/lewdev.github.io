@@ -45,6 +45,11 @@ const projects = [
 },
 // Games
 {
+  title: "Fix Wires Among Us Game", name: "fix-wires-js", emoji: '🛰️',
+  description: "The Fixing Wiring mini game from Among Us written in JavaScript canvas",
+  category: "Games",
+},
+{
   title: "Moonshot Commander", name: "moonshot-commander", emoji: '🕹️',
   description: "Top-down shooter released 11/30/2020 for Game Off 2020",
   category: "Games",
