@@ -54,7 +54,3 @@ Other Links
     <img src="https://projecteuler.net/profile/lewdev.png" title="Lewis' Project Euler Progress"/>
   </td>
 </tr></table>
-
-<script data-ad-client="ca-pub-9379975851459960" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-{% include google_analytics.html %}
