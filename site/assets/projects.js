@@ -135,6 +135,11 @@ const projects = [
   category: "Lists",
 },
 {
+  title: "Magic Mic Song List", name: "magic-mic-song-list", emoji: '🎤',
+  description: "Search, browse, and queue up songs found on a Magic Mic.",
+  category: "Lists",
+},
+{
   title: "Lost Planet 2 Quick Guide", name: "lost-planet-2-walkthru", emoji: '🌏',
   description: "Helpful list to IGN guide, YouTube videos, Cheats, Abilities, and Weapons.",
   category: "Lists",
