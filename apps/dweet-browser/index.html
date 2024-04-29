@@ -25,7 +25,8 @@
   </div>
 
   <div class="d-flex justify-content-between mb-2">
-    <input type="text" class="form-control w-100" placeholder="Search titles..." oninput="searchStr = this.value; render()">
+    <input id=searchBar type="text" class="form-control w-100" placeholder="Search titles..." oninput="searchStr = this.value; render()">
+    <button class="btn btn-light m-1 p-1" title="Clear search bar" onclick="searchBar.value=searchStr='';render()">&times;</button>
     <div class="m-1">
       <span id="count" class="badge bg-secondary">0</span>
     </div>
@@ -33,9 +34,10 @@
 
   <div id=o>Loading...</div>
 
-  <div id="modal" class="card card-body mx-auto" style="width:80%;position:fixed;top:5%;left:5%;display:none;">
+  <div id="modal" class="card card-body mx-auto" style="width:80%;position:fixed;top:2rem;bottom:2rem;left:10%;display:none;overflow-y:auto;">
+    <button style="border:0; background: transparent; position:absolute; top:0; right:0"
+      title="Close" class="btn" onclick="closeModal()">&times;</button>
     <div></div>
-    <button class="btn btn-secondary" onclick="closeModal()">Close</button>
   </div>
 
 <script>
@@ -43,6 +45,7 @@ let rows = [];
 let searchStr = "";
 const propsToAttr = props => Object.keys(props).map(attr => ` ${attr}="${props[attr]}"`).join``;
 const addStyleClass = (style, className) => style && className ? propsToAttr({style, class: className}) : "";
+modal.onkeydown = e => e.code === "Escape" && closeModal() && e.preventDefault();
 const pathToLabel = path => {
   let label = path.split(".").pop();
   return label ? (
@@ -67,16 +70,20 @@ const showTable = (rows, cols) => !rows.length ? "No results" : (
     </tbody>
   </table>`
 );
-const showPosted = r => `<span class="text-secondary text-italic" style="font-size: .8rem">Posted: ${new Date(r.posted).toLocaleDateString()} (${dateDistance(r.posted)})</span>`;
-const showLinkToDweet = id => `<a href="https://beta.dwitter.com/d/${id}" title="View Dweet d/${id}">d/${id}</a>`;
-const uncompressCode = code => {
-  const index = code.indexOf("eval(unescape(escape");
-  if (index === -1) return "-";
+const showPosted = r => `<span class="text-secondary text-italic" style="font-size: .8rem">Posted: ${new Date(r.posted).toLocaleString()} (${dateDistance(r.posted)})</span>`;
+const showLinkToDweet = id => `<a href="https://beta.dwitter.net/d/${id}" title="View Dweet d/${id}">d/${id}</a>`;
+const handleCode = code => {
+  let index = code.indexOf("eval(unescape(escape(");
+  if (index === -1) index = code.indexOf("eval(unescape(escape`");
+  if (index === -1) return code;
   let str = "";
   if (index > 0) str += code.substring(0, index);
-  return str + eval(code.substring(index + 5, code.length - 1));
+  try {
+    return str + eval(code.substring(index + 4));
+  }
+  catch(e) { console.error(e, code); }
+  return code;
 };
-const showUncompressedCode = code => `<b>Uncompressed:</b><div><code>${uncompressCode(code)}</code><div>`;
 const showRemixOf = r => {
   const { author, id } = r?.remix_of || {};
   return author ? `<div><b>Remix Of:</b> ${showLinkToDweet(id)} by ${author.username}</div>` : "";
@@ -86,13 +93,20 @@ const showRemixes = r => {
   if (!remixes || remixes.length === 0) return "";
   return `<div><b>Remixes:</b> ${remixes.map(id => showLinkToDweet(id)).join`, `}</div>`;
 };
+const highlight = (text, s) => text.split(s).join(`<span class="bg-warning">${s}</span>`);
 const render = _=>{
-  const filteredRows = rows.filter(r => !searchStr || r.title.includes(searchStr));
+  const filteredRows = rows.filter(r => !searchStr
+    || (r.title.toLowerCase().includes(searchStr.toLowerCase()))
+    || (r.code.toLowerCase().includes(searchStr.toLowerCase()))
+  );
   o.innerHTML = showTable(filteredRows, [
     {name: "title", body: r => `<div>
-      <button onclick="viewModal(${r.id})" class="link-btn">${r.title}</button>
+      <button onclick="viewModal(${r.id})" class="link-btn">${highlight(r.title, searchStr)}</button>
       ${showLinkToDweet(r.id)}
       ${showPosted(r)}
+      ${searchStr && (index = (code=r.code).indexOf(searchStr)) >= 0 ? (
+        `<div><code>${highlight(code, searchStr)}</code></div>`
+      ) : ""}
     </div>`},
     {name: "remix_of", body: r => r.remix_of ? showLinkToDweet(r.remix_of.id) : "-"},
   ]);
@@ -102,7 +116,7 @@ const URL = "https://www.dwitter.net/apiv2beta/dweets/?limit=1000&order_by=-post
 onload=_=>fetch(URL).then(r => r.json()).then(data => {
   const { count, results } = data;
   rows = results.map(({id, comments, code, remixes, remix_of, posted}) => ({
-    id, title: comments[0].text, code, remixes, remix_of, posted,
+    id, title: comments[0].text, code: handleCode(code), remixes, remix_of, posted,
   }));
   render();
 });
@@ -113,13 +127,17 @@ const viewModal = id => {
   const row = rows.find(r => r.id === id);
   div.innerHTML = !row ? `${id} not found` : (
     `<h3>${row.title}</h3>
-    ${showPosted(row)}
-    <div><b>Link:</b> ${showLinkToDweet(row.id)}</div>
+    <div class="justify-content-between d-flex">
+      ${showPosted(row)}
+      <div><b>Link:</b> ${showLinkToDweet(row.id)}</div>
+      ${showRemixOf(row)}
+      ${showRemixes(row)}
+    </div>
     <b>Code:</b>
     <div><code>${row.code}</code></div>
-    ${showUncompressedCode(row.code)}
-    ${showRemixOf(row)}
-    ${showRemixes(row)}`
+    <div class="text-center overflow-auto">
+      <iframe width=530 height=600 frameBorder="0" src="https://www.dwitter.net/e/${row.id}" allowFullScreen="true"></iframe>
+    </div>`
   );
 };
 const closeModal = _ => {
