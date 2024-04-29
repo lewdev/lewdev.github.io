@@ -108,6 +108,7 @@ const render = _=>{
         `<div><code>${highlight(code, searchStr)}</code></div>`
       ) : ""}
     </div>`},
+    {name: "awesome_count", label: "Awesomes", body: r => `<div class="text-center">${r.awesome_count}</div>` },
     {name: "remix_of", body: r => r.remix_of ? showLinkToDweet(r.remix_of.id) : "-"},
   ]);
   count.innerHTML = filteredRows.length;
@@ -115,8 +116,8 @@ const render = _=>{
 const URL = "https://www.dwitter.net/apiv2beta/dweets/?limit=1000&order_by=-posted&posted_after=&username=lewdev";
 onload=_=>fetch(URL).then(r => r.json()).then(data => {
   const { count, results } = data;
-  rows = results.map(({id, comments, code, remixes, remix_of, posted}) => ({
-    id, title: comments[0].text, code: handleCode(code), remixes, remix_of, posted,
+  rows = results.map(({id, comments, code, remixes, remix_of, posted, awesome_count}) => ({
+    id, title: comments[0].text, code: handleCode(code), remixes, remix_of, posted, awesome_count,
   }));
   render();
 });
