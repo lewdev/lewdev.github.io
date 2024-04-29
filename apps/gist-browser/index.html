@@ -58,8 +58,14 @@
     right: 9px;
   }
   .text-sm { font-size: .8rem }
+  #dataStr { height: calc(100vh - 150px) }
   dialog#gist { width: 80%; max-width: 900px; }
-  dialog#d { width: 80%; max-width: 900px; }
+  dialog#d {
+    width: 80%;
+    max-width: 900px;
+    position: fixed;
+    top: 1rem; bottom: 1rem;
+  }
   @media only screen and (max-width: 600px) {
     dialog#gist { width: 100%; }
     dialog#d { width: 100%; }
@@ -100,7 +106,7 @@
 <dialog id="d" class="rounded bg-light">
   <button onclick="this.parentNode.close()" class="btn btn-light btn-sm rounded-circle" style="float:right">&times;</button>
   <h2 class="d-block">💽 <code id="filename"></code></h2>
-  <textarea id="dataStr" spellcheck="false" rows="10" class="w-100 form-control"></textarea>
+  <textarea id="dataStr" spellcheck="false" class="w-100 form-control"></textarea>
   <button class="btn btn-dark mt-2" onclick="navigator.clipboard.writeText(dataStr.value)">📋 Copy</button>
   <button class="btn btn-primary mt-2" onclick="runCode()">🏃‍♂️ Run</button>
   <button class="btn btn-primary mt-2" onclick="saveFile()" id="saveFileBtn">💾 Save File</button>
@@ -115,8 +121,9 @@
 
 <script src="util.js"></script>
 <script src="github-api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/markdown-it@14.1.0/dist/markdown-it.min.js"></script>
 <script>
-let gistList, gistId, fileCache = {};
+let gistList, gistId, fileCache = {}, fileExt;
 
 const showLoading = _ => o.innerHTML = `<div class="spinner-border text-center" role="status"><span class="visually-hidden">Loading...</span></div>`;
 
@@ -158,6 +165,7 @@ const getFilenameFromUrl = url => decodeURI(url).split('/').pop().replace(/%23/g
 
 const getRaw = url => {
   dataStr.value = "";
+  fileExt = "";
   viewGist.disabled = true;
   gistId = getGistIdFromUrl(url);
   const fname = getFilenameFromUrl(url);
@@ -172,6 +180,7 @@ const displayFile = (url, fname, content) => {
   if (!fileCache[index]) fileCache[index] = content;
   filename.innerHTML = fname;
   dataStr.value = content + "";
+  fileExt = fname.split`.`.pop();
   d.show();
   viewGist.disabled = false;
   viewGist.href = `https://gists.github.com/${GithubApi.getUsername()}/${gistId}`;
@@ -179,7 +188,8 @@ const displayFile = (url, fname, content) => {
 
 const runCode = () => {
   document.getElementById('fullScreen').style.display = 'block';
-  f.srcdoc = dataStr.value;
+  const isMarkdown = ["md", "markdown"].includes(fileExt);
+  f.srcdoc = isMarkdown ? `<link rel="stylesheet" href="bootstrap.5.2.3.min.css"><body class="m-4">` + markdownit().render(dataStr.value) : dataStr.value;
 };
 
 const saveFile = () => {
