@@ -45,7 +45,7 @@ const drawStack = (s, y = 0) => {
   }
 };
 
-onkeydown = onclick = ontouch = e => {
+onkeydown = onclick = ontouchstart = e => {
   if (gameover) {
     init();
     return;
