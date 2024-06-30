@@ -1,0 +1,100 @@
+<!doctype html>
+<head>
+<title>Stacking Game</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%22-.4rem%22 y=%221em%22 font-size=%2280%22>🏗️</text></svg>">
+
+<style>html,body{background:#222;display:flex;justify-content:center;align-items:center;height:100%;margin:0}#c{background:white;max-height:100%;max-width:100%}</style>
+</head>
+<body>
+<div style="position:fixed;top:0;right:0"><a href="https://gist.github.com/lewdev/96d53f42545f34836edfe4f2d0676285" target="_blank" title="Source code">👨‍💻</a></div>
+<canvas id=c width=1080 height=1080></canvas><script>x=c.getContext`2d`,lfr=1,S=Math.sin,C=Math.cos,T=Math.tan,R=(r,g,b,a=1)=>`rgba(${r|0},${g|0},${b|0},${a})`,t=f=nfm=0;
+
+const START_W = 700;
+const STACK_HEIGHT = 100;
+const SPEED = 1000;
+const TOPPER_COLOR = "#00A";
+const STACK_COLOR = "#A00";
+
+let prev = diff = gameover = 0;
+let goRight = true;
+let stack = [];
+let topper = {};
+const init = () => {
+  gameover = false;
+  stack = [{
+    x: (c.width - START_W ) / 2,
+    y: c.height - STACK_HEIGHT,
+    w: START_W,
+    c: STACK_COLOR,
+  }];
+  topper = {
+    x: -stack[0].w,
+    y: c.height - (STACK_HEIGHT * 2),
+    w: START_W,
+    c: TOPPER_COLOR,
+  };
+};
+
+const drawBar = (s, y) => {
+  x.fillStyle=s.c;
+  x.fillRect(s.x, y || s.y, s.w, STACK_HEIGHT);
+};
+const drawStack = (s, y = 0) => {
+  for (let i = 0; i < s.length; i++) {
+    drawBar(s[i], y + (STACK_HEIGHT * (i + 1)));
+  }
+};
+
+onkeydown = onclick = ontouch = e => {
+  if (gameover) {
+    init();
+    return;
+  }
+  const top = stack[0];
+  // if cutoff left
+  if (topper.x < top.x && topper.x + topper.w > top.x) {
+    topper.w = top.w - (top.x - topper.x);
+    stack.unshift({...topper, x: top.x, c: STACK_COLOR});
+    if (stack.length <= 5) topper.y -= STACK_HEIGHT;
+  }
+  // if cutoff right
+  else if (topper.x > top.x && topper.x < top.x + top.w) {
+    topper.w = (top.x + top.w) - topper.x;
+    stack.unshift({...topper, c: STACK_COLOR});
+    if (stack.length <= 5) topper.y -= STACK_HEIGHT;
+  }
+  else gameover = true;
+
+  topper.x = Math.random() > .5 ? c.width : -topper.w;
+};
+init();
+
+z=t=>{// loop start ---------------------------
+
+//draw
+c.width|=0
+drawStack(stack, topper.y);
+drawBar(topper);
+x.font = "2in'"
+x.textAlign = "center";
+
+if (gameover) x.fillText("Game Over", c.width / 2, 500);
+
+x.font = "1in'"
+x.fillText("Score: " + (stack.length - 1), c.width / 2, 100);
+
+//update
+diff = t - prev;
+if (!gameover) {
+  if (topper.x > c.width) goRight = false;
+  else if (topper.x < -topper.w) goRight = true;
+  topper.x += (goRight ? 1 : -1) * SPEED * diff;
+}
+
+prev = t;
+
+};loop=fTime=>{requestAnimationFrame(loop);if(lfr&&fTime<nfm-2)return;nfm=Math.max(nfm+1e3/60,fTime);t=f/60;if(t*60|0!=f++)t+=1e-6;z(t)};loop()</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GNP8ER8985"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-GNP8ER8985');</script>
+</body>
