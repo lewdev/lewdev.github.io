@@ -14,12 +14,15 @@ const STACK_HEIGHT = 100;
 const SPEED = 1000;
 const TOPPER_COLOR = "#00A";
 const STACK_COLOR = "#A00";
+const STORE_ID = "stacking-game-top-score";
 
 let prev = diff = gameover = 0;
 let goRight = true;
 let stack = [];
 let topper = {};
+let topScore = 0;
 const init = () => {
+  topScore = localStorage.getItem(STORE_ID) || 0;
   gameover = false;
   stack = [{
     x: (c.width - START_W ) / 2,
@@ -45,7 +48,7 @@ const drawStack = (s, y = 0) => {
   }
 };
 
-onkeydown = onclick = ontouchstart = e => {
+onkeydown = ontouchstart = e => {
   if (gameover) {
     init();
     return;
@@ -65,6 +68,10 @@ onkeydown = onclick = ontouchstart = e => {
   }
   else gameover = true;
 
+  if (stack.length - 1 > topScore) {
+    topScore = stack.length - 1;
+    localStorage.setItem(STORE_ID, topScore);
+  }
   topper.x = Math.random() > .5 ? c.width : -topper.w;
 };
 init();
@@ -81,7 +88,7 @@ x.textAlign = "center";
 if (gameover) x.fillText("Game Over", c.width / 2, 500);
 
 x.font = "1in'"
-x.fillText("Score: " + (stack.length - 1), c.width / 2, 100);
+x.fillText("Score: " + (stack.length - 1) + ", Best: " + topScore, c.width / 2, 100);
 
 //update
 diff = t - prev;
