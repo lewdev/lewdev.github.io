@@ -38,24 +38,31 @@ const init = () => {
   };
 };
 
-const drawBar = (s, y) => {
+const drawBar = (s, y, h = STACK_HEIGHT) => {
   x.fillStyle=s.c;
-  x.fillRect(s.x, y || s.y, s.w, STACK_HEIGHT);
+  x.fillRect(s.x, y || s.y, s.w, h);
 };
-const drawStack = (s, y = 0) => {
+const drawStack = (s, y = 0, showFullStack) => {
+  let height = STACK_HEIGHT;
+  if (showFullStack) {
+    y = STACK_HEIGHT * 3;
+    if (showFullStack > 8) height = 8 * STACK_HEIGHT / showFullStack;
+  }
+  let yPos;
   for (let i = 0; i < s.length; i++) {
-    drawBar(s[i], y + (STACK_HEIGHT * (i + 1)));
+    yPos = y + (height * (i + 1));
+    drawBar(s[i], yPos, height);
   }
 };
 
-onkeydown = ontouchstart = e => {
+dropBar = () => {
   if (gameover) {
     init();
     return;
   }
   const top = stack[0];
-  // if cutoff left
-  if (topper.x < top.x && topper.x + topper.w > top.x) {
+  // if cutoff left or equals
+  if (topper.x <= top.x && topper.x + topper.w >= top.x) {
     topper.w = top.w - (top.x - topper.x);
     stack.unshift({...topper, x: top.x, c: STACK_COLOR});
     if (stack.length <= 5) topper.y -= STACK_HEIGHT;
@@ -74,18 +81,23 @@ onkeydown = ontouchstart = e => {
   }
   topper.x = Math.random() > .5 ? c.width : -topper.w;
 };
+
+ontouchstart = dropBar;
+
+onkeydown = e => e.key === " " && dropBar();
+
 init();
 
 z=t=>{// loop start ---------------------------
 
 //draw
 c.width|=0
-drawStack(stack, topper.y);
+drawStack(stack, topper.y, gameover && stack.length);
 drawBar(topper);
 x.font = "2in'"
 x.textAlign = "center";
 
-if (gameover) x.fillText("Game Over", c.width / 2, 500);
+if (gameover) x.fillText("Game Over", c.width / 2, 300);
 
 x.font = "1in'"
 x.fillText("Score: " + (stack.length - 1) + ", Best: " + topScore, c.width / 2, 100);
