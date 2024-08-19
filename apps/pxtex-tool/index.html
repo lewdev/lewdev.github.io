@@ -41,6 +41,7 @@ const render = _ => {
 
 const setVal = e => {
   const { name, value } = e.target;
+  fields[name].value = value;
   for (const input of document.querySelectorAll(`[name=${name}]`)) {
     input.value = value;
   }
@@ -58,7 +59,4 @@ onload = _ => {
   render();
 };
 </script>
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-GNP8ER8985"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-GNP8ER8985');</script>
 </body>
