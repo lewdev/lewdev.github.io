@@ -1,0 +1,64 @@
+<!doctype html>
+<head>
+<title>Tool for pxtex by xem</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%221.045em%22 font-size=%2272%22>⛏️</text></svg>">
+<style>
+#c{width:100%;height:100%;image-rendering:pixelated;border:1px solid black }
+body{background:#888; font-family: sans-serif}
+div{display:inline-block;vertical-align:top;margin-right:1rem}
+</style>
+</head>
+<body>
+<h1>⛏️ Tool for <a href="https://xem.github.io/pxtex">pxtex</a> by xem</h1>
+<div id=inputs></div>
+
+<div style="width:150px;height:150px">
+  <canvas id=c></canvas>
+</div>
+
+<div>
+  <textarea id=output rows=5 style="width:100%"></textarea>
+</div>
+
+<script>
+// xem's code (220b)
+pxtex=(c,H,S,L,v=10,w=10,h=10,x=c.getContext`2d`,i,j,m=Math.random)=>{for(c.width=w,c.height=h,i=w;i--;)for(j=h;j--;)x.fillStyle=`hsl(${H+(m()-.5)*v},${S+(m()-.5)*v}%,${L+(m()-.5)*v}%)`,x.fillRect(i,j,1,1),c.toDataURL()}
+
+const fields = {
+  Hue: { max: 360, value: 250 },
+  Saturation: { max: 100, value: 50 },
+  Lightness: { max: 100, value: 50 },
+  Variation: { max: 100, value: 10 },
+  Width: { max: 32, value: 10 },
+  Height: { max: 32, value: 10 },
+};
+
+const render = _ => {
+  const params = Object.keys(fields).map(name => parseInt(fields[name].value));
+  pxtex(c, ...params);
+  output.value = `pxtex(c,${params.join`,`})`;
+};
+
+const setVal = e => {
+  const { name, value } = e.target;
+  for (const input of document.querySelectorAll(`[name=${name}]`)) {
+    input.value = value;
+  }
+  render()
+};
+
+onload = _ => {
+  inputs.innerHTML = Object.keys(fields).map(name => {
+    const { max, value } = fields[name];
+    const attr = `name="${name}" value="${value}" max="${max}" onchange="setVal(event)"`;
+    return `<b>${name}</b> <input type="number" ${attr} style="width:50px"><br>
+      <input type="range" ${attr} />`
+  }).join`<br>`;
+
+  render();
+};
+</script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GNP8ER8985"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-GNP8ER8985');</script>
+</body>
