@@ -2,8 +2,9 @@ const categories = [
   { name: "Apps", emoji: "📲" },
   { name: "Games", emoji: "👾" },
   { name: "Simulations", emoji: "⏯" },
-  { name: "Tenrikyo", emoji: "🙏" },
+  { name: "Utilities", emoji: "🛠" },
   { name: "Lists", emoji: "📃" },
+  { name: "Tenrikyo", emoji: "🙏" },
 ];
 
 const projects = [
@@ -38,12 +39,23 @@ const projects = [
   description: "Draw pixel art with emoji squares.",
   category: "Apps",
 },
+// Utilities
 {
   title: "Regex Find & Format Tool", name: "regex-text-finder", url: "https://lewdev.github.io/apps/regex-find-and-format", emoji: '🔍',
   description: "Perform regular expression search & replace operations on text.",
-  category: "Apps",
+  category: "Utilities",
+},
+{
+  title: "Tool for pxtex by xem", url: "https://lewdev.github.io/apps/pxtex-tool", emoji: '⛏️', sourceIsIndex: true,
+  description: "Tool using xem's <a href='https://xem.github.io/pxtex/'>pxtex</a> code to generate textures",
+  category: "Utilities",
 },
 // Games
+{
+  title: "13attle TanKs", name: "js13k-2024-thirteen", url: "https://lewdev.github.io/apps/13attle-tanks", emoji: '💥',
+  description: "A top-down tank controls shooting game submitted to <a href='https://js13kgames.com/2024/games/13attle-tanks'>JS13K 2024</a>.",
+  category: "Games",
+},
 {
   title: "Fix Wires Among Us Game", name: "fix-wires-js", emoji: '🛰️',
   description: "The Fixing Wiring mini game from Among Us written in JavaScript canvas",

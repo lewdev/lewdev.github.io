@@ -41,8 +41,7 @@
   const displayData = () => {
     const arr = [];
     categories.map(c => {
-      arr.push(`<h2 class="mt-3">${c.emoji} ${c.name}</h2>`);
-      arr.push(displayCategory(c.name));
+      arr.push(`<div class="col-md-6"><h2 class="mt-3">${c.emoji} ${c.name}</h2>`, displayCategory(c.name), "</div>");
     });
     projectsDiv.innerHTML = arr.join("");
   };
@@ -61,7 +60,7 @@
           <div class="text-secondary">${p.description}</div>
         </td>
         <td class="text-center">
-          ${srcUrl ? `<a href="${srcUrl}" target="_blank">👨‍💻️ Source Code</a>` : '-'}
+          ${srcUrl ? `<a href="${srcUrl}" target="_blank">👨‍💻️ Source</a>` : '-'}
         </td>
       </tr>
     `)});
