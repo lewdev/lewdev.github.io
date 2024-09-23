@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+  <title>lewdev's blog</title>
+  <link rel="stylesheet" href="/site/assets/bootstrap.min.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📝</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="m-2">
+<div id="top" class="row">
+  <h1 class="col-md-auto border-0">📝 Lewis Nakao's blog</h1>
+  <div class="col-md-2 text-nowrap text-sm m-1">
+    <a href="https://lewdev.github.io" title="Portfolio">📂</a>
+    <a href="https://x.com/lewdev" title="Twitter">🐦</a>
+    <a href="https://github.com/lewdev" title="Github Profile">🐙</a>
+    <a href="http://stackoverflow.com/cv/lewis.nakao" title="StackOverflow">📚</a>
+    <a href="https://www.linkedin.com/in/lewisnakao" title="LinkedIn">👔</a>
+  </div>
+  <div class="col-md-3">
+    <div class="justify-content-between d-flex" style="width: 230px">
+      <div>
+        <input id="search" class="form-control mt-2 d-block" placeholder="Search..." oninput="searchStr=this.value;render()">
+      </div>
+      <div>
+        <button class="btn btn-light p-1 m-2 d-block" title="Clear search" onclick="search.value='';render();">&times;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div id=o><div class="text-center m-5">Loading...</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/11.1.0/marked.min.js" integrity="sha512-49xmrP3uviO3RLWud0G4giZPhidSGQMjdsX3AkGH0tW4q1FN1nzTa4WGhyKIl+sggfI2q9rB78y/HvVK2HbVnA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="utils.js"></script>
+<script src="script.js"></script>
+</body>
