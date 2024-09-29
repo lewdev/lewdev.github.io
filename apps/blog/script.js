@@ -70,21 +70,26 @@ const getFile = async (gistId, file) => {
   return FILE_CACHE[index] || await fetch(file.raw_url).then(r => r.text()).then(r => FILE_CACHE[index] = r);
 };
 
-const showMdEditor = showTextEditor = (content, ext) => (
-  `<textarea id="editor" spellcheck=false onkeypress="runCode(this, event, '${ext}')">${escapeXml(content)}</textarea>`
+const showTextareaEditor = (content, ext) => (
+  `<textarea id="editor" spellcheck=false
+    ${["html", "md"].includes(ext) ? ` onkeypress="runCode(this, event, '${ext}')"` : ''}
+    style=resize:none;filter:invert(>${escapeXml(content)}</textarea>`
 );
 
-const showHtmlEditor = (content, ext) => (
+const showTextEditor = (content, ext) => showTextareaEditor(content, ext);
+
+const showMdEditor = showHtmlEditor = (content, ext) => (
   `<div class="editor-div">
-    <textarea id="editor" spellcheck=false onkeypress="runCode(this, event, '${ext}')">${escapeXml(content)}</textarea>
+    ${showTextareaEditor(content, ext)}
     <iframe id="f" srcdoc="Press Ctrl + Enter to run HTML code"></iframe>
   </div>`
 );
 
 const runCode = (self, event, ext) => {
-  k = event.keyCode;
-  if ((event.ctrlKey && k == 13) || k == 10) {
-    f.srcdoc = ext === "md" ? marked.parse(self.value) : self.value;
+  const k = event.keyCode;
+  if (ext === "md") f.srcdoc = marked.parse(self.value);
+  else if ((event.ctrlKey && k == 13) || k == 10) {
+    f.srcdoc = self.value;
   }
 };
 
@@ -127,7 +132,7 @@ const showGist = async () => {
       <div>
         <button class="btn btn-primary p-1 text-nowrap" onclick="goBack()">⬅️ Back</button>
         <button class="btn btn-${isEditorMode ? "primary" : "light"} p-1 my-2" title="Toggle Editor View" onclick="toggleEditorView()">
-          ${isEditorMode ? "📃" : "✏️"}
+          ${isEditorMode ? "📃 View" : "✏️ Editor"}
         </button>
       </div>
       <div class="p-2 text-right">
@@ -139,7 +144,7 @@ const showGist = async () => {
     </div>
     <div class="files-tab btn-group w-100 round">
       ${fileList.map(filename => (
-        `<button class="text-nowrap overflow-hidden p-0 rounded-0 btn btn-${filename === selectedFilename ? 'primary' : 'secondary'}"
+        `<button class="text-nowrap overflow-hidden p-0 rounded-0 btn btn-${filename === selectedFilename ? 'primary' : 'dark text-secondary'}"
           title="${filename}"
           onclick="selectedFilename='${filename}';render()">${fileEmoji} ${filename}</button>`
       )).join``}
@@ -148,7 +153,9 @@ const showGist = async () => {
   `;
 };
 
-render = async _ => {
+let delay = null;
+
+const render = async _ => {
   const top = document.getElementById("top");
   if (top) top.className = selectedGist ? "d-none" : "row"
   o.innerHTML = selectedGist ? (
@@ -171,9 +178,24 @@ render = async _ => {
       <button class="btn btn-secondary" onclick=nextPage()>🔻 More 🔻</button>
     </div>`
   );
-  if (!isEditorMode && document.getElementById("f")) {
-    const { id, files } = selectedGist || {};
-    f.srcdoc = await getFile(id, files[selectedFilename]);
+  if (!isEditorMode) {
+    p.style.display = "none";
+    if (document.getElementById("f")) {
+      const { id, files } = selectedGist || {};
+      f.srcdoc = await getFile(id, files[selectedFilename]);
+    }
+  }
+  if (document.getElementById("editor")) {
+    p.style.display = "block"
+    clearTimeout(delay);
+    const d = editor;
+    d.onkeyup = d.onclick = _ => {
+      clearTimeout(delay);
+      delay = setTimeout(_ => {
+        let A = d.selectionStart, B = d.selectionEnd, V = d.value, E = V.substr(0,B).split`\n`;
+        p.innerHTML = `Ln: ${E.length}, Col: ${E.pop().length+1}, ${A==B?"Pos: "+B:"Sel: "+(B-A)}, Len: ${V.length}`
+      }, 99)
+    };
   }
   adjustEditorHeight();
 };

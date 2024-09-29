@@ -3,9 +3,9 @@ a { text-decoration: none; }
 a:hover { text-decoration: underline; }
 pre {
   text-wrap: auto;
-  border-left: .5rem solid #CCC;
+  border-left: .5rem solid #444;
   padding: .5rem;
-  background-color: lightgoldenrodyellow;
+  background-color: #181d29;
 }
 code {
   color: rgb(146, 0, 143);
