@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<head>
+<title>Mini 2-Color Pixel Editor</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%221.045em%22 font-size=%2272%22>🖌️</text></svg>">
+<style>body{font-family:Arial} h1,h4 {margin:.5rem} textarea { width: 100%}</style>
+</head>
+<body>
+<h1>🖌️ Mini 2-Color Pixel Editor</h1>
+Palette: <select id=paletteSelect></select>
+<input type=hidden id=c0 value="transparent">
+<input type=radio name=p id=p0>transparent
+<span id=colors></span>
+<br><br>
+Canvas size <input id=s value=8 size=2>
+<button id=r>clear</button>
+<button id=e>export</button><br>
+<br>
+<canvas id=a width=80 height=80 style="border:1px solid"></canvas><br>
+Palette: <input id=paletteOut> Data: <input id=dataOut><br>
+<h4>Render image</h4>
+<textarea id=exp rows=7></textarea>
+<h4>Render image in a bookmarklet</h4>
+<textarea id=bmkl rows=7></textarea>
+<h4>Render image in a reusable method</h4>
+<textarea id=lib rows=7></textarea>
+<h4>Store in Canvas</h4>
+<textarea id=storeObj rows=7></textarea>
+
+<script>
+PALETTES = [
+  { title: "Obra Dinn - IBM 8503", colors: ["2e3037","ebe5ce"] },
+  { title: "Adelaide Bakery", colors: ["1a1a22","a79095"] },
+  { title: "1bit Monitor Glow", colors: ["222323","f0f6f0"] },
+  { title: "Paperback-2", colors: ["382b26","b8c2b9"] },
+  { title: "Noire Truth", colors: ["1e1c32","c6baac"] },
+  { title: "Pixel Ink", colors: ["3e232c","edf6d6"] },
+  { title: "Mac Paint", colors: ["051b2c","8bc8fe"] },
+  { title: "Pastelito2", colors: ["4b475c","d7dedc"] },
+  { title: "Y's Neutral Green", colors: ["004c3d","ffeaf9"] },
+  { title: "Bitbee", colors: ["292b30","cfab4a"] },
+];
+let COLOR_INPUTS;
+c = a.getContext("2d");
+pixels = [];
+
+const setUrlParam = param => {
+  const url = document.location.href.split`?`[0].split`#`[0];
+  history.pushState({ param }, param, `${url}${param ? "?" + param : ""}`);
+  return false;
+};
+const numToThree = n => [n & 3, (n >> 2) & 3, (n >> 4) & 3];
+const num2Jex=n=>String.fromCharCode(n+39+(n>7?1:0)+(n>17?7:0)+(n>43?6:0));
+const jex2Num=s=>(n=s.charCodeAt()-39,n-(n>7?1:0)-(n>18?7:0)-(n>51?6:0));
+
+init = size => {
+  a.width = size * 20;
+  a.height = size * 20;
+  c.fillStyle = "#aaa";
+  drawGrid(size);
+};
+
+onload = _ => {
+  let S, colorPallete;
+  // extract data from URL
+  const [urlPallete, urlData] = (document.location.href.split`?`[1] || "").split`=`.map(a => decodeURI(a));
+  if (urlPallete) colorPallete = urlPallete.match(/a-f0-9{6}/ig);
+  if (!colorPallete) colorPallete = PALETTES[0].colors;
+
+  // display color options
+  colors.innerHTML = colorPallete.map((c, i) => (
+    `<input type=radio name=p id=p${i+1} ${i ? "" : "checked"}><input type=color id=c${i+1} value="#${c}">`
+  )).join``;
+
+  // populate palletes
+  paletteSelect.innerHTML = '<option value="">(default)</option>' + PALETTES.map(p => `<option>${p.title}</option>`);
+  paletteSelect.onchange = e => {
+    const palette = PALETTES.find(p => p.title === e.target.value);
+    if (palette) for (i=2;i--;) document.getElementById(`c${i+1}`).value = "#"+palette.colors[i];
+  };
+  COLOR_INPUTS = [c0, c1, c2];
+
+  // convert URL data into
+  if (urlData) {
+    init(S = s.value = ~~Math.sqrt(urlData.length * 3));
+    pixels = [...urlData].reduce((p, c) => [...p, ...numToThree(jex2Num(c))], []).slice(0, S * S);
+    draw(e);
+  }
+  else {
+    init(S = s.value);
+    paletteSelect.value = PALETTES[0].title;
+    for(i=S;i--;)pixels.push(new Array(S * S).fill(0));
+  }
+}
+
+onchange = oninput = e => (init(s.value), draw(e), setUrlParam(""));
+
+// Reset
+r.onclick = _=>{
+  init(S = s.value);
+  pixels = new Array(S * S).fill(0);
+  setUrlParam(exp.value = bmkl.value = lib.value = paletteOut.value = dataOut.value = "");
+};
+
+s.onchange = s.oninput = _=>init(s.value);
+
+// Export
+e.onclick = _ =>{
+  colors = COLOR_INPUTS.map((e, i) => i ? e.value.replace("#",'') : "").join``;
+
+  px = [];
+  pxascii = "";
+  colorsUsed = {};
+  S = s.value;
+
+  for(j = S * S; j--;)colorsUsed[pixels[j]] = 1;
+
+  for(i = 0; i < pixels.length; i+=3){
+    pxascii += num2Jex(0b0000000 + (pixels[i] || 0) + ((pixels[i+1] || 0) << 2) + (((pixels[i+2] || 0) << 4)));
+  }
+  setUrlParam(`${colors}=${pxascii}`);
+  const baseCode = `E=9;S=${S};x=c.getContext\`2d\`;P=[];[...\`${pxascii}\`].map(a=>{n=a.charCodeAt()-39;n=n-(n>7?1:0)-(n>18?7:0)-(n>51?6:0);P.push(n&3,(n>>2)&3,(n>>4)&3)});for(j=S*S;j--;)if(q=P[j])x.fillStyle=\`#\`+\`${colors}\`.substr(6*(q-1),6),x.fillRect(j%S*E,~~(j/S>>0)*E,E,E)`
+
+  paletteOut.value = colors;
+  dataOut.value = pxascii;
+  exp.value = `<canvas id=c style=image-rendering:pixelated><script>${baseCode}<\/script>`;
+
+  //bookmarklet
+  bmkl.value = `data:text/html,<body onload="${baseCode.replace("#", "%23")}"><canvas id=c style=image-rendering:pixelated>`
+
+  lib.value =
+`<canvas id=c style=image-rendering:pixelated><script>
+x=c.getContext\`2d\`;
+drawPxAscii=(str, palette, size, scale = 10, xPos = 0, yPos = 0) => {
+  P=[];
+  [...str].map(a=>{
+    n = a.charCodeAt()-39;
+    n = n-(n>7?1:0)-(n>18?7:0)-(n>51?6:0);
+    P.push(n & 3,(n >> 2) & 3,(n >> 4) & 3);
+  });
+  for (j = size * size; j--;) if (q = P[j])
+    x.fillStyle=\`#\` + palette.substr(6*(q-1),6),
+    x.fillRect(j % size * scale + xPos, ~~(j / size >> 0) * scale + yPos, scale, scale)
+};
+drawPxAscii(\`${pxascii}\`, '${colors}', ${S}, 10);
+<\/script>`;
+  storeObj.value=
+`<canvas id=c style=image-rendering:pixelated><script>
+x=c.getContext\`2d\`;
+// two-color palette using JEX (Base 70) data
+class PxJex2C {
+  constructor(palette, jexStr, scale) {
+    const size = ~~Math.sqrt(jexStr.length * 3);
+
+    const ca = document.createElement\`canvas\`;
+    const cx = ca.getContext\`2d\`;
+    this.size = size;
+    this.c = ca;
+
+    ca.width = ca.height = size * scale;
+    const P = [];
+    [...jexStr].map(a=>{
+      let n = a.charCodeAt()-39;
+      n = n-(n>7?1:0)-(n>18?7:0)-(n>51?6:0);
+      P.push(n & 3,(n >> 2) & 3,(n >> 4) & 3);
+    });
+    for (let j = size * size, q; j--;) if (q = P[j]) {
+      cx.fillStyle=\`#\` + palette.substr(6*(q-1),6);
+      cx.fillRect(j % size * scale, ~~(j / size) * scale, scale, scale);
+    }
+  }
+  render(pos) { x.drawImage(this.c, pos.x, pos.y); }
+}
+
+// example: 1 pixel is 50px
+let pj = new PxJex("${colors}", \`${pxascii}\`, 20);
+pj.render({ x: 50, y: 50});
+
+<\/script>`;
+};
+
+drawGrid = size => {
+  for(i = size; i--;)c.fillRect(0, i * 20, size * 20, 1),c.fillRect(i * 20, 0, 1, size * 20);
+};
+
+// Draw
+draw = e =>{
+  a.width = a.width;
+  c.fillStyle = "#aaa";
+  size = s.value;
+  drawGrid(size);
+
+  for (h = size * size; h--;) {
+    i = h % size;
+    j = h / size >> 0;
+    c.fillStyle = ["transparent", c1.value, c2.value][pixels[h] || 0];
+    c.fillRect(i*20, j*20, 20, 20);
+  }
+};
+
+// Trace
+m = 0;
+rightMouseBtn = 0;
+a.onmousedown = e => (m = 1, rightMouseBtn = e.button === 2, trace(e));
+a.onmousemove = e => m && trace(e);
+window.onmouseup = _ => m = 0;
+a.addEventListener('contextmenu', e => e?.cancelable && e.preventDefault());
+
+trace = e => {
+  colorIndex = [p0, p1, p2].findIndex(e => e.checked);
+  currentColor = COLOR_INPUTS[!rightMouseBtn && colorIndex >= 0 ? colorIndex : 0].value;
+
+  x = (e.pageX - a.offsetLeft) / 20 >> 0;
+  y = (e.pageY - a.offsetTop) / 20 >> 0;
+  index = y * s.value + x;
+  if (currentColor == "transparent"){
+    pixels[index] = 0;
+    draw(e);
+  }
+  else {
+    c.fillStyle = currentColor;
+    c.fillRect(x * 20, y * 20, 20, 20);
+    pixels[index] = colorIndex;
+  }
+};
+</script>
+</body>
