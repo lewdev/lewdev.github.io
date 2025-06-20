@@ -86,9 +86,9 @@ onload = _ => {
     draw(e);
   }
   else {
-    init(S = s.value);
+    init(S = s.value = 8);
     paletteSelect.value = PALETTES[0].title;
-    for(i=S;i--;)pixels.push(new Array(S * S).fill(0));
+    pixels = new Array(S * S).fill(0);
   }
 }
 
