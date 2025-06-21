@@ -2,14 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 <url><loc>https://lewdev.github.io/</loc></url>
+<url><loc>https://lewdev.github.io/apps/blog/</loc></url>
 <url><loc>https://lewdev.github.io/apps/hw-gen/</loc></url>
 <url><loc>https://lewdev.github.io/apps/meta-tag-gen/</loc></url>
 <url><loc>https://lewdev.github.io/apps/gist-browser/</loc></url>
 <url><loc>https://lewdev.github.io/apps/extext/</loc></url>
 <url><loc>https://lewdev.github.io/apps/github-repo-stats/</loc></url>
 <url><loc>https://lewdev.github.io/apps/pixmoji/</loc></url>
-<url><loc>https://lewdev.github.io/apps/regex-find-and-format</loc></url>
+<url><loc>https://lewdev.github.io/apps/pixel2c</loc></url>
 <url><loc>https://lewdev.github.io/apps/pxtex-tool</loc></url>
+<url><loc>https://lewdev.github.io/apps/regex-find-and-format</loc></url>
 <url><loc>https://lewdev.github.io/apps/13attle-tanks</loc></url>
 <url><loc>https://lewdev.github.io/apps/fix-wires-js/</loc></url>
 <url><loc>https://lewdev.github.io/apps/stacking-game/</loc></url>

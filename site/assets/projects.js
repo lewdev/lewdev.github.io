@@ -41,13 +41,18 @@ const projects = [
 },
 // Utilities
 {
-  title: "Regex Find & Format Tool", name: "regex-text-finder", url: "https://lewdev.github.io/apps/regex-find-and-format", emoji: '🔍',
-  description: "Perform regular expression search & replace operations on text.",
+  title: "Mini 2-Color Pixel Editor", url: "https://lewdev.github.io/apps/pixel2c", emoji: '🖌️',
+  description: "Two color pixel editor with URL sharing capability.",
   category: "Utilities",
 },
 {
   title: "Tool for pxtex by xem", url: "https://lewdev.github.io/apps/pxtex-tool", emoji: '⛏️', sourceIsIndex: true,
   description: "Tool using xem's <a href='https://xem.github.io/pxtex/'>pxtex</a> code to generate textures",
+  category: "Utilities",
+},
+{
+  title: "Regex Find & Format Tool", name: "regex-text-finder", url: "https://lewdev.github.io/apps/regex-find-and-format", emoji: '🔍',
+  description: "Perform regular expression search & replace operations on text.",
   category: "Utilities",
 },
 // Games
