@@ -2,7 +2,12 @@
 <head>
 <title>Mini 2-Color Pixel Editor</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%221.045em%22 font-size=%2272%22>🖌️</text></svg>">
-<style>body{font-family:Arial} h1,h4 {margin:.5rem} textarea { width: 100%}</style>
+<style>
+body {font-family:Arial;background: #CCC; padding-right: .5rem}
+h1,h4 {margin:.5rem}
+textarea {width: 100%;}
+canvas {background: white;}
+</style>
 </head>
 <body>
 <h1>🖌️ Mini 2-Color Pixel Editor</h1>
@@ -17,13 +22,16 @@ Canvas size <input id=s value=8 size=2>
 <br>
 <canvas id=a width=80 height=80 style="border:1px solid"></canvas><br>
 Palette: <input id=paletteOut> Data: <input id=dataOut><br>
-<h4>Render image</h4>
+Shareable URL : <input id=shareUrl style="width:calc(100% - 15rem)">
+<button onclick="navigator.clipboard.writeText(shareUrl.value)">📋 Copy</button>
+<br>
+<h4>Render image <button onclick="navigator.clipboard.writeText(exp.value)">📋 Copy</button></h4>
 <textarea id=exp rows=7></textarea>
-<h4>Render image in a bookmarklet</h4>
+<h4>Render image in a bookmarklet <button onclick="navigator.clipboard.writeText(bmkl.value)">📋 Copy</button></h4>
 <textarea id=bmkl rows=7></textarea>
-<h4>Render image in a reusable method</h4>
+<h4>Render image in a reusable method <button onclick="navigator.clipboard.writeText(lib.value)">📋 Copy</button></h4>
 <textarea id=lib rows=7></textarea>
-<h4>Store in Canvas</h4>
+<h4>Store in Canvas <button onclick="navigator.clipboard.writeText(storeObj.value)">📋 Copy</button></h4>
 <textarea id=storeObj rows=7></textarea>
 
 <script>
@@ -49,34 +57,36 @@ const setUrlParam = param => {
   return false;
 };
 const numToThree = n => [n & 3, (n >> 2) & 3, (n >> 4) & 3];
-const num2Jex=n=>String.fromCharCode(n+39+(n>7?1:0)+(n>17?7:0)+(n>43?6:0));
-const jex2Num=s=>(n=s.charCodeAt()-39,n-(n>7?1:0)-(n>18?7:0)-(n>51?6:0));
+const num2Jex=n=>String.fromCharCode(n+40+(n>7?1:0)+(n>17?7:0)+(n>43?6:0));
+const jex2Num=s=>(n=s.charCodeAt()-40,n-(n>7?1:0)-(n>18?7:0)-(n>51?6:0));
 
 init = size => {
   a.width = size * 20;
   a.height = size * 20;
-  c.fillStyle = "#aaa";
   drawGrid(size);
 };
 
 onload = _ => {
   let S, colorPallete;
-  // extract data from URL
-  const [urlPallete, urlData] = (document.location.href.split`?`[1] || "").split`=`.map(a => decodeURI(a));
-  if (urlPallete) colorPallete = urlPallete.match(/a-f0-9{6}/ig);
-  if (!colorPallete) colorPallete = PALETTES[0].colors;
-
-  // display color options
-  colors.innerHTML = colorPallete.map((c, i) => (
-    `<input type=radio name=p id=p${i+1} ${i ? "" : "checked"}><input type=color id=c${i+1} value="#${c}">`
-  )).join``;
-
   // populate palletes
   paletteSelect.innerHTML = '<option value="">(default)</option>' + PALETTES.map(p => `<option>${p.title}</option>`);
   paletteSelect.onchange = e => {
     const palette = PALETTES.find(p => p.title === e.target.value);
     if (palette) for (i=2;i--;) document.getElementById(`c${i+1}`).value = "#"+palette.colors[i];
   };
+  // extract data from URL
+  const [urlPallete, urlData] = (document.location.href.split`?`[1] || "").split`=`.map(a => decodeURI(a));
+  if (urlPallete) {
+    colorPallete = urlPallete.match(/a-f0-9{6}/ig);
+    const foundPalette = PALETTES.find(p => p.colors.join`` === urlPallete.toLowerCase());
+    if (foundPalette) paletteSelect.value = foundPalette.title;
+  }
+  if (!colorPallete) colorPallete = PALETTES[0].colors;
+
+  // display color options
+  colors.innerHTML = colorPallete.map((c, i) => (
+    `<input type=radio name=p id=p${i+1} ${i ? "" : "checked"}><input type=color id=c${i+1} value="#${c}">`
+  )).join``;
   COLOR_INPUTS = [c0, c1, c2];
 
   // convert URL data into
@@ -118,10 +128,11 @@ e.onclick = _ =>{
     pxascii += num2Jex(0b0000000 + (pixels[i] || 0) + ((pixels[i+1] || 0) << 2) + (((pixels[i+2] || 0) << 4)));
   }
   setUrlParam(`${colors}=${pxascii}`);
-  const baseCode = `E=9;S=${S};x=c.getContext\`2d\`;P=[];[...\`${pxascii}\`].map(a=>{n=a.charCodeAt()-39;n=n-(n>7?1:0)-(n>18?7:0)-(n>51?6:0);P.push(n&3,(n>>2)&3,(n>>4)&3)});for(j=S*S;j--;)if(q=P[j])x.fillStyle=\`#\`+\`${colors}\`.substr(6*(q-1),6),x.fillRect(j%S*E,~~(j/S>>0)*E,E,E)`
+  const baseCode = `E=9;S=${S};x=c.getContext\`2d\`;P=[];[...\`${pxascii}\`].map(a=>{n=a.charCodeAt()-40;n=n-(n>7?1:0)-(n>18?7:0)-(n>51?6:0);P.push(n&3,(n>>2)&3,(n>>4)&3)});for(j=S*S;j--;)if(q=P[j])x.fillStyle=\`#\`+\`${colors}\`.substr(6*(q-1),6),x.fillRect(j%S*E,~~(j/S>>0)*E,E,E)`
 
   paletteOut.value = colors;
   dataOut.value = pxascii;
+  shareUrl.value = window.location.href;
   exp.value = `<canvas id=c style=image-rendering:pixelated><script>${baseCode}<\/script>`;
 
   //bookmarklet
@@ -133,7 +144,7 @@ x=c.getContext\`2d\`;
 drawPxAscii=(str, palette, size, scale = 10, xPos = 0, yPos = 0) => {
   P=[];
   [...str].map(a=>{
-    n = a.charCodeAt()-39;
+    n = a.charCodeAt()-40;
     n = n-(n>7?1:0)-(n>18?7:0)-(n>51?6:0);
     P.push(n & 3,(n >> 2) & 3,(n >> 4) & 3);
   });
@@ -146,7 +157,7 @@ drawPxAscii(\`${pxascii}\`, '${colors}', ${S}, 10);
   storeObj.value=
 `<canvas id=c style=image-rendering:pixelated><script>
 x=c.getContext\`2d\`;
-// two-color palette using JEX (Base 70) data
+// two-color palette using JEX (Base 69) data
 class PxJex2C {
   constructor(palette, jexStr, scale) {
     const size = ~~Math.sqrt(jexStr.length * 3);
@@ -159,7 +170,7 @@ class PxJex2C {
     ca.width = ca.height = size * scale;
     const P = [];
     [...jexStr].map(a=>{
-      let n = a.charCodeAt()-39;
+      let n = a.charCodeAt()-40;
       n = n-(n>7?1:0)-(n>18?7:0)-(n>51?6:0);
       P.push(n & 3,(n >> 2) & 3,(n >> 4) & 3);
     });
@@ -179,6 +190,7 @@ pj.render({ x: 50, y: 50});
 };
 
 drawGrid = size => {
+  c.fillStyle = "#aaa";
   for(i = size; i--;)c.fillRect(0, i * 20, size * 20, 1),c.fillRect(i * 20, 0, 1, size * 20);
 };
 
